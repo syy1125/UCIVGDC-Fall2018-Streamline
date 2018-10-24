@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.UI;
 public class BuildGridButtons : MonoBehaviour {
 
     // Use this for initialization
@@ -22,6 +22,7 @@ public class BuildGridButtons : MonoBehaviour {
 	}
     private void buildGrid(int r, int c)
     {
+        //Create grid of buttons with x,y coordinates
         Transform newButton;
         buttonList = new Transform[c][];
         float width = 1f / c;
@@ -31,7 +32,6 @@ public class BuildGridButtons : MonoBehaviour {
             buttonList[i] = new Transform[r];
             for(int j = 0; j < r; j++)
             {
-                print(i + ", " + j);
                 newButton = Instantiate(gridButtonPrefab);
                 newButton.SetParent(transform);
                 newButton.GetComponent<RectTransform>().anchorMin = new Vector2(i * width, j * height);
@@ -40,6 +40,7 @@ public class BuildGridButtons : MonoBehaviour {
                 newButton.GetComponent<RectTransform>().offsetMax = Vector2.zero;
                 newButton.localScale = new Vector3(1, 1, 1);
                 newButton.GetComponent<GridButton>().model = model;
+                newButton.GetComponent<GridButton>().setPosition(new Vector2(i, j));
                 buttonList[i][j] = newButton;
             }
         }

@@ -6,6 +6,7 @@ public class GridButton : MonoBehaviour {
 
     // Use this for initialization
     public Model model;
+    private Vector2 position;
 	void Start () {
 		
 	}
@@ -14,4 +15,17 @@ public class GridButton : MonoBehaviour {
 	void Update () {
 		
 	}
+    public void setPosition(Vector2 p)
+    {
+        position = p;
+    }
+    public Vector2 getPosition()
+    {
+        return position;
+    }
+    public void onPress()
+    {
+        model.onGridButtonPress(position);
+    }
+      
 }

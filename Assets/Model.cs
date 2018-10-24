@@ -13,4 +13,8 @@ public class Model : MonoBehaviour {
 	void Update () {
 		
 	}
+    public void onGridButtonPress(Vector2 position)
+    {
+
+    }
 }
