@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Xml.Schema;
+using UnityEngine;
 using UnityEngine.Serialization;
 
 public class Grid : MonoBehaviour
@@ -38,15 +39,35 @@ public class Grid : MonoBehaviour
         }
 	}
 
+    public bool InGrid(int x, int y)
+    {
+        return x >= 0 && x < Width && y >= 0 && y < Height;
+    }
+
+    public bool InGrid(Vector2Int pos)
+    {
+        return InGrid(pos.x, pos.y);
+    }
+
     public GameObject GetGridComponent(int x, int y)
     {
         return _gridComponents[x][y];
+    }
+
+    public GameObject GetGridComponent(Vector2Int pos)
+    {
+        return GetGridComponent(pos.x, pos.y);
     }
 
     public GameObject SetGridComponent(int x, int y, GameObject prefab)
     {
         _gridComponents[x][y] = Instantiate(prefab, transform);
         return _gridComponents[x][y];
+    }
+
+    public GameObject SetGridComponent(Vector2Int pos, GameObject prefab)
+    {
+        return SetGridComponent(pos.x, pos.y, prefab);
     }
     
     private void buildGridButtons(int h, int w)
