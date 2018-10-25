@@ -12,6 +12,7 @@
         <e p="Model.cs" t="Include" />
         <e p="Scripts" t="Include">
           <e p="Grid.cs" t="Include" />
+          <e p="TestGrid.cs" t="Include" />
           <e p="Wire.cs" t="Include" />
         </e>
       </e>
