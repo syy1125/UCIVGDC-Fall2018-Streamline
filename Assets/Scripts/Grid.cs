@@ -1,48 +1,62 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
-public class Grid : MonoBehaviour {
-
+public class Grid : MonoBehaviour
+{
+    public static Grid Instance;
+    
     // Use this for initialization
-    public int rows;
-    public int columns;
+    [FormerlySerializedAs("rows")] public int Height;
+    [FormerlySerializedAs("columns")] public int Width;
     public Transform gridButtonPrefab;
     [HideInInspector]
     public Transform[][] buttonList;
     public Model model;
-	void Start () {
-        buildGrid(rows, columns);
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
 
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Debug.LogWarning("Another `Grid` is being instantiated. Destroying the new `Grid`.");
+            Destroy(gameObject);
+        }
+    }
+
+    private void Start () {
+        buildGridButtons(Height, Width);
 	}
-    private void buildGrid(int r, int c)
+    
+    private void buildGridButtons(int h, int w)
     {
         //Create grid of buttons with x,y coordinates
-        Transform newButton;
-        buttonList = new Transform[c][];
-        float width = 1f / c;
-        float height = 1f / r;
-        for (int i = 0; i < c; i++)
+        buttonList = new Transform[w][];
+        float width = 1f / w;
+        float height = 1f / h;
+        for (int row = 0; row < w; row++)
         {
-            buttonList[i] = new Transform[r];
-            for(int j = 0; j < r; j++)
+            buttonList[row] = new Transform[h];
+            for(int col = 0; col < h; col++)
             {
-                newButton = Instantiate(gridButtonPrefab);
+                Transform newButton = Instantiate(gridButtonPrefab);
                 newButton.SetParent(transform);
-                newButton.GetComponent<RectTransform>().anchorMin = new Vector2(i * width, j * height);
-                newButton.GetComponent<RectTransform>().anchorMax = new Vector2((i+1) * width, (j+1) * height);
-                newButton.GetComponent<RectTransform>().offsetMin = Vector2.zero;
-                newButton.GetComponent<RectTransform>().offsetMax = Vector2.zero;
-                newButton.localScale = new Vector3(1, 1, 1);
+                RectTransform buttonTransform = newButton.GetComponent<RectTransform>();
+                
+                buttonTransform.anchorMin = new Vector2(row * width, col * height);
+                buttonTransform.anchorMax = new Vector2((row+1) * width, (col+1) * height);
+                buttonTransform.offsetMin = Vector2.zero;
+                buttonTransform.offsetMax = Vector2.zero;
+                
+                newButton.localScale = Vector3.one;
                 newButton.GetComponent<GridButton>().model = model;
-                newButton.GetComponent<GridButton>().setPosition(new Vector2(i, j));
-                buttonList[i][j] = newButton;
+                newButton.GetComponent<GridButton>().setPosition(new Vector2(row, col));
+                buttonList[row][col] = newButton;
             }
         }
     }
@@ -50,5 +64,10 @@ public class Grid : MonoBehaviour {
     {
         // (x,y) == (col,row)
         return buttonList[x][y];
+    }
+
+    private void OnDestroy()
+    {
+        Instance = null;
     }
 }
