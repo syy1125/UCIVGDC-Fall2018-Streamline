@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-public class BuildGridButtons : MonoBehaviour {
+
+public class Grid : MonoBehaviour {
 
     // Use this for initialization
     public int rows;
