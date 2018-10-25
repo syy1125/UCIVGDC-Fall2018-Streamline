@@ -12,8 +12,14 @@ public class Grid : MonoBehaviour
     public Transform gridButtonPrefab;
     [HideInInspector]
     public Transform[][] buttonList;
-    public Model model;
 
+    public GameObject redWire;
+    public GameObject greenWire;
+    public GameObject addition;
+    public GameObject subtraction;
+    public GameObject multiplication;
+    public GameObject division;
+    public GameObject constant;
     private GameObject[][] _gridComponents;
 
     private void Awake()
@@ -61,7 +67,7 @@ public class Grid : MonoBehaviour
 
     public GameObject SetGridComponent(int x, int y, GameObject prefab)
     {
-        _gridComponents[x][y] = Instantiate(prefab, transform);
+        _gridComponents[x][y] = Instantiate(prefab, getGridButton(x,y));
         return _gridComponents[x][y];
     }
 
@@ -69,7 +75,15 @@ public class Grid : MonoBehaviour
     {
         return SetGridComponent(pos.x, pos.y, prefab);
     }
-    
+    public void DestroyGridComponent(int x, int y)
+    {
+        Destroy(GetGridComponent(x,y));
+        _gridComponents[x][y] = null;
+    }
+    public void DestroyGridComponent(Vector2Int pos)
+    {
+        DestroyGridComponent(pos.x, pos.y);
+    }
     private void buildGridButtons(int h, int w)
     {
         //Create grid of buttons with x,y coordinates
@@ -91,8 +105,8 @@ public class Grid : MonoBehaviour
                 buttonTransform.offsetMax = Vector2.zero;
                 
                 newButton.localScale = Vector3.one;
-                newButton.GetComponent<GridButton>().model = model;
-                newButton.GetComponent<GridButton>().setPosition(new Vector2(row, col));
+                newButton.GetComponent<GridButton>().grid = GetComponent<Grid>();
+                newButton.GetComponent<GridButton>().setPosition(new Vector2Int(row, col));
                 buttonList[row][col] = newButton;
             }
         }
@@ -102,7 +116,88 @@ public class Grid : MonoBehaviour
         // (x,y) == (col,row)
         return buttonList[x][y];
     }
-
+    public void onGridButtonPress(Vector2Int position)
+    {
+        if (!ValidPlacement(position, ComponentSelection.cursorSelection))
+            return;
+        switch (ComponentSelection.cursorSelection)
+        {
+            case Selection.NONE:
+                return;
+            case Selection.ERASER:
+                DestroyGridComponent(position);
+                break;
+            case Selection.REDWIRE:
+                SetGridComponent(position, redWire);
+                break;
+            case Selection.GREENWIRE:
+                SetGridComponent(position, greenWire);
+                break;
+            case Selection.ADD:
+                SetGridComponent(position, addition);
+                break;
+            case Selection.SUB:
+                SetGridComponent(position, subtraction);
+                break;
+            case Selection.MULT:
+                SetGridComponent(position, multiplication);
+                break;
+            case Selection.DIV:
+                SetGridComponent(position, division);
+                break;
+            case Selection.CONSTANT:
+                SetGridComponent(position, constant);
+                break;
+        }
+    }
+    public bool ValidPlacement(Vector2Int position, Selection selection)
+    {
+        bool result = false;
+        if (!InGrid(position))
+            return false;
+        GameObject g = GetGridComponent(position);
+        if (g == null)
+            return true;
+        switch (selection)
+        {
+            case Selection.NONE:
+                return true;
+            case Selection.ERASER:
+                return true;
+            case Selection.REDWIRE:
+                if (IsOperator(g))
+                    return false;
+                if (IsWire(g) && !g.GetComponent<Wire>().HasRed)
+                    return true;
+                break;
+            case Selection.GREENWIRE:
+                if (IsOperator(g))
+                    return false;
+                if (IsWire(g) && !g.GetComponent<Wire>().HasGreen)
+                    return true;
+                break;
+            case Selection.ADD:
+                return !(IsOperator(g) || IsWire(g));
+            case Selection.SUB:
+                return !(IsOperator(g) || IsWire(g));
+            case Selection.MULT:
+                return !(IsOperator(g) || IsWire(g));
+            case Selection.DIV:
+                return !(IsOperator(g) || IsWire(g));
+            case Selection.CONSTANT:
+                return !(IsOperator(g) || IsWire(g));
+        }
+        return result;
+        
+    }
+    public bool IsWire(GameObject g)
+    {
+        return g != null && g.CompareTag("Wire");
+    }
+    public bool IsOperator(GameObject g)
+    {
+        return g != null && g.CompareTag("Operator");
+    }
     private void OnDestroy()
     {
         Instance = null;

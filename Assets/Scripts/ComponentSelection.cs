@@ -5,7 +5,7 @@ using UnityEngine;
 public enum Selection
 {
     NONE, ERASER, REDWIRE, GREENWIRE,
-    ADD, SUB, MULT, DIV,
+    ADD, SUB, MULT, DIV, CONSTANT,
 }
 public class ComponentSelection : MonoBehaviour {
 
@@ -19,8 +19,8 @@ public class ComponentSelection : MonoBehaviour {
     public KeyCode subtraction;
     public KeyCode multiplication;
     public KeyCode division;
-    
-    private Selection cursorSelection;
+    public KeyCode constant;
+    public static Selection cursorSelection;
 	void Start () {
         cursorSelection = Selection.NONE;
 	}
