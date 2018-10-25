@@ -54,7 +54,10 @@ public class ComponentSelection : MonoBehaviour {
         } else if (Input.GetKeyDown(division))
         {
             setSelection(Selection.DIV);
-        } 
+        } else if (Input.GetKeyDown(constant))
+        {
+            setSelection(Selection.CONSTANT);
+        }
 
 	}
     public Selection getSelection()
@@ -64,5 +67,10 @@ public class ComponentSelection : MonoBehaviour {
     public void setSelection(Selection s)
     {
         cursorSelection = s;
+    }
+    public void setSelection(int x)
+    {
+        //This is the only way buttons can call setSelection, because of the enum parameter I think
+        cursorSelection = (Selection)x;
     }
 }

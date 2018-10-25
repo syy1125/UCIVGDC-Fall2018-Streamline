@@ -192,11 +192,13 @@ public class Grid : MonoBehaviour
     }
     public bool IsWire(GameObject g)
     {
-        return g != null && g.CompareTag("Wire");
+        return g != null && g.GetComponent<Wire>() != null;
     }
     public bool IsOperator(GameObject g)
     {
-        return g != null && g.CompareTag("Operator");
+        //return g != null && g.GetComponent<Operator>() != null);
+        return g != null && g.CompareTag("Operator");   //placeholder until Operator class is built
+            
     }
     private void OnDestroy()
     {
