@@ -1,8 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.Serialization;
-using UnityEngine.UI;
 
 public class Grid : MonoBehaviour
 {
@@ -15,6 +12,8 @@ public class Grid : MonoBehaviour
     [HideInInspector]
     public Transform[][] buttonList;
     public Model model;
+
+    private GameObject[][] _gridComponents;
 
     private void Awake()
     {
@@ -31,7 +30,24 @@ public class Grid : MonoBehaviour
 
     private void Start () {
         buildGridButtons(Height, Width);
+        
+        _gridComponents = new GameObject[Width][];
+        for (int x = 0; x < Width; x++)
+        {
+            _gridComponents[x] = new GameObject[Height];
+        }
 	}
+
+    public GameObject GetGridComponent(int x, int y)
+    {
+        return _gridComponents[x][y];
+    }
+
+    public GameObject SetGridComponent(int x, int y, GameObject prefab)
+    {
+        _gridComponents[x][y] = Instantiate(prefab, transform);
+        return _gridComponents[x][y];
+    }
     
     private void buildGridButtons(int h, int w)
     {
