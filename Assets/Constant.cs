@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Constant : Operator {
+	public int number;
 
 	protected override void Step() {
-		GetFromReceiver();
+		result = number;
 		SendToTransmitter();
 	}
 }
