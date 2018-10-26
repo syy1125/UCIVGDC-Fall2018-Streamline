@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.UI;
 public enum Selection
 {
     NONE, ERASER, REDWIRE, GREENWIRE,
@@ -21,13 +21,15 @@ public class ComponentSelection : MonoBehaviour {
     public KeyCode division;
     public KeyCode constant;
     public static Selection cursorSelection;
+    private Image image;
 	void Start () {
         cursorSelection = Selection.NONE;
+        image = GetComponent<Image>();
 	}
 	
 	// Update is called once per frame
 	void Update () {
-
+        image.enabled = !GameController.gameMenuOpen;
         if (Input.GetKeyDown(none))
         {
             setSelection(Selection.NONE);
