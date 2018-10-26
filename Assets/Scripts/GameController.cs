@@ -24,9 +24,22 @@ public class GameController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        if (Input.GetKeyDown(escapeKey))
+        switch (simState)
         {
-            gameMenuUIGroup.EnableUI();
+            case SimState.EDITING:
+                if(!gameMenuOpen && Input.GetKeyDown(escapeKey))
+                {
+                    
+                    gameMenuUIGroup.EnableUI();
+                }
+                break;
+            case SimState.RUNNING:
+
+                break;
+            case SimState.PAUSED:
+
+                break;
         }
+        
 	}
 }
