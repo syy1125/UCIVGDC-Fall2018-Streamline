@@ -8,12 +8,24 @@
       <e p="Assembly-CSharp.csproj" t="IncludeRecursive" />
       <e p="Assets" t="Include">
         <e p="Scripts" t="Include">
+          <e p="Add.cs" t="Include" />
           <e p="ComponentSelection.cs" t="Include" />
+          <e p="ConfirmationUIGroup.cs" t="Include" />
+          <e p="Constant.cs" t="Include" />
+          <e p="Division.cs" t="Include" />
           <e p="FollowCursor.cs" t="Include" />
+          <e p="GameController.cs" t="Include" />
+          <e p="GameMenuUIGroup.cs" t="Include" />
           <e p="Grid.cs" t="Include" />
           <e p="GridButton.cs" t="Include" />
           <e p="Model.cs" t="Include" />
+          <e p="Multiplication.cs" t="Include" />
+          <e p="Operator.cs" t="Include" />
+          <e p="Receiver.cs" t="Include" />
+          <e p="Subtract.cs" t="Include" />
           <e p="TestGrid.cs" t="Include" />
+          <e p="Transmitter.cs" t="Include" />
+          <e p="UIGroup.cs" t="Include" />
           <e p="Wire.cs" t="Include" />
         </e>
       </e>
