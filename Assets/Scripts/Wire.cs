@@ -1,11 +1,22 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
+using UnityEditor.U2D;
 using UnityEngine;
 
 public class Wire : MonoBehaviour
 {
-	public bool HasRed;
-	public bool HasGreen;
+	[Serializable]
+	public struct Parts
+	{
+		public GameObject Center;
+		public GameObject Up;
+		public GameObject Down;
+		public GameObject Left;
+		public GameObject Right;
+	}
+
+	public Parts RedParts;
+	public Parts GreenParts;
 
 	private class WireNetwork
 	{
@@ -35,7 +46,7 @@ public class Wire : MonoBehaviour
 		set
 		{
 			_hasRed = value;
-			UpdateTexture();
+			UpdateTexture(RedParts, HasRedWireAt);
 		}
 	}
 
@@ -45,7 +56,7 @@ public class Wire : MonoBehaviour
 		set
 		{
 			_hasGreen = value;
-			UpdateTexture();
+			UpdateTexture(GreenParts, HasGreenWireAt);
 		}
 	}
 
@@ -55,10 +66,37 @@ public class Wire : MonoBehaviour
 	{
 		_redNetwork = null;
 		_greenNetwork = null;
+		
+		UpdateAllTextures();
 	}
 
-	public void UpdateTexture()
+	private static bool HasRedWireAt(Vector2Int location)
 	{
+		GameObject g = Grid.Instance.InGrid(location) ? Grid.Instance.GetGridComponent(location) : null;
+		return g != null && g.GetComponent<Wire>() != null && g.GetComponent<Wire>().HasRed;
+	}
+
+	private static bool HasGreenWireAt(Vector2Int location)
+	{
+		GameObject g = Grid.Instance.InGrid(location) ? Grid.Instance.GetGridComponent(location) : null;
+		return g != null && g.GetComponent<Wire>() != null && g.GetComponent<Wire>().HasGreen;
+	}
+
+	public void UpdateTexture(Parts wireParts, Predicate<Vector2Int> shouldConnect)
+	{
+		bool selfHasColor = shouldConnect(Location);
+		 
+		wireParts.Center.SetActive(selfHasColor);
+		wireParts.Up.SetActive(selfHasColor && shouldConnect(Location + Vector2Int.up));
+		wireParts.Down.SetActive(selfHasColor && shouldConnect(Location + Vector2Int.down));
+		wireParts.Left.SetActive(selfHasColor && shouldConnect(Location + Vector2Int.left));
+		wireParts.Right.SetActive(selfHasColor && shouldConnect(Location + Vector2Int.right));
+	}
+
+	public void UpdateAllTextures()
+	{
+		UpdateTexture(RedParts, HasRedWireAt);
+		UpdateTexture(GreenParts, HasGreenWireAt);
 	}
 
 	public void SetUp()
@@ -66,7 +104,7 @@ public class Wire : MonoBehaviour
 		if (HasRed && _redNetwork == null)
 		{
 			var network = new WireNetwork();
-			
+
 			FloodFill(
 				Location,
 				wire => wire._hasRed,
@@ -77,7 +115,7 @@ public class Wire : MonoBehaviour
 		if (HasGreen && _greenNetwork == null)
 		{
 			var network = new WireNetwork();
-			
+
 			FloodFill(
 				Location,
 				wire => wire._hasGreen,
