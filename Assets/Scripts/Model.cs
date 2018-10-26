@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GridButton : MonoBehaviour {
+public class Model : MonoBehaviour {
 
-    // Use this for initialization
-    public Model model;
+	// Use this for initialization
 	void Start () {
 		
 	}
@@ -14,4 +13,8 @@ public class GridButton : MonoBehaviour {
 	void Update () {
 		
 	}
+    public void onGridButtonPress(Vector2 position)
+    {
+
+    }
 }
