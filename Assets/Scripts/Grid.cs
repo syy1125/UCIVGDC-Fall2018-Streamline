@@ -200,6 +200,16 @@ public class Grid : MonoBehaviour
         return g != null && g.CompareTag("Operator");   //placeholder until Operator class is built
             
     }
+    public void ClearGrid()
+    {
+        for(int i = 0; i < Height; i++)
+        {
+            for(int j = 0; j < Width; j++)
+            {
+                DestroyGridComponent(i, j);
+            }
+        }
+    }
     private void OnDestroy()
     {
         Instance = null;
