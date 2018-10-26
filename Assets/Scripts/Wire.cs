@@ -1,11 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
+using UnityEditor.U2D;
 using UnityEngine;
 
 public class Wire : MonoBehaviour
 {
-	public bool HasRed;
-	public bool HasGreen;
+	[Serializable]
+	public struct Parts
+	{
+		public GameObject Center;
+		public GameObject Up;
+		public GameObject Down;
+		public GameObject Left;
+		public GameObject Right;
+	}
+
+	public Parts RedParts;
+	public Parts GreenParts;
 
 	private class WireNetwork
 	{
@@ -26,42 +37,97 @@ public class Wire : MonoBehaviour
 		}
 	}
 
+	private bool _hasRed;
+	private bool _hasGreen;
+
+	public bool HasRed
+	{
+		get { return _hasRed; }
+		set
+		{
+			_hasRed = value;
+			UpdateTexture(RedParts, HasRedWireAt);
+		}
+	}
+
+	public bool HasGreen
+	{
+		get { return _hasGreen; }
+		set
+		{
+			_hasGreen = value;
+			UpdateTexture(GreenParts, HasGreenWireAt);
+		}
+	}
+
 	public Vector2Int Location;
 
 	private void Start()
 	{
 		_redNetwork = null;
 		_greenNetwork = null;
+		
+		UpdateAllTextures();
+	}
+
+	private static bool HasRedWireAt(Vector2Int location)
+	{
+		GameObject g = Grid.Instance.InGrid(location) ? Grid.Instance.GetGridComponent(location) : null;
+		return g != null && g.GetComponent<Wire>() != null && g.GetComponent<Wire>().HasRed;
+	}
+
+	private static bool HasGreenWireAt(Vector2Int location)
+	{
+		GameObject g = Grid.Instance.InGrid(location) ? Grid.Instance.GetGridComponent(location) : null;
+		return g != null && g.GetComponent<Wire>() != null && g.GetComponent<Wire>().HasGreen;
+	}
+
+	public void UpdateTexture(Parts wireParts, Predicate<Vector2Int> shouldConnect)
+	{
+		bool selfHasColor = shouldConnect(Location);
+		 
+		wireParts.Center.SetActive(selfHasColor);
+		wireParts.Up.SetActive(selfHasColor && shouldConnect(Location + Vector2Int.up));
+		wireParts.Down.SetActive(selfHasColor && shouldConnect(Location + Vector2Int.down));
+		wireParts.Left.SetActive(selfHasColor && shouldConnect(Location + Vector2Int.left));
+		wireParts.Right.SetActive(selfHasColor && shouldConnect(Location + Vector2Int.right));
+	}
+
+	public void UpdateAllTextures()
+	{
+		UpdateTexture(RedParts, HasRedWireAt);
+		UpdateTexture(GreenParts, HasGreenWireAt);
 	}
 
 	public void SetUp()
 	{
 		if (HasRed && _redNetwork == null)
 		{
-			BuildNetwork(
-				new WireNetwork(),
+			var network = new WireNetwork();
+
+			FloodFill(
 				Location,
-				wire => wire.HasRed,
-				(wire, network) => wire._redNetwork = network
+				wire => wire._hasRed,
+				wire => wire._redNetwork = network
 			);
 		}
 
 		if (HasGreen && _greenNetwork == null)
 		{
-			BuildNetwork(
-				new WireNetwork(),
+			var network = new WireNetwork();
+
+			FloodFill(
 				Location,
-				wire => wire.HasGreen,
-				(wire, network) => wire._greenNetwork = network
+				wire => wire._hasGreen,
+				wire => wire._greenNetwork = network
 			);
 		}
 	}
 
-	private void BuildNetwork(
-		WireNetwork network,
+	private void FloodFill(
 		Vector2Int start,
-		Predicate<Wire> hasColor,
-		Action<Wire, WireNetwork> setNetwork
+		Predicate<Wire> include,
+		Action<Wire> update
 	)
 	{
 		// Flood fill algorithm - avoids loops in the wire system and so on.
@@ -79,10 +145,10 @@ public class Wire : MonoBehaviour
 				GameObject g = Grid.Instance.GetGridComponent(next);
 				if (g == null) continue;
 				Wire w = g.GetComponent<Wire>();
-				if (w == null || !hasColor(w)) continue;
+				if (w == null || !include(w)) continue;
 
 				// Update Wire
-				setNetwork(w, network);
+				update(w);
 
 				// Propagate search
 				Vector2Int up = next + Vector2Int.up;

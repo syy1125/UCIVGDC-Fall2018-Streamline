@@ -1,4 +1,5 @@
-﻿using System.Xml.Schema;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Xml.Schema;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -13,8 +14,7 @@ public class Grid : MonoBehaviour
     [HideInInspector]
     public Transform[][] buttonList;
 
-    public GameObject redWire;
-    public GameObject greenWire;
+    public GameObject wire;
     public GameObject addition;
     public GameObject subtraction;
     public GameObject multiplication;
@@ -67,8 +67,27 @@ public class Grid : MonoBehaviour
 
     public GameObject SetGridComponent(int x, int y, GameObject prefab)
     {
-        _gridComponents[x][y] = Instantiate(prefab, getGridButton(x,y));
+        _gridComponents[x][y] = Instantiate(prefab, getGridButton(x, y));
         return _gridComponents[x][y];
+    }
+
+    [SuppressMessage("ReSharper", "PossibleNullReferenceException")]
+    public void UpdateAdjacentWires(int x, int y)
+    {
+        GameObject up = InGrid(x, y + 1) ? GetGridComponent(x, y + 1) : null;
+        GameObject down = InGrid(x, y - 1) ? GetGridComponent(x, y - 1) : null;
+        GameObject left = InGrid(x - 1, y) ? GetGridComponent(x - 1, y) : null;
+        GameObject right = InGrid(x + 1, y) ? GetGridComponent(x + 1, y) : null;
+
+        if (IsWire(up)) up.GetComponent<Wire>().UpdateAllTextures();
+        if (IsWire(down)) down.GetComponent<Wire>().UpdateAllTextures();
+        if (IsWire(left)) left.GetComponent<Wire>().UpdateAllTextures();
+        if (IsWire(right)) right.GetComponent<Wire>().UpdateAllTextures();
+    }
+
+    public void UpdateAdjacentWires(Vector2Int location)
+    {
+        UpdateAdjacentWires(location.x, location.y);
     }
 
     public GameObject SetGridComponent(Vector2Int pos, GameObject prefab)
@@ -116,39 +135,53 @@ public class Grid : MonoBehaviour
         // (x,y) == (col,row)
         return buttonList[x][y];
     }
-    public void onGridButtonPress(Vector2Int position)
+    public void onGridButtonPress(Vector2Int location)
     {
-        if (!ValidPlacement(position, ComponentSelection.cursorSelection))
+        if (!ValidPlacement(location, ComponentSelection.cursorSelection))
             return;
         switch (ComponentSelection.cursorSelection)
         {
             case Selection.NONE:
                 return;
             case Selection.ERASER:
-                DestroyGridComponent(position);
+                DestroyGridComponent(location);
                 break;
             case Selection.REDWIRE:
-                SetGridComponent(position, redWire);
+                if (IsWire(GetGridComponent(location)))
+                {
+                    GetGridComponent(location).GetComponent<Wire>().HasRed = true;
+                    break;
+                }
+                SetGridComponent(location, wire).GetComponent<Wire>().Location = location;
+                GetGridComponent(location).GetComponent<Wire>().HasRed = true;
                 break;
             case Selection.GREENWIRE:
-                SetGridComponent(position, greenWire);
+                if (IsWire(GetGridComponent(location)))
+                {
+                    GetGridComponent(location).GetComponent<Wire>().HasGreen = true;
+                    break;
+                }
+                SetGridComponent(location, wire).GetComponent<Wire>().Location = location;
+                GetGridComponent(location).GetComponent<Wire>().HasGreen = true;
                 break;
             case Selection.ADD:
-                SetGridComponent(position, addition);
+                SetGridComponent(location, addition);
                 break;
             case Selection.SUB:
-                SetGridComponent(position, subtraction);
+                SetGridComponent(location, subtraction);
                 break;
             case Selection.MULT:
-                SetGridComponent(position, multiplication);
+                SetGridComponent(location, multiplication);
                 break;
             case Selection.DIV:
-                SetGridComponent(position, division);
+                SetGridComponent(location, division);
                 break;
             case Selection.CONSTANT:
-                SetGridComponent(position, constant);
+                SetGridComponent(location, constant);
                 break;
         }
+        
+        UpdateAdjacentWires(location);
     }
     public bool ValidPlacement(Vector2Int position, Selection selection)
     {
