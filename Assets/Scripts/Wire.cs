@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -26,6 +26,29 @@ public class Wire : MonoBehaviour
 		}
 	}
 
+	private bool _hasRed;
+	private bool _hasGreen;
+
+	public bool HasRed
+	{
+		get { return _hasRed; }
+		set
+		{
+			_hasRed = value;
+			UpdateTexture();
+		}
+	}
+
+	public bool HasGreen
+	{
+		get { return _hasGreen; }
+		set
+		{
+			_hasGreen = value;
+			UpdateTexture();
+		}
+	}
+
 	public Vector2Int Location;
 
 	private void Start()
@@ -34,34 +57,39 @@ public class Wire : MonoBehaviour
 		_greenNetwork = null;
 	}
 
+	public void UpdateTexture()
+	{
+	}
+
 	public void SetUp()
 	{
 		if (HasRed && _redNetwork == null)
 		{
-			BuildNetwork(
-				new WireNetwork(),
+			var network = new WireNetwork();
+			
+			FloodFill(
 				Location,
-				wire => wire.HasRed,
-				(wire, network) => wire._redNetwork = network
+				wire => wire._hasRed,
+				wire => wire._redNetwork = network
 			);
 		}
 
 		if (HasGreen && _greenNetwork == null)
 		{
-			BuildNetwork(
-				new WireNetwork(),
+			var network = new WireNetwork();
+			
+			FloodFill(
 				Location,
-				wire => wire.HasGreen,
-				(wire, network) => wire._greenNetwork = network
+				wire => wire._hasGreen,
+				wire => wire._greenNetwork = network
 			);
 		}
 	}
 
-	private void BuildNetwork(
-		WireNetwork network,
+	private void FloodFill(
 		Vector2Int start,
-		Predicate<Wire> hasColor,
-		Action<Wire, WireNetwork> setNetwork
+		Predicate<Wire> include,
+		Action<Wire> update
 	)
 	{
 		// Flood fill algorithm - avoids loops in the wire system and so on.
@@ -79,10 +107,10 @@ public class Wire : MonoBehaviour
 				GameObject g = Grid.Instance.GetGridComponent(next);
 				if (g == null) continue;
 				Wire w = g.GetComponent<Wire>();
-				if (w == null || !hasColor(w)) continue;
+				if (w == null || !include(w)) continue;
 
 				// Update Wire
-				setNetwork(w, network);
+				update(w);
 
 				// Propagate search
 				Vector2Int up = next + Vector2Int.up;
