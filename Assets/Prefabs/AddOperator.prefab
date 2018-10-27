@@ -22,6 +22,7 @@ GameObject:
   - component: {fileID: 222923862050727336}
   - component: {fileID: 114949138029618060}
   - component: {fileID: 114620338655684306}
+  - component: {fileID: 114728110492516694}
   m_Layer: 5
   m_Name: AddOperator
   m_TagString: Operator
@@ -43,6 +44,17 @@ MonoBehaviour:
   m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
   m_EffectDistance: {x: 1, y: -1}
   m_UseGraphicAlpha: 1
+--- !u!114 &114728110492516694
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1111880713450656}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 11f260475934542fdb7327a853eca55b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114949138029618060
 MonoBehaviour:
   m_ObjectHideFlags: 1

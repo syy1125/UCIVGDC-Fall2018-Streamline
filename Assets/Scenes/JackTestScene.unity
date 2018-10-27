@@ -2041,7 +2041,7 @@ MonoBehaviour:
   division: {fileID: 1331655183446030, guid: 857bdbca88889ec4395925eb8183ee8f, type: 2}
   constant: {fileID: 1516390648950410, guid: ca78a9a57083ac94a9aee4b204928695, type: 2}
   SelectedColor: {r: 0, g: 1, b: 0, a: 1}
-  EditorInstance: {fileID: 0}
+  EditorInstance: {fileID: 1344412232}
 --- !u!1 &897321720
 GameObject:
   m_ObjectHideFlags: 0
@@ -3539,7 +3539,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ComponentName: {fileID: 1293204662}
-  ComponentPreview: {fileID: 0}
+  ComponentPreview: {fileID: 1243125425}
   Up:
     Input1: {fileID: 0}
     Input2: {fileID: 0}
