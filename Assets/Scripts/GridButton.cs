@@ -38,4 +38,15 @@ public class GridButton : MonoBehaviour {
     {
         eventSystem.SetSelectedGameObject(gameObject);
     }
+    public void DragDraw()
+    {
+        //place components if this is a valid mouse drag
+        if (!GameController.mouseDragging)
+            return;
+        onPress();
+    }
+    public void BeginDragDraw()
+    {
+        GameController.mouseDragging = true;
+    }
 }
