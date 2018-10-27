@@ -60,13 +60,14 @@ public class Wire : MonoBehaviour
 		}
 	}
 
+	[HideInInspector]
 	public Vector2Int Location;
 
 	private void Start()
 	{
 		_redNetwork = null;
 		_greenNetwork = null;
-		
+
 		UpdateAllTextures();
 	}
 
@@ -85,7 +86,7 @@ public class Wire : MonoBehaviour
 	public void UpdateTexture(Parts wireParts, Predicate<Vector2Int> shouldConnect)
 	{
 		bool selfHasColor = shouldConnect(Location);
-		 
+
 		wireParts.Center.SetActive(selfHasColor);
 		wireParts.Up.SetActive(selfHasColor && shouldConnect(Location + Vector2Int.up));
 		wireParts.Down.SetActive(selfHasColor && shouldConnect(Location + Vector2Int.down));

@@ -5,7 +5,6 @@ using UnityEngine.EventSystems;
 public class GridButton : MonoBehaviour {
 
     // Use this for initialization
-    public Grid grid;
     private Vector2Int position;
     private EventSystem eventSystem;
     void Start()
@@ -18,10 +17,7 @@ public class GridButton : MonoBehaviour {
         trigger.triggers.Add(entry);
 
     }
-        // Update is called once per frame
-        void Update () {
-		
-	}
+    
     public void setPosition(Vector2Int p)
     {
         position = p;
@@ -32,7 +28,7 @@ public class GridButton : MonoBehaviour {
     }
     public void onPress()
     {
-        grid.onGridButtonPress(position);
+        Grid.Instance.onGridButtonPress(position);
     }
     public void OnPointerEnter(PointerEventData data)
     {
