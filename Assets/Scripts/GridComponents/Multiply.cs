@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Multiplication : Operator {
+public class Multiply : Operator {
 
 	protected override void Step() {
 		GetFromReceiver();

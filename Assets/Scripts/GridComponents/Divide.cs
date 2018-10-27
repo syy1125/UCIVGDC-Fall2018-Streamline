@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Division : Operator {
+public class Divide : Operator {
 
 	protected override void Step() {
 		GetFromReceiver();
