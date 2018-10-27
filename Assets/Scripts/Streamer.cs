@@ -5,6 +5,8 @@ using UnityEngine;
 public class Streamer : MonoBehaviour {
 
     // Use this for initialization
+    public float trailWidth;
+
     private Vector2 velocity;
     public float rightVelocity;
     public float orthogonalVelocity;
@@ -12,9 +14,14 @@ public class Streamer : MonoBehaviour {
     public float moveDuration;
     private float moveTimer;
     public float lifeTime;
-	void Start () {
+    public float scale;
+    private TrailRenderer tr;
+	void Awake () {
         Destroy(gameObject, lifeTime);
         moveTimer = moveDuration;
+        tr = GetComponent<TrailRenderer>();
+        tr.startWidth = trailWidth*scale;
+        tr.endWidth = trailWidth*scale;
 	}
 	
 	// Update is called once per frame
@@ -40,6 +47,12 @@ public class Streamer : MonoBehaviour {
         {
             moveTimer -= Time.deltaTime;
         }
-        transform.position += (Vector3)velocity*Time.deltaTime;
+        transform.position += ((transform.up*velocity.y)+(transform.right*velocity.x))*Time.deltaTime*scale;
 	}
+    public void SetScale(float s)
+    {
+        scale = s;
+        tr.startWidth = trailWidth * scale;
+        tr.endWidth = trailWidth * scale;
+    }
 }
