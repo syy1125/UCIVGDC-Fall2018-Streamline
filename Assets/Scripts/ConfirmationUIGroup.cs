@@ -47,7 +47,6 @@ public class ConfirmationUIGroup : UIGroup {
     public IEnumerator EscapePress()
     {
         yield return new WaitForEndOfFrame();
-        print("At end of frame");
         this.DisableUI();
         gameMenuUIGroup.EnableUI();
     }
