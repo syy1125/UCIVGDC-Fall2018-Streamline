@@ -1,7 +1,9 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Xml.Schema;
+using TMPro.EditorUtilities;
 using UnityEngine;
 using UnityEngine.Serialization;
+using UnityEngine.UI;
 
 public class Grid : MonoBehaviour
 {
@@ -22,6 +24,45 @@ public class Grid : MonoBehaviour
     public GameObject constant;
     private GameObject[][] _gridComponents;
 
+    public Color SelectedColor;
+
+    private ColorBlock SelectedButtonColors
+    {
+        get
+        {
+            return new ColorBlock()
+            {
+                normalColor = SelectedColor,
+                highlightedColor = SelectedColor,
+                pressedColor = SelectedColor,
+                disabledColor = SelectedColor,
+                colorMultiplier = 1
+            };
+        }
+    }
+    
+    private Vector2Int _selected = Vector2Int.one * -1;
+    
+    public Vector2Int Selected
+    {
+        get { return _selected; }
+        private set
+        {
+            if (InGrid(_selected))
+            {
+                buttonList[_selected.x][_selected.y].GetComponent<Button>().colors = gridButtonPrefab.GetComponent<Button>().colors;
+            }
+
+            _selected = value;
+            
+            buttonList[_selected.x][_selected.y].GetComponent<Button>().colors = SelectedButtonColors;
+            
+            EditorInstance.UpdateUI();
+        }
+    }
+
+    public ComponentEditor EditorInstance;
+    
     private void Awake()
     {
         if (Instance == null)
@@ -36,7 +77,7 @@ public class Grid : MonoBehaviour
     }
 
     private void Start () {
-        buildGridButtons(Height, Width);
+        buildGridButtons();
         
         _gridComponents = new GameObject[Width][];
         for (int x = 0; x < Width; x++)
@@ -103,30 +144,29 @@ public class Grid : MonoBehaviour
     {
         DestroyGridComponent(pos.x, pos.y);
     }
-    private void buildGridButtons(int h, int w)
+    private void buildGridButtons()
     {
         //Create grid of buttons with x,y coordinates
-        buttonList = new Transform[w][];
-        float width = 1f / w;
-        float height = 1f / h;
-        for (int row = 0; row < w; row++)
+        buttonList = new Transform[Width][];
+        float buttonWidth = 1f / Width;
+        float buttonHeight = 1f / Height;
+        for (int x = 0; x < Width; x++)
         {
-            buttonList[row] = new Transform[h];
-            for(int col = 0; col < h; col++)
+            buttonList[x] = new Transform[Height];
+            for(int y = 0; y < Height; y++)
             {
                 Transform newButton = Instantiate(gridButtonPrefab);
                 newButton.SetParent(transform);
                 RectTransform buttonTransform = newButton.GetComponent<RectTransform>();
                 
-                buttonTransform.anchorMin = new Vector2(row * width, col * height);
-                buttonTransform.anchorMax = new Vector2((row+1) * width, (col+1) * height);
+                buttonTransform.anchorMin = new Vector2(x * buttonWidth, y * buttonHeight);
+                buttonTransform.anchorMax = new Vector2((x+1) * buttonWidth, (y+1) * buttonHeight);
                 buttonTransform.offsetMin = Vector2.zero;
                 buttonTransform.offsetMax = Vector2.zero;
                 
                 newButton.localScale = Vector3.one;
-                newButton.GetComponent<GridButton>().grid = GetComponent<Grid>();
-                newButton.GetComponent<GridButton>().setPosition(new Vector2Int(row, col));
-                buttonList[row][col] = newButton;
+                newButton.GetComponent<GridButton>().setPosition(new Vector2Int(x, y));
+                buttonList[x][y] = newButton;
             }
         }
     }
@@ -137,12 +177,16 @@ public class Grid : MonoBehaviour
     }
     public void onGridButtonPress(Vector2Int location)
     {
+        if (ComponentSelection.cursorSelection == Selection.NONE)
+        {
+            Selected = location;
+            return;
+        }
+        
         if (!ValidPlacement(location, ComponentSelection.cursorSelection))
             return;
         switch (ComponentSelection.cursorSelection)
         {
-            case Selection.NONE:
-                return;
             case Selection.ERASER:
                 DestroyGridComponent(location);
                 break;
