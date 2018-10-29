@@ -10,11 +10,14 @@ public abstract class Operator : MonoBehaviour {
 	protected Receiver receiver;
 	protected Transmitter transmitter;
 	
+	public string OpName { get; protected set; }
+	
 	protected abstract void Step();
 
-	private void Start() {
+	protected virtual void Start() {
 		receiver = GetComponent<Receiver>();
 		transmitter = GetComponent<Transmitter>();
+		OpName = "Operator";
 	}
 
 	protected void GetFromReceiver() {

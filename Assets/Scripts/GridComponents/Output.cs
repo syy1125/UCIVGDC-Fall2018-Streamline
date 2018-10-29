@@ -6,6 +6,12 @@ public class Output : Operator {
 
     public ColArray[] outputColumns; //values will be distributed from left to right, looping
     private int colIndex = 0;
+
+    protected override void Start()
+    {
+        base.Start();
+        OpName = "Output";
+    }
     
     protected override void Step()
     {

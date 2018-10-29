@@ -34,7 +34,7 @@ public class ComponentEditor : MonoBehaviour
 				GameObject gridComponent = Grid.Instance.GetGridComponent(Grid.Instance.Selected);
 				Instantiate(gridComponent, ComponentPreview.transform);
 				// LOL super hacky. Is there a better way?
-				ComponentName.text = gridComponent.GetComponent<Operator>().GetType().Name;
+				ComponentName.text = gridComponent.GetComponent<Operator>().OpName;
 
 				return;
 			}

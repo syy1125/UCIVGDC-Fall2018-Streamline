@@ -3,6 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Multiply : Operator {
+	protected override void Start()
+	{
+		base.Start();
+		OpName = "Multiply";
+	}
 
 	protected override void Step() {
 		GetFromReceiver();
