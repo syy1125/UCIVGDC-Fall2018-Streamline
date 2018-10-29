@@ -24,7 +24,6 @@ public class ColArray : MonoBehaviour {
         nums = new List<int>();
         for (int i = 0; i < text.Count; i++)
         {
-            nums.Add(-1000);
             text[i].text = "";
         }
     }
@@ -46,5 +45,15 @@ public class ColArray : MonoBehaviour {
         }
         nums[i] = newX;
         text[i].text = nums[i].ToString();
+    }
+    public void AddValue(int val)
+    {
+        if(nums.Count >= text.Count)
+        {
+            Debug.Log("ColArray is Full: (Count=" + nums.Count);
+            return;
+        }
+        text[nums.Count].text = val.ToString();
+        nums.Add(val);
     }
 }
