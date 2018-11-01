@@ -1,6 +1,4 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using System.Xml.Schema;
-using TMPro.EditorUtilities;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
