@@ -97,7 +97,7 @@ public class ComponentEditor : MonoBehaviour
                 break;
             case ArrowSelection.OUT:
                 outputImage.enabled = true;
-                //outputArrow.GetComponent<EditorArrow>().InitializePosition(currentlySelectedComponent.GetComponent<Receiver>().OutputDirection);
+                outputArrow.GetComponent<EditorArrow>().InitializePosition(currentlySelectedComponent.GetComponent<Transmitter>().OutputDirection);
                 break;
             case ArrowSelection.NONE:
                 break;
@@ -115,7 +115,7 @@ public class ComponentEditor : MonoBehaviour
                 Grid.Instance.GetGridComponent(Grid.Instance.Selected).GetComponent<Receiver>().InputDirection2 = v;
                 break;
             case ArrowSelection.OUT:
-                //Grid.Instance.GetGridComponent(Grid.Instance.Selected).GetComponent<Transmitter>(). = v;
+                Grid.Instance.GetGridComponent(Grid.Instance.Selected).GetComponent<Transmitter>().OutputDirection = v;
                 break;
         }
     }

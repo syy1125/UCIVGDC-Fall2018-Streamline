@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class Transmitter : MonoBehaviour
 {
-	[HideInInspector]
-	public Vector2Int OutputDirection;
+	
+	public Vector2Int OutputDirection = Vector2Int.right;
 
 	[HideInInspector]
 	public Vector2Int Location;
