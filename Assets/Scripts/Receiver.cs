@@ -32,12 +32,6 @@ public class Receiver : MonoBehaviour
 		}
 	}
 
-	public void FromTransmitter(Vector2Int direction, int signal)
-	{
-		if (direction == InputDirection1) Num1 = signal;
-		if (direction == InputDirection2) Num2 = signal;
-	}
-
 	public int GetNum1()
 	{
 		return Num1;
