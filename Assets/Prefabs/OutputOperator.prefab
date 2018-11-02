@@ -23,6 +23,7 @@ GameObject:
   - component: {fileID: 114304658105335730}
   - component: {fileID: 114942782825341678}
   - component: {fileID: 114868969719744854}
+  - component: {fileID: 114302262248400692}
   m_Layer: 5
   m_Name: OutputOperator
   m_TagString: Operator
@@ -30,6 +31,20 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &114302262248400692
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1569791326579190}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a5d1a59780de0a843a08b822104febef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Location: {x: 0, y: 0}
+  InputDirection1: {x: 0, y: -1}
+  InputDirection2: {x: 0, y: 1}
 --- !u!114 &114304658105335730
 MonoBehaviour:
   m_ObjectHideFlags: 1

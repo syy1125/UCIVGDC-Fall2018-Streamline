@@ -23,6 +23,8 @@ GameObject:
   - component: {fileID: 114806932854863304}
   - component: {fileID: 114759989710034120}
   - component: {fileID: 114592609517768628}
+  - component: {fileID: 114017743381856016}
+  - component: {fileID: 114406989443996896}
   m_Layer: 5
   m_Name: ConstOperator
   m_TagString: Operator
@@ -30,6 +32,31 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &114017743381856016
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1516390648950410}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a5d1a59780de0a843a08b822104febef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Location: {x: 0, y: 0}
+  InputDirection1: {x: 0, y: -1}
+  InputDirection2: {x: 0, y: 1}
+--- !u!114 &114406989443996896
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1516390648950410}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 309cdb7f7eebfe74d9b4185bec1fc5db, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114592609517768628
 MonoBehaviour:
   m_ObjectHideFlags: 1
