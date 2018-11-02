@@ -15,7 +15,11 @@ class LevelTest
 [Serializable]
 class GameLevel
 {
+	[NonSerialized]
+	public string FileName;
+	
 	public string Name;
+	public string Description;
 
 	public LevelTest[] Tests;
 
@@ -47,6 +51,7 @@ public class LevelManager : MonoBehaviour
 		{
 			Debug.Log(levelSources[index].FullName);
 			_levels[index] = JsonUtility.FromJson<GameLevel>(File.ReadAllText(levelSources[index].FullName));
+			_levels[index].FileName = levelSources[index].Name;
 		}
 
 		Array.Sort(_levels, GameLevel.Compare);
