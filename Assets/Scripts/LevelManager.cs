@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections;
 using System.IO;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 [Serializable]
@@ -17,31 +19,45 @@ class GameLevel
 {
 	[NonSerialized]
 	public string FileName;
-	
+
 	public string Name;
 	public string Description;
 
-	public LevelTest[] Tests;
+	public LevelTest[] Tests = new LevelTest[0];
 
 	public static int Compare(GameLevel left, GameLevel right)
 	{
-		return String.CompareOrdinal(left.Name, right.Name);
+		return string.CompareOrdinal(left.Name, right.Name);
 	}
 }
 
 public class LevelManager : MonoBehaviour
 {
+	public static LevelManager Instance;
+
 	public GameObject ButtonPrefab;
 
 	private GameLevel[] _levels;
 
 	private void Awake()
 	{
-		LoadLevels();
+		if (Instance == null)
+		{
+			Instance = this;
+			DontDestroyOnLoad(gameObject);
+		}
+		else
+		{
+			Debug.Log("Multiple `LevelManager`s instantiated. Destroying the extra ones.");
+			Destroy(gameObject);
+			return;
+		}
+
+		ReadLevels();
 		UpdateDisplay();
 	}
-	
-	private void LoadLevels()
+
+	private void ReadLevels()
 	{
 		FileInfo[] levelSources = new DirectoryInfo(Application.streamingAssetsPath + "/Levels").GetFiles("*.json");
 
@@ -49,7 +65,6 @@ public class LevelManager : MonoBehaviour
 
 		for (int index = 0; index < levelSources.Length; index++)
 		{
-			Debug.Log(levelSources[index].FullName);
 			_levels[index] = JsonUtility.FromJson<GameLevel>(File.ReadAllText(levelSources[index].FullName));
 			_levels[index].FileName = levelSources[index].Name;
 		}
@@ -60,20 +75,31 @@ public class LevelManager : MonoBehaviour
 	private void UpdateDisplay()
 	{
 		foreach (Transform childTransform in transform)
-        		{
-        			Destroy(childTransform.gameObject);
-        		}
-        
-        		for (int index = 0; index < _levels.Length; index++)
-        		{
-        			GameObject button = Instantiate(ButtonPrefab, transform);
-        			button.GetComponentInChildren<Text>().text = _levels[index].Name;
-        		}
+		{
+			Destroy(childTransform.gameObject);
+		}
+
+		for (int index = 0; index < _levels.Length; index++)
+		{
+			GameObject button = Instantiate(ButtonPrefab, transform);
+
+			int i = index;
+			button.GetComponent<Button>().onClick.AddListener(() => StartCoroutine(PlayLevel(i)));
+
+			button.GetComponentInChildren<Text>().text = _levels[index].Name;
+		}
 	}
 
-	public void Reload()
+	public void ReloadLevels()
 	{
-		LoadLevels();
+		ReadLevels();
 		UpdateDisplay();
+	}
+
+	private IEnumerator PlayLevel(int index)
+	{
+		AsyncOperation load = SceneManager.LoadSceneAsync("");
+
+		while (!load.isDone) yield return null;
 	}
 }
