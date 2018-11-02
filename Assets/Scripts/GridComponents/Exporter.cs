@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Output : Operator {
+public class Exporter : Operator {
 
     public ColArray[] outputColumns; //values will be distributed from left to right, looping
     private int colIndex = 0;
