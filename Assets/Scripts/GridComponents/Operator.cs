@@ -11,8 +11,8 @@ public abstract class Operator : MonoBehaviour {
 	protected Transmitter transmitter;
 	
 	public string OpName { get; protected set; }
-	
-	protected abstract void Step();
+
+	public abstract void Step();
 
 	protected virtual void Start() {
 		receiver = GetComponent<Receiver>();

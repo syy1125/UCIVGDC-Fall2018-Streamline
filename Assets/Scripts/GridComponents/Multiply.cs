@@ -9,7 +9,7 @@ public class Multiply : Operator {
 		OpName = "Multiply";
 	}
 
-	protected override void Step() {
+	public override void Step() {
 		GetFromReceiver();
 		result = num1 * num2;
 		SendToTransmitter();

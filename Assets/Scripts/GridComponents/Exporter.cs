@@ -12,8 +12,8 @@ public class Exporter : Operator {
         base.Start();
         OpName = "Output";
     }
-    
-    protected override void Step()
+
+    public override void Step()
     {
         //Output only reads from num1 var
         GetFromReceiver();

@@ -11,7 +11,7 @@ public class Constant : Operator {
 		OpName = "Constant";
 	}
 
-	protected override void Step() {
+	public override void Step() {
 		result = number;
 		SendToTransmitter();
 	}

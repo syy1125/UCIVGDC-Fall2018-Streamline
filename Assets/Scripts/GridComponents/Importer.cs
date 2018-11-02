@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -16,18 +17,9 @@ public class Importer : Operator
 		_index = 0;
 	}
 
-	protected override void Step()
+	public override void Step()
 	{
-		if (_index >= Sequence.Length)
-		{
-			result = 0;
-		}
-		else
-		{
-			result = Sequence[_index];
-			_index++;
-		}
-
+		result = Sequence[Mathf.Min(_index++, Sequence.Length - 1)];
 		SendToTransmitter();
 	}
 
