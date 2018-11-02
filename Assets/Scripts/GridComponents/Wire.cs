@@ -24,6 +24,7 @@ public class Wire : MonoBehaviour
 
 	private WireNetwork _redNetwork;
 	private WireNetwork _greenNetwork;
+	private static readonly HashSet<WireNetwork> _networks = new HashSet<WireNetwork>();
 
 	public int SignalStrength
 	{
@@ -99,6 +100,27 @@ public class Wire : MonoBehaviour
 		UpdateTexture(GreenParts, HasGreenWireAt);
 	}
 
+	private static void ForAllWires(Action<Wire> action)
+	{
+		Grid grid = Grid.Instance;
+
+		for (int x = 0; x < grid.Width; x++)
+		{
+			for (int y = 0; y < grid.Height; y++)
+			{
+				if (grid.IsWire(grid.GetGridComponent(x, y)))
+				{
+					action(grid.GetGridComponent(x, y).GetComponent<Wire>());
+				}
+			}
+		}
+	}
+
+	public static void GlobalSetUp()
+	{
+		ForAllWires(wire => wire.SetUp());
+	}
+
 	public void SetUp()
 	{
 		if (HasRed && _redNetwork == null)
@@ -110,6 +132,8 @@ public class Wire : MonoBehaviour
 				wire => wire._hasRed,
 				wire => wire._redNetwork = network
 			);
+
+			_networks.Add(network);
 		}
 
 		if (HasGreen && _greenNetwork == null)
@@ -121,6 +145,8 @@ public class Wire : MonoBehaviour
 				wire => wire._hasGreen,
 				wire => wire._greenNetwork = network
 			);
+
+			_networks.Add(network);
 		}
 	}
 
@@ -184,10 +210,19 @@ public class Wire : MonoBehaviour
 		if (_greenNetwork != null) _greenNetwork.Value += signal;
 	}
 
-	public void ResetSignal()
+	public static void ResetSignals()
 	{
-		if (_redNetwork != null) _redNetwork.Value = 0;
-		if (_greenNetwork != null) _greenNetwork.Value = 0;
+		foreach (WireNetwork network in _networks)
+		{
+			network.Value = 0;
+		}
+	}
+
+	public static void GlobalTearDown()
+	{
+		ForAllWires(wire => wire.TearDown());
+
+		_networks.Clear();
 	}
 
 	public void TearDown()
