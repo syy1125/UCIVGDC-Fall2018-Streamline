@@ -4,13 +4,20 @@ using UnityEngine;
 using UnityEngine.UI;
 
 [Serializable]
-class GameLevel
+class LevelTest
 {
-	public string Name;
 	public int[] Input1;
 	public int[] Input2;
 	public int[] Output1;
 	public int[] Output2;
+}
+
+[Serializable]
+class GameLevel
+{
+	public string Name;
+
+	public LevelTest[] Tests;
 
 	public static int Compare(GameLevel left, GameLevel right)
 	{
@@ -26,10 +33,11 @@ public class LevelManager : MonoBehaviour
 
 	private void Awake()
 	{
-		UpdateLevels();
+		LoadLevels();
+		UpdateDisplay();
 	}
-
-	private void UpdateLevels()
+	
+	private void LoadLevels()
 	{
 		FileInfo[] levelSources = new DirectoryInfo(Application.streamingAssetsPath + "/Levels").GetFiles("*.json");
 
@@ -42,21 +50,25 @@ public class LevelManager : MonoBehaviour
 		}
 
 		Array.Sort(_levels, GameLevel.Compare);
+	}
 
+	private void UpdateDisplay()
+	{
 		foreach (Transform childTransform in transform)
-		{
-			Destroy(childTransform.gameObject);
-		}
-
-		for (int index = 0; index < _levels.Length; index++)
-		{
-			GameObject button = Instantiate(ButtonPrefab, transform);
-			button.GetComponentInChildren<Text>().text = _levels[index].Name;
-		}
+        		{
+        			Destroy(childTransform.gameObject);
+        		}
+        
+        		for (int index = 0; index < _levels.Length; index++)
+        		{
+        			GameObject button = Instantiate(ButtonPrefab, transform);
+        			button.GetComponentInChildren<Text>().text = _levels[index].Name;
+        		}
 	}
 
 	public void Reload()
 	{
-		UpdateLevels();
+		LoadLevels();
+		UpdateDisplay();
 	}
 }
