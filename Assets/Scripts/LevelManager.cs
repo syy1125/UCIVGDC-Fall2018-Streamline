@@ -38,6 +38,7 @@ public class LevelManager : MonoBehaviour
 	public GameObject ButtonPrefab;
 
 	private GameLevel[] _levels;
+	private string _search = "";
 
 	private void Awake()
 	{
@@ -81,13 +82,21 @@ public class LevelManager : MonoBehaviour
 
 		for (int index = 0; index < _levels.Length; index++)
 		{
+			if (!_search.Equals("") && !_levels[index].Name.ToLower().Contains(_search)) continue;
+
 			GameObject button = Instantiate(ButtonPrefab, transform);
 
-			int i = index;
+			int i = index; // `i` is an immutable index
 			button.GetComponent<Button>().onClick.AddListener(() => StartCoroutine(PlayLevel(i)));
 
 			button.GetComponentInChildren<Text>().text = _levels[index].Name;
 		}
+	}
+
+	public void UpdateSearch(string search)
+	{
+		_search = search.ToLower();
+		UpdateDisplay();
 	}
 
 	public void ReloadLevels()
