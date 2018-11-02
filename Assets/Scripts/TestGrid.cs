@@ -53,7 +53,7 @@ public class TestGrid : MonoBehaviour
 		Debug.Log("Expected green channel signal: 12. Actual: " +
 		          Grid.Instance.GetGridComponent(3, 2).GetComponent<Wire>().SignalStrength);
 
-		Grid.Instance.GetGridComponent(2, 2).GetComponent<Wire>().ResetSignal();
+		Wire.ResetSignals();
 
 		Grid.Instance.GetGridComponent(2, 2).GetComponent<Wire>().SendSignal(12);
 
