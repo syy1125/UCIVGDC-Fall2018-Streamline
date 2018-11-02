@@ -78,8 +78,8 @@ public class Wire : MonoBehaviour
 
 	private static bool HasGreenWireAt(Vector2Int location)
 	{
-		GameObject g = Grid.Instance.InGrid(location) ? Grid.Instance.GetGridComponent(location) : null;
-		return g != null && g.GetComponent<Wire>() != null && g.GetComponent<Wire>().HasGreen;
+		GameObject wireTile = Grid.Instance.GetGridComponent(location);
+		return wireTile != null && wireTile.GetComponent<Wire>() != null && wireTile.GetComponent<Wire>().HasGreen;
 	}
 
 	public void UpdateTexture(Parts wireParts, Predicate<Vector2Int> shouldConnect)

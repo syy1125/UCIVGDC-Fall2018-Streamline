@@ -2,20 +2,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Transmitter : MonoBehaviour {
-
-	// Use this for initialization
-	void Start () {
-		
-	}
+public class Transmitter : MonoBehaviour
+{
+	private int _signal;
 	
-	// Update is called once per frame
-	void Update () {
-		
-	}
-
 	public void Send(int signal)
 	{
+		_signal = signal;
+	}
+
+	public void Step()
+	{
+		Grid grid = Grid.Instance;
+		
 		
 	}
 }

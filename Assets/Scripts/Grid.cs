@@ -96,7 +96,7 @@ public class Grid : MonoBehaviour
 
     public GameObject GetGridComponent(int x, int y)
     {
-        return _gridComponents[x][y];
+        return InGrid(x, y) ? _gridComponents[x][y] : null;
     }
 
     public GameObject GetGridComponent(Vector2Int pos)
@@ -110,13 +110,12 @@ public class Grid : MonoBehaviour
         return _gridComponents[x][y];
     }
 
-    [SuppressMessage("ReSharper", "PossibleNullReferenceException")]
     public void UpdateAdjacentWires(int x, int y)
     {
-        GameObject up = InGrid(x, y + 1) ? GetGridComponent(x, y + 1) : null;
-        GameObject down = InGrid(x, y - 1) ? GetGridComponent(x, y - 1) : null;
-        GameObject left = InGrid(x - 1, y) ? GetGridComponent(x - 1, y) : null;
-        GameObject right = InGrid(x + 1, y) ? GetGridComponent(x + 1, y) : null;
+        GameObject up = GetGridComponent(x, y + 1);
+        GameObject down = GetGridComponent(x, y - 1);
+        GameObject left = GetGridComponent(x - 1, y);
+        GameObject right = GetGridComponent(x + 1, y);
 
         if (IsWire(up)) up.GetComponent<Wire>().UpdateAllTextures();
         if (IsWire(down)) down.GetComponent<Wire>().UpdateAllTextures();

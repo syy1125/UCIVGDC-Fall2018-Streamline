@@ -19,7 +19,7 @@ public class Receiver : MonoBehaviour
 
 	private static void TryPullFromWire(Vector2Int location, Action<int> setNum)
 	{
-		if (Grid.Instance.InGrid(location) && Grid.Instance.IsWire(Grid.Instance.GetGridComponent(location)))
+		if (Grid.Instance.IsWire(Grid.Instance.GetGridComponent(location)))
 		{
 			setNum(Grid.Instance.GetGridComponent(location).GetComponent<Wire>().SignalStrength);
 		}
