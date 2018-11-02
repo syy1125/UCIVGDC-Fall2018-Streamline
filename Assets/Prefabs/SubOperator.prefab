@@ -23,6 +23,8 @@ GameObject:
   - component: {fileID: 114733501409373174}
   - component: {fileID: 114759563137606928}
   - component: {fileID: 114322481619372000}
+  - component: {fileID: 114175943427789320}
+  - component: {fileID: 114758108535232172}
   m_Layer: 5
   m_Name: SubOperator
   m_TagString: Operator
@@ -30,6 +32,20 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &114175943427789320
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1442466876901158}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a5d1a59780de0a843a08b822104febef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Location: {x: 0, y: 0}
+  InputDirection1: {x: 0, y: -1}
+  InputDirection2: {x: 0, y: 1}
 --- !u!114 &114322481619372000
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -74,6 +90,17 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: '-'
+--- !u!114 &114758108535232172
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1442466876901158}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 309cdb7f7eebfe74d9b4185bec1fc5db, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114759563137606928
 MonoBehaviour:
   m_ObjectHideFlags: 1
