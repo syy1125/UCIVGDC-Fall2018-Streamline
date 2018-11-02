@@ -10,20 +10,21 @@ public class Transmitter : MonoBehaviour
 	[HideInInspector]
 	public Vector2Int Location;
 
-	private int _signal;
+	public int Signal { get; private set; }
 
 	public void Send(int signal)
 	{
-		_signal = signal;
+		Signal = signal;
 	}
 
 	public void Step()
 	{
 		Grid grid = Grid.Instance;
-		GameObject outputWire = grid.GetGridComponent(Location + OutputDirection);
-		if (grid.IsWire(outputWire))
+		GameObject outputTile = grid.GetGridComponent(Location + OutputDirection);
+		
+		if (grid.IsWire(outputTile))
 		{
-			outputWire.GetComponent<Wire>().SendSignal(_signal);
+			outputTile.GetComponent<Wire>().SendSignal(Signal);
 		}
 	}
 }

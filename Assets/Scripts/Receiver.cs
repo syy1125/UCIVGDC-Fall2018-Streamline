@@ -13,15 +13,22 @@ public class Receiver : MonoBehaviour
 	public void Step()
 	{
 		// Pull from wire special case
-		TryPullFromWire(Location + InputDirection1, num => Num1 = num);
-		TryPullFromWire(Location + InputDirection2, num => Num2 = num);
+		GetSignal(InputDirection1, num => Num1 = num);
+		GetSignal(InputDirection2, num => Num2 = num);
 	}
 
-	private static void TryPullFromWire(Vector2Int location, Action<int> setNum)
+	private void GetSignal(Vector2Int direction, Action<int> setNum)
 	{
-		if (Grid.Instance.IsWire(Grid.Instance.GetGridComponent(location)))
+		Grid grid = Grid.Instance;
+		GameObject tile = grid.GetGridComponent(Location + direction);
+
+		if (grid.IsWire(tile))
 		{
-			setNum(Grid.Instance.GetGridComponent(location).GetComponent<Wire>().SignalStrength);
+			setNum(tile.GetComponent<Wire>().SignalStrength);
+		}
+		else if (grid.IsOperator(tile) && tile.GetComponent<Transmitter>().OutputDirection == direction * -1)
+		{
+			setNum(tile.GetComponent<Transmitter>().Signal);
 		}
 	}
 
