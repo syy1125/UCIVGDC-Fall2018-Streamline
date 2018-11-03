@@ -24,7 +24,30 @@ public class GameController : MonoBehaviour {
         clearConfirmationOpen = false;
         simState = SimState.EDITING;
 	}
-	
+
+
+    public void Step() {
+        for (int h=0; h < gameGrid.Height; ++h) {
+            for (int w = 0; h < gameGrid.Width; ++w) {
+                GameObject g = gameGrid.GetGridComponent(h, w);
+                if (gameGrid.IsOperator(g)) {
+                    g.GetComponent<Receiver>().Step();
+                    g.GetComponent<Operator>().Step();
+                }
+            }
+        }
+                
+        Wire.ResetSignals();
+                
+        for (int h=0; h < gameGrid.Height; ++h) {
+            for (int w = 0; h < gameGrid.Width; ++w) {
+                GameObject g = gameGrid.GetGridComponent(h, w);
+                if (gameGrid.IsOperator(g)) {
+                    g.GetComponent<Transmitter>().Step();
+                }
+            }
+        }
+    }
 	// Update is called once per frame
 	void Update () {
         switch (simState)
@@ -41,6 +64,7 @@ public class GameController : MonoBehaviour {
                 
                 break;
             case SimState.RUNNING:
+                Step();
 
                 break;
             case SimState.PAUSED:
