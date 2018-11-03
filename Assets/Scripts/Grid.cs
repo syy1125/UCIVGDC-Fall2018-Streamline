@@ -44,7 +44,7 @@ public class Grid : MonoBehaviour
     public Vector2Int Selected
     {
         get { return _selected; }
-        private set
+        set
         {
             if (InGrid(_selected))
             {
@@ -52,10 +52,11 @@ public class Grid : MonoBehaviour
             }
 
             _selected = value;
-            
-            buttonList[_selected.x][_selected.y].GetComponent<Button>().colors = SelectedButtonColors;
-            
-            EditorInstance.UpdateUI();
+            if (InGrid(_selected))
+            {
+                buttonList[_selected.x][_selected.y].GetComponent<Button>().colors = SelectedButtonColors;
+                EditorInstance.UpdateUI();
+            }
         }
     }
 

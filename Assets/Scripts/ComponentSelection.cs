@@ -11,15 +11,15 @@ public class ComponentSelection : MonoBehaviour {
 
     // Use this for initialization
     //hard coded, to be removed later
-    public KeyCode none;
-    public KeyCode eraser;
-    public KeyCode redWire;
-    public KeyCode greenWire;
-    public KeyCode addition;
-    public KeyCode subtraction;
-    public KeyCode multiplication;
-    public KeyCode division;
-    public KeyCode constant;
+    public string none;
+    public string eraser;
+    public string redWire;
+    public string greenWire;
+    public string addition;
+    public string subtraction;
+    public string multiplication;
+    public string division;
+    public string constant;
     public static Selection cursorSelection;
     private Image image;
 	void Start () {

@@ -32,6 +32,13 @@ public class ComponentEditor : MonoBehaviour
     private Image outputImage;
     private ArrowSelection selection = ArrowSelection.NONE;
     private GameObject currentlySelectedComponent;
+    public KeyCode input1Key;
+    public KeyCode input2Key;
+    public KeyCode outputKey;
+    public GameObject input1Button;
+    public GameObject input2Button;
+    public GameObject outputButton;
+    public RectTransform mimicArrows;
     private void Start()
     {
         inputImage1 = inputArrow1.GetComponentInChildren<Image>();
@@ -58,7 +65,11 @@ public class ComponentEditor : MonoBehaviour
 				ComponentName.text = gridComponent.GetComponent<Operator>().OpName;
                 currentlySelectedComponent = Grid.Instance.GetGridComponent(Grid.Instance.Selected);
                 SetArrowSelection(ArrowSelection.IN1);
-				return;
+                inputArrow1.GetComponent<EditorArrow>().InitializePosition(currentlySelectedComponent.GetComponent<Receiver>().InputDirection1);
+                inputArrow2.GetComponent<EditorArrow>().InitializePosition(currentlySelectedComponent.GetComponent<Receiver>().InputDirection2);
+                outputArrow.GetComponent<EditorArrow>().InitializePosition(currentlySelectedComponent.GetComponent<Transmitter>().OutputDirection);
+
+                return;
 			} else
             {
                 SetArrowSelection(ArrowSelection.NONE);
@@ -68,12 +79,68 @@ public class ComponentEditor : MonoBehaviour
         SetArrowSelection(ArrowSelection.NONE);
         ComponentName.text = "Empty";
 	}
+    public void ClearSelection()
+    {
+        ComponentName.text = "Empty";
+        foreach (Transform t in ComponentPreview.transform)
+        {
+            Destroy(t.gameObject);
+        }
+        SetArrowSelection(ArrowSelection.NONE);
+
+    }
     private void Update()
     {
-        if(Grid.Instance.Selected != Vector2Int.one * -1)
+        if(Grid.Instance.GetGridComponent(Grid.Instance.Selected) == null)
+        {
+            //Remove component editor content and clear green selection square
+            ClearSelection();
+            Grid.Instance.Selected = new Vector2Int(-1,-1);
+        }
+        if (Grid.Instance.GetGridComponent(Grid.Instance.Selected) != null 
+            && Grid.Instance.IsOperator(Grid.Instance.GetGridComponent(Grid.Instance.Selected)))
+        {
+            //Run if selected is not null and is Operator
+            //Watch for selecting arrow inputs.
+            //Set position for the mimic arrows on the grid
+            //Make selecting arrow buttons visible
             currentlySelectedComponent = Grid.Instance.GetGridComponent(Grid.Instance.Selected);
+            if (Input.GetKeyDown(input1Key))
+            {
+                SetArrowSelection(ArrowSelection.IN1);
+            } else if (Input.GetKeyDown(input2Key))
+            {
+                SetArrowSelection(ArrowSelection.IN2);
+            } else if (Input.GetKeyDown(outputKey))
+            {
+                SetArrowSelection(ArrowSelection.OUT);
+            }
+            input1Button.SetActive(true);
+            input2Button.SetActive(true);
+            outputButton.SetActive(true);
+            SetMimicArrows(Grid.Instance.GetGridComponent(Grid.Instance.Selected).transform.parent, Vector2.zero, Vector2.one);
+        }
+        else
+        {
+            //If selected is null or is not Operator
+            //Make things invisible
+            input1Button.SetActive(false);
+            input2Button.SetActive(false);
+            outputButton.SetActive(false);
+            SetMimicArrows(null, Vector2.zero, Vector2.zero);
+            currentlySelectedComponent = null;
+        }
+
     }
-    
+    public void SetMimicArrows(Transform newParent, Vector2 minAnchor, Vector2 maxAnchor)
+    {
+        //mimic arrows show the overall inputs and outputs on the game grid
+        mimicArrows.SetParent(newParent);
+        mimicArrows.anchorMin = minAnchor;
+        mimicArrows.anchorMax = maxAnchor;
+        mimicArrows.offsetMax = Vector2.zero;
+        mimicArrows.offsetMin = Vector2.zero;
+    }
     public void SetArrowSelection(ArrowSelection a)
     {
         SetArrowSelection((int)a);
@@ -108,7 +175,6 @@ public class ComponentEditor : MonoBehaviour
         switch (selection)
         {
             case ArrowSelection.IN1:
-                Debug.Log(v);
                 Grid.Instance.GetGridComponent(Grid.Instance.Selected).GetComponent<Receiver>().InputDirection1 = v;
                 break;
             case ArrowSelection.IN2:
