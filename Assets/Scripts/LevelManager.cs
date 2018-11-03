@@ -38,7 +38,11 @@ public class LevelManager : MonoBehaviour
 	public GameObject ButtonPrefab;
 
 	private GameLevel[] _levels;
-	private string _search = "";
+	private string _search;
+
+	public Color SelectedColor;
+	private ColorBlock _selectedColors;
+	private int _selectedIndex;
 
 	private void Awake()
 	{
@@ -51,8 +55,21 @@ public class LevelManager : MonoBehaviour
 		{
 			Debug.Log("Multiple `LevelManager`s instantiated. Destroying the extra ones.");
 			Destroy(gameObject);
-			return;
 		}
+	}
+
+	private void Start()
+	{
+		_search = "";
+		_selectedColors = new ColorBlock()
+		{
+			colorMultiplier = 1,
+			disabledColor = SelectedColor,
+			highlightedColor = SelectedColor,
+			normalColor = SelectedColor,
+			pressedColor = SelectedColor
+		};
+		_selectedIndex = -1;
 
 		ReadLevels();
 		UpdateDisplay();
@@ -87,7 +104,12 @@ public class LevelManager : MonoBehaviour
 			GameObject button = Instantiate(ButtonPrefab, transform);
 
 			int i = index; // `i` is an immutable index
-			button.GetComponent<Button>().onClick.AddListener(() => StartCoroutine(PlayLevel(i)));
+			button.GetComponent<Button>().onClick.AddListener(() => UpdateSelection(i));
+
+			if (index == _selectedIndex)
+			{
+				button.GetComponent<Button>().colors = _selectedColors;
+			}
 
 			button.GetComponentInChildren<Text>().text = _levels[index].Name;
 		}
@@ -96,6 +118,12 @@ public class LevelManager : MonoBehaviour
 	public void UpdateSearch(string search)
 	{
 		_search = search.ToLower();
+		UpdateDisplay();
+	}
+
+	private void UpdateSelection(int index)
+	{
+		_selectedIndex = index;
 		UpdateDisplay();
 	}
 
