@@ -24,13 +24,9 @@ public class ComponentEditor : MonoBehaviour
 	public DirectionGroup Left;
 	public DirectionGroup Right;
     */
-    public GameObject inputArrow1;
-    public GameObject inputArrow2;
-    public GameObject outputArrow;
-    private Image inputImage1;
-    private Image inputImage2;
-    private Image outputImage;
-    private ArrowSelection selection = ArrowSelection.NONE;
+    
+    
+    public static ArrowSelection selection = ArrowSelection.NONE;
     private GameObject currentlySelectedComponent;
     public KeyCode input1Key;
     public KeyCode input2Key;
@@ -39,14 +35,13 @@ public class ComponentEditor : MonoBehaviour
     public GameObject input2Button;
     public GameObject outputButton;
     public RectTransform mimicArrows;
+    public Color input1Color;
+    public Color input2Color;
+    public Color outputColor;
+    public DirectionButton[] directionButtons;
     private void Start()
     {
-        inputImage1 = inputArrow1.GetComponentInChildren<Image>();
-        inputImage2 = inputArrow2.GetComponentInChildren<Image>();
-        outputImage = outputArrow.GetComponentInChildren<Image>();
-        inputImage1.enabled = false;
-        inputImage2.enabled = false;
-        outputImage.enabled = false;
+        
     }
     public void UpdateUI()
 	{
@@ -64,11 +59,12 @@ public class ComponentEditor : MonoBehaviour
 				// LOL super hacky. Is there a better way?
 				ComponentName.text = gridComponent.GetComponent<Operator>().OpName;
                 currentlySelectedComponent = Grid.Instance.GetGridComponent(Grid.Instance.Selected);
+                for (int i = 0; i < directionButtons.Length; i++)
+                {
+                    directionButtons[i].GetComponent<Image>().enabled = true;
+                }
                 SetArrowSelection(ArrowSelection.IN1);
-                inputArrow1.GetComponent<EditorArrow>().InitializePosition(currentlySelectedComponent.GetComponent<Receiver>().InputDirection1);
-                inputArrow2.GetComponent<EditorArrow>().InitializePosition(currentlySelectedComponent.GetComponent<Receiver>().InputDirection2);
-                outputArrow.GetComponent<EditorArrow>().InitializePosition(currentlySelectedComponent.GetComponent<Transmitter>().OutputDirection);
-
+                
                 return;
 			} else
             {
@@ -96,6 +92,10 @@ public class ComponentEditor : MonoBehaviour
             //Remove component editor content and clear green selection square
             ClearSelection();
             Grid.Instance.Selected = new Vector2Int(-1,-1);
+            for(int i = 0; i < directionButtons.Length; i++)
+            {
+                directionButtons[i].GetComponent<Image>().enabled = false;
+            }
         }
         if (Grid.Instance.GetGridComponent(Grid.Instance.Selected) != null 
             && Grid.Instance.IsOperator(Grid.Instance.GetGridComponent(Grid.Instance.Selected)))
@@ -143,32 +143,14 @@ public class ComponentEditor : MonoBehaviour
     }
     public void SetArrowSelection(ArrowSelection a)
     {
+        
         SetArrowSelection((int)a);
     }
     public void SetArrowSelection(int i)
     {
         //Buttons use this function
         selection = (ArrowSelection)i;
-        inputImage1.enabled = false;
-        inputImage2.enabled = false;
-        outputImage.enabled = false;
-        switch (selection)
-        {
-            case ArrowSelection.IN1:
-                inputImage1.enabled = true;
-                inputArrow1.GetComponent<EditorArrow>().InitializePosition(currentlySelectedComponent.GetComponent<Receiver>().InputDirection1);
-                break;
-            case ArrowSelection.IN2:
-                inputImage2.enabled = true;
-                inputArrow2.GetComponent<EditorArrow>().InitializePosition(currentlySelectedComponent.GetComponent<Receiver>().InputDirection2);
-                break;
-            case ArrowSelection.OUT:
-                outputImage.enabled = true;
-                outputArrow.GetComponent<EditorArrow>().InitializePosition(currentlySelectedComponent.GetComponent<Transmitter>().OutputDirection);
-                break;
-            case ArrowSelection.NONE:
-                break;
-        }
+        InitializeArrows((ArrowSelection)i);
     }
     public void SetArrowDirection(Vector2Int v)
     {
@@ -184,7 +166,30 @@ public class ComponentEditor : MonoBehaviour
                 Grid.Instance.GetGridComponent(Grid.Instance.Selected).GetComponent<Transmitter>().OutputDirection = v;
                 break;
         }
+        InitializeArrows(selection);
     }
+    public void SetArrowDirection(int d)
+    {
+        switch (d)
+        {
+            case 0:
+                SetArrowDirection(Vector2Int.right);
+                break;
+            case 90:
+                SetArrowDirection(Vector2Int.up);
+                break;
+            case 180:
+                SetArrowDirection(Vector2Int.left);
+                break;
+            case 270:
+                SetArrowDirection(Vector2Int.down);
+                break;
+            default:
+                Debug.Log("Angle not 0,90,180,270: " + d);
+                break;
+        }
+    }
+    /*
     public void OnEndDrag()
     {
         int angle = 0;
@@ -218,5 +223,63 @@ public class ComponentEditor : MonoBehaviour
                 Debug.Log("Angle not 0,90,180,270: " + angle);
                 break;
         }
+    }
+    */
+    public void InitializeArrows(ArrowSelection s)
+    {
+        Color newColor = Color.white;
+        float newAngle = 0;
+        Vector2Int inputVector = Vector2Int.one * -1;
+        switch (s)
+        {
+            case ArrowSelection.NONE:
+                inputVector = Vector2Int.one * -1;
+                newColor = new Color(0, 0, 0, 0);
+                newAngle = 0;
+                break;
+            case ArrowSelection.IN1:
+                inputVector = currentlySelectedComponent.GetComponent<Receiver>().InputDirection1;
+                newColor = input1Color;
+                newAngle = 90;
+                break;
+            case ArrowSelection.IN2:
+                inputVector = currentlySelectedComponent.GetComponent<Receiver>().InputDirection2;
+                newColor = input2Color;
+                newAngle = 90;
+                break;
+            case ArrowSelection.OUT:
+                inputVector = currentlySelectedComponent.GetComponent<Transmitter>().OutputDirection;
+                newColor = outputColor;
+                newAngle = -90;
+                break;
+        }
+        if(inputVector == Vector2Int.right)
+        {
+            SetActiveSprite(0);
+        } else if(inputVector == Vector2Int.up)
+        {
+            SetActiveSprite(1);
+        } else if(inputVector == Vector2Int.left)
+        {
+            SetActiveSprite(2);
+        } else
+        {
+            SetActiveSprite(3);
+        }
+        for(int i = 0; i < directionButtons.Length; i++)
+        {
+            directionButtons[i].GetComponent<Image>().color = newColor;
+            directionButtons[i].transform.localRotation = Quaternion.Euler(new Vector3(0, 0, newAngle));
+        }
+
+    }
+    public void SetActiveSprite(int x)
+    {
+        //x is index of directionButton to activate
+        for(int i = 0; i < directionButtons.Length; i++)
+        {
+            directionButtons[i].SetActivated(false);
+        }
+        directionButtons[x].SetActivated(true);
     }
 }
