@@ -45,6 +45,10 @@ public class LevelManager : MonoBehaviour
 	private ColorBlock _selectedColors;
 	private int _selectedIndex;
 
+	public Text LevelTitle;
+	public Text LevelDescription;
+	public GameObject LoadButton;
+
 	private void Awake()
 	{
 		if (Instance == null)
@@ -114,6 +118,19 @@ public class LevelManager : MonoBehaviour
 
 			button.GetComponentInChildren<Text>().text = _levels[index].Name;
 		}
+
+		if (_selectedIndex >= 0)
+		{
+			LevelTitle.text = _levels[_selectedIndex].Name;
+			LevelDescription.text = _levels[_selectedIndex].Description;
+			LoadButton.SetActive(true);
+		}
+		else
+		{
+			LevelTitle.text = "";
+			LevelDescription.text = "";
+			LoadButton.SetActive(false);
+		}
 	}
 
 	public void UpdateSearch(string search)
@@ -130,14 +147,23 @@ public class LevelManager : MonoBehaviour
 
 	public void ReloadLevels()
 	{
+		_selectedIndex = -1;
 		ReadLevels();
 		UpdateDisplay();
 	}
 
+	public void PlaySelectedLevel()
+	{
+		StartCoroutine(PlayLevel(_selectedIndex));
+	}
+
 	private IEnumerator PlayLevel(int index)
 	{
-		AsyncOperation load = SceneManager.LoadSceneAsync("");
+//		AsyncOperation load = SceneManager.LoadSceneAsync("");
 
-		while (!load.isDone) yield return null;
+//		while (!load.isDone) yield return null;
+		Debug.Log("Loading level " + index);
+		
+		yield return null;
 	}
 }
