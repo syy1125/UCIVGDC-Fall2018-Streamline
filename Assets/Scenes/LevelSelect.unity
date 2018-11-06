@@ -341,7 +341,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 998790769}
+      - m_Target: {fileID: 0}
         m_MethodName: ReloadLevels
         m_Mode: 1
         m_Arguments:
@@ -431,7 +431,6 @@ GameObject:
   m_Component:
   - component: {fileID: 998790767}
   - component: {fileID: 998790768}
-  - component: {fileID: 998790769}
   m_Layer: 5
   m_Name: Levels
   m_TagString: Untagged
@@ -480,20 +479,6 @@ MonoBehaviour:
   m_Spacing: {x: 10, y: 10}
   m_Constraint: 1
   m_ConstraintCount: 4
---- !u!114 &998790769
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 998790766}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 431b1ee76bfe0c84498ced2604520aea, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ButtonPrefab: {fileID: 1584262017135314, guid: d435cc9b792e2564c88fe961352fbce4,
-    type: 2}
-  SelectedColor: {r: 0, g: 1, b: 0, a: 1}
 --- !u!1 &1334909626
 GameObject:
   m_ObjectHideFlags: 0
@@ -511,14 +496,14 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1334909627
 RectTransform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1334909626}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -765,7 +750,7 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 998790769}
+      - m_Target: {fileID: 0}
         m_MethodName: UpdateSearch
         m_Mode: 0
         m_Arguments:
@@ -849,8 +834,8 @@ RectTransform:
   m_Father: {fileID: 394452452}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 0.8}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -1140,6 +1125,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2146913802}
+  - component: {fileID: 2146913803}
   m_Layer: 5
   m_Name: LevelList
   m_TagString: Untagged
@@ -1169,3 +1155,18 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &2146913803
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2146913801}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 431b1ee76bfe0c84498ced2604520aea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  LevelsGrid: {fileID: 998790766}
+  ButtonPrefab: {fileID: 1584262017135314, guid: d435cc9b792e2564c88fe961352fbce4,
+    type: 2}
+  SelectedColor: {r: 0, g: 1, b: 0, a: 1}

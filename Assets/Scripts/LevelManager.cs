@@ -35,6 +35,7 @@ public class LevelManager : MonoBehaviour
 {
 	public static LevelManager Instance;
 
+	public GameObject LevelsGrid;
 	public GameObject ButtonPrefab;
 
 	private GameLevel[] _levels;
@@ -92,7 +93,7 @@ public class LevelManager : MonoBehaviour
 
 	private void UpdateDisplay()
 	{
-		foreach (Transform childTransform in transform)
+		foreach (Transform childTransform in LevelsGrid.transform)
 		{
 			Destroy(childTransform.gameObject);
 		}
@@ -101,7 +102,7 @@ public class LevelManager : MonoBehaviour
 		{
 			if (!_search.Equals("") && !_levels[index].Name.ToLower().Contains(_search)) continue;
 
-			GameObject button = Instantiate(ButtonPrefab, transform);
+			GameObject button = Instantiate(ButtonPrefab, LevelsGrid.transform);
 
 			int i = index; // `i` is an immutable index
 			button.GetComponent<Button>().onClick.AddListener(() => UpdateSelection(i));
