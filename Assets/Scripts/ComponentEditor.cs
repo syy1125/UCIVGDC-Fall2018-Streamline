@@ -9,6 +9,7 @@ public enum ArrowSelection
 public class ComponentEditor : MonoBehaviour
 {
 	public Text ComponentName;
+    public Text helpText;
 	public GameObject ComponentPreview;
     /*
 	[Serializable]
@@ -34,6 +35,7 @@ public class ComponentEditor : MonoBehaviour
     public GameObject input1Button;
     public GameObject input2Button;
     public GameObject outputButton;
+    public GameObject constEditor;
     public RectTransform mimicArrows;
     public Color input1Color;
     public Color input2Color;
@@ -63,8 +65,14 @@ public class ComponentEditor : MonoBehaviour
                 {
                     directionButtons[i].GetComponent<Image>().enabled = true;
                 }
-                SetArrowSelection(ArrowSelection.IN1);
-                
+                bool[] mask = OperatorInfo.GetIOMask(currentlySelectedComponent.GetComponent<Operator>().OpName);
+                if(mask[0])
+                    SetArrowSelection(ArrowSelection.IN1);
+                else if(mask[1])
+                    SetArrowSelection(ArrowSelection.IN2);
+                else
+                    SetArrowSelection(ArrowSelection.OUT);
+
                 return;
 			} else
             {
@@ -82,11 +90,13 @@ public class ComponentEditor : MonoBehaviour
         {
             Destroy(t.gameObject);
         }
+        SetButtonsActive(false);
         SetArrowSelection(ArrowSelection.NONE);
-
+        helpText.text = "";
     }
     private void Update()
     {
+       
         if(Grid.Instance.GetGridComponent(Grid.Instance.Selected) == null)
         {
             //Remove component editor content and clear green selection square
@@ -105,32 +115,89 @@ public class ComponentEditor : MonoBehaviour
             //Set position for the mimic arrows on the grid
             //Make selecting arrow buttons visible
             currentlySelectedComponent = Grid.Instance.GetGridComponent(Grid.Instance.Selected);
-            if (Input.GetKeyDown(input1Key))
-            {
-                SetArrowSelection(ArrowSelection.IN1);
-            } else if (Input.GetKeyDown(input2Key))
-            {
-                SetArrowSelection(ArrowSelection.IN2);
-            } else if (Input.GetKeyDown(outputKey))
-            {
-                SetArrowSelection(ArrowSelection.OUT);
-            }
-            input1Button.SetActive(true);
-            input2Button.SetActive(true);
-            outputButton.SetActive(true);
+            CheckForInput();
+            helpText.text = OperatorInfo.GetOperatorHint(currentlySelectedComponent.GetComponent<Operator>().OpName);
+            SetButtonsActive(true);
             SetMimicArrows(Grid.Instance.GetGridComponent(Grid.Instance.Selected).transform.parent, Vector2.zero, Vector2.one);
         }
         else
         {
             //If selected is null or is not Operator
             //Make things invisible
-            input1Button.SetActive(false);
-            input2Button.SetActive(false);
-            outputButton.SetActive(false);
+            SetButtonsActive(false);
             SetMimicArrows(null, Vector2.zero, Vector2.zero);
             currentlySelectedComponent = null;
         }
 
+    }
+    private void CheckForInput()
+    {
+        //1,2,3 button switching
+        if (Input.GetKeyDown(input1Key))
+        {
+            SetArrowSelection(ArrowSelection.IN1);
+        }
+        else if (Input.GetKeyDown(input2Key))
+        {
+            SetArrowSelection(ArrowSelection.IN2);
+        }
+        else if (Input.GetKeyDown(outputKey))
+        {
+            SetArrowSelection(ArrowSelection.OUT);
+        }
+        //Arrow key control
+        if (Input.GetKeyDown(KeyCode.RightArrow))
+        {
+            SetArrowDirection(Vector2Int.right);
+        } else if (Input.GetKeyDown(KeyCode.UpArrow))
+        {
+            SetArrowDirection(Vector2Int.up);
+        } else if (Input.GetKeyDown(KeyCode.LeftArrow))
+        {
+            SetArrowDirection(Vector2Int.left);
+        } else if (Input.GetKeyDown(KeyCode.DownArrow))
+        {
+            SetArrowDirection(Vector2Int.down);
+        }
+        //Tab and Shift+Tab
+        if (Input.GetKeyDown(KeyCode.Tab))
+        {
+            int x = ((int)selection)-1; //0->IN1,1->IN2,2->OUT
+           
+            if (Input.GetKeyDown(KeyCode.LeftShift))
+            {
+                x -= 1;
+                x = x % 3;
+                x += 1;
+                SetArrowSelection((ArrowSelection)x);
+            } else
+            {
+                x += 1;
+                x = x % 3;
+                x += 1;
+                SetArrowSelection((ArrowSelection)x);
+            }
+        }
+    }
+    private void SetButtonsActive(bool b)
+    {
+        if (b)
+        {
+            bool[] mask = OperatorInfo.GetIOMask(currentlySelectedComponent.GetComponent<Operator>().OpName);
+            input1Button.SetActive(mask[0]);
+            input2Button.SetActive(mask[1]);
+            outputButton.SetActive(mask[2]);
+            if (currentlySelectedComponent.GetComponent<Operator>().OpName.Equals("Constant"))
+            {
+                constEditor.SetActive(true);
+            }
+        } else
+        {
+            input1Button.SetActive(false);
+            input2Button.SetActive(false);
+            outputButton.SetActive(false);
+            constEditor.SetActive(false);
+        }
     }
     public void SetMimicArrows(Transform newParent, Vector2 minAnchor, Vector2 maxAnchor)
     {
@@ -281,5 +348,28 @@ public class ComponentEditor : MonoBehaviour
             directionButtons[i].SetActivated(false);
         }
         directionButtons[x].SetActivated(true);
+    }
+    public void IncrementConst(Text t)
+    {
+        if(currentlySelectedComponent.GetComponent<Constant>() != null)
+        {
+            Constant constant = currentlySelectedComponent.GetComponent<Constant>();
+            constant.number += 1;
+            if(constant.number > Operator.MAX)
+                constant.number = Operator.MAX;
+            t.text = "Value=" + constant.number;
+        }
+        
+    }
+    public void DecrementConst(Text t)
+    {
+        if (currentlySelectedComponent.GetComponent<Constant>() != null)
+        {
+            Constant constant = currentlySelectedComponent.GetComponent<Constant>();
+            constant.number -= 1;
+            if (constant.number < Operator.MIN)
+                constant.number = Operator.MIN;
+            t.text = "Value=" + constant.number;
+        }
     }
 }

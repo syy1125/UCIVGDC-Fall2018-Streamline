@@ -9,7 +9,8 @@ public abstract class Operator : MonoBehaviour {
 
 	protected Receiver receiver;
 	protected Transmitter transmitter;
-	
+    public static int MAX = 999;
+    public static int MIN = -999;
 	public string OpName { get; protected set; }
 
 	public abstract void Step();

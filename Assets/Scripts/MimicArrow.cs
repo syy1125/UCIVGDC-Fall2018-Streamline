@@ -1,14 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.UI;
 public class MimicArrow : MonoBehaviour {
 
     // Use this for initialization
     private GameObject selectedComponent;
     public ArrowSelection copySelection;
+    private Image image;
 	void Start () {
-        
+        image = GetComponentInChildren<Image>();
     }
 	
 	// Update is called once per frame
@@ -21,16 +22,21 @@ public class MimicArrow : MonoBehaviour {
 	}
     void UpdateArrow()
     {
+        bool[] mask = OperatorInfo.GetIOMask(selectedComponent.GetComponent<Operator>().OpName);
+        
         Vector2Int v = Vector2Int.zero;
         switch (copySelection)
         {
             case ArrowSelection.IN1:
+                image.enabled = mask[0];
                 v = selectedComponent.GetComponent<Receiver>().InputDirection1;
                 break;
             case ArrowSelection.IN2:
+                image.enabled = mask[1];
                 v = selectedComponent.GetComponent<Receiver>().InputDirection2;
                 break;
             case ArrowSelection.OUT:
+                image.enabled = mask[2];
                 v = selectedComponent.GetComponent<Transmitter>().OutputDirection;
                 break;
         }
