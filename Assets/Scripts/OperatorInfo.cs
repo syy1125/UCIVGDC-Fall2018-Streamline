@@ -20,7 +20,7 @@ public static class OperatorInfo {
             case "Divide":
                 return "<Color=#00d2d6>In.1</Color> / <Color=#c9d300>In.2</Color> -> Out.1";
             case "Constant":
-                return "Out.1 -> Out.1";
+                return "Value -> Out.1";
             case "Importer":
                 return "[NEXT] -> [ANY]";
             case "Output":

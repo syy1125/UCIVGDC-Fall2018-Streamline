@@ -189,7 +189,11 @@ public class ComponentEditor : MonoBehaviour
             outputButton.SetActive(mask[2]);
             if (currentlySelectedComponent.GetComponent<Operator>().OpName.Equals("Constant"))
             {
+                UpdateConst(constEditor.GetComponentInChildren<Text>());
                 constEditor.SetActive(true);
+            } else
+            {
+                constEditor.SetActive(false);
             }
         } else
         {
@@ -348,6 +352,15 @@ public class ComponentEditor : MonoBehaviour
             directionButtons[i].SetActivated(false);
         }
         directionButtons[x].SetActivated(true);
+    }
+    public void UpdateConst(Text t)
+    {
+        if (currentlySelectedComponent.GetComponent<Constant>() != null)
+        {
+            Constant constant = currentlySelectedComponent.GetComponent<Constant>();
+            constant.number = Mathf.Clamp(constant.number, Operator.MIN, Operator.MAX);
+            t.text = "Value=" + constant.number;
+        }
     }
     public void IncrementConst(Text t)
     {
