@@ -108,6 +108,14 @@ public class Grid : MonoBehaviour
     public GameObject SetGridComponent(int x, int y, GameObject prefab)
     {
         _gridComponents[x][y] = Instantiate(prefab, getGridButton(x, y));
+        if (_gridComponents[x][y].GetComponent<Receiver>() != null)
+        {
+            _gridComponents[x][y].GetComponent<Receiver>().Location = new Vector2Int(x, y);
+        }
+        if (_gridComponents[x][y].GetComponent<Transmitter>() != null)
+        {
+            _gridComponents[x][y].GetComponent<Transmitter>().Location = new Vector2Int(x, y);
+        }
         return _gridComponents[x][y];
     }
 

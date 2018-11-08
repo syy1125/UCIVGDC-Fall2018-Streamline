@@ -13,12 +13,8 @@ public class ValueDisplayManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        /*  FOR TESTING PURPOSES
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            AddAllValueDisplays();  
-        }
-        */
+        
+        
 	}
     public void AddAllValueDisplays()
     {

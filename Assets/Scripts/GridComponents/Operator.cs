@@ -27,6 +27,7 @@ public abstract class Operator : MonoBehaviour {
 	}
 
 	protected void SendToTransmitter() {
+        result = Mathf.Clamp(result, MIN, MAX);
 		transmitter.Send(result);
 	}
 }

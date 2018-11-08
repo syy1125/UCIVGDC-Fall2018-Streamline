@@ -11,7 +11,7 @@ public class Divide : Operator {
 
 	public override void Step() {
 		GetFromReceiver();
-		result = num1 / num2;
+		result = (num2 != 0) ? num1 / num2 : 0;
 		SendToTransmitter();
 	}
 }

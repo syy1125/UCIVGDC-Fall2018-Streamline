@@ -18,6 +18,11 @@ public class GameController : MonoBehaviour {
     public static SimState simState;
     public KeyCode escapeKey;
     public UIGroup gameMenuUIGroup;
+    public float stepDelay;
+    private float stepTimer = 0;
+    public ValueDisplayManager displayManager;
+    [HideInInspector]
+    public bool isSetUp = false;
 	void Start () {
         gameGrid = Grid.Instance;
         gameMenuOpen = false;
@@ -27,8 +32,9 @@ public class GameController : MonoBehaviour {
 
 
     public void Step() {
+
         for (int h=0; h < gameGrid.Height; ++h) {
-            for (int w = 0; h < gameGrid.Width; ++w) {
+            for (int w = 0; w < gameGrid.Width; ++w) {
                 GameObject g = gameGrid.GetGridComponent(h, w);
                 if (gameGrid.IsOperator(g)) {
                     g.GetComponent<Receiver>().Step();
@@ -36,11 +42,9 @@ public class GameController : MonoBehaviour {
                 }
             }
         }
-                
         Wire.ResetSignals();
-                
         for (int h=0; h < gameGrid.Height; ++h) {
-            for (int w = 0; h < gameGrid.Width; ++w) {
+            for (int w = 0; w < gameGrid.Width; ++w) {
                 GameObject g = gameGrid.GetGridComponent(h, w);
                 if (gameGrid.IsOperator(g)) {
                     g.GetComponent<Transmitter>().Step();
@@ -64,7 +68,15 @@ public class GameController : MonoBehaviour {
                 
                 break;
             case SimState.RUNNING:
-                Step();
+                if(stepTimer > stepDelay)
+                {
+                    stepTimer = 0;
+                    Step();
+                }
+                else
+                {
+                    stepTimer += Time.deltaTime;
+                }
 
                 break;
             case SimState.PAUSED:
@@ -73,6 +85,60 @@ public class GameController : MonoBehaviour {
         }
         
 	}
+    public void SetSimState(int s)
+    {
+        SimState newSimState = (SimState)s;
+        switch (simState)
+        {
+            case SimState.EDITING:
+                if(newSimState == SimState.RUNNING || newSimState == SimState.PAUSED)
+                {
+                    SetUpSimulation();
+                    simState = newSimState;
+                } 
+                break;
+            case SimState.RUNNING:
+                if(newSimState == SimState.EDITING)
+                {
+                    TearDownSimulation();
+                    simState = SimState.EDITING;
+                } else if(newSimState == SimState.PAUSED)
+                {
+                    simState = SimState.PAUSED;
+                }
+                break;
+            case SimState.PAUSED:
+                if(newSimState == SimState.RUNNING)
+                {
+                    simState = SimState.RUNNING;
+                } else if(newSimState == SimState.EDITING)
+                {
+                    TearDownSimulation();
+                    simState = SimState.EDITING;
+                }
+                break;
+        }
+
+
+        
+    }
+    public void SetUpSimulation()
+    {
+        if (isSetUp)
+            return;
+        isSetUp = true;
+        Wire.GlobalSetUp();
+        displayManager.AddAllValueDisplays();
+        stepTimer = stepDelay;
+    }
+    public void TearDownSimulation()
+    {
+        if (!isSetUp)
+            return;
+        isSetUp = false;
+        Wire.GlobalTearDown();
+        displayManager.DestroyAllValueDisplays();
+    }
     
     
 }
