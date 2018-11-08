@@ -1,12 +1,16 @@
 ﻿using System;
 using System.Collections;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
+using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using Debug = UnityEngine.Debug;
 
 [Serializable]
-class LevelTest
+public class LevelTest
 {
 	public int[] Input1;
 	public int[] Input2;
@@ -15,7 +19,7 @@ class LevelTest
 }
 
 [Serializable]
-class GameLevel
+public class GameLevel
 {
 	[NonSerialized]
 	public string FileName;
@@ -31,41 +35,27 @@ class GameLevel
 	}
 }
 
-public class LevelManager : MonoBehaviour
+public class LevelListState
 {
-	public static LevelManager Instance;
+	[CanBeNull]
+	public GameLevel[] Levels;
 
+	[CanBeNull]
+	public string Search;
+
+	public int? SelectedIndex;
+}
+
+public class LevelList : StatefulUI<LevelListState>
+{
 	public GameObject LevelsGrid;
 	public GameObject ButtonPrefab;
 
-	private GameLevel[] _levels;
-	private string _search;
-
 	public Color SelectedColor;
 	private ColorBlock _selectedColors;
-	private int _selectedIndex;
-
-	public Text LevelTitle;
-	public Text LevelDescription;
-	public GameObject LoadButton;
-
-	private void Awake()
-	{
-		if (Instance == null)
-		{
-			Instance = this;
-			DontDestroyOnLoad(gameObject);
-		}
-		else
-		{
-			Debug.Log("Multiple `LevelManager`s instantiated. Destroying the extra ones.");
-			Destroy(gameObject);
-		}
-	}
 
 	private void Start()
 	{
-		_search = "";
 		_selectedColors = new ColorBlock()
 		{
 			colorMultiplier = 1,
@@ -74,87 +64,90 @@ public class LevelManager : MonoBehaviour
 			normalColor = SelectedColor,
 			pressedColor = SelectedColor
 		};
-		_selectedIndex = -1;
+
+		State = new LevelListState()
+		{
+			Levels = new GameLevel[0],
+			Search = "",
+			SelectedIndex = -1
+		};
 
 		ReadLevels();
-		UpdateDisplay();
 	}
 
 	private void ReadLevels()
 	{
 		FileInfo[] levelSources = new DirectoryInfo(Application.streamingAssetsPath + "/Levels").GetFiles("*.json");
 
-		_levels = new GameLevel[levelSources.Length];
+		GameLevel[] levels = new GameLevel[levelSources.Length];
 
 		for (int index = 0; index < levelSources.Length; index++)
 		{
-			_levels[index] = JsonUtility.FromJson<GameLevel>(File.ReadAllText(levelSources[index].FullName));
-			_levels[index].FileName = levelSources[index].Name;
+			levels[index] = JsonUtility.FromJson<GameLevel>(File.ReadAllText(levelSources[index].FullName));
+			levels[index].FileName = levelSources[index].Name;
 		}
 
-		Array.Sort(_levels, GameLevel.Compare);
+		Array.Sort(levels, GameLevel.Compare);
+
+		State = new LevelListState()
+		{
+			Levels = levels
+		};
 	}
 
-	private void UpdateDisplay()
+	protected override void Render()
 	{
 		foreach (Transform childTransform in LevelsGrid.transform)
 		{
 			Destroy(childTransform.gameObject);
 		}
 
-		for (int index = 0; index < _levels.Length; index++)
+		for (int index = 0; index < State.Levels.Length; index++)
 		{
-			if (!_search.Equals("") && !_levels[index].Name.ToLower().Contains(_search)) continue;
+			if (!State.Search.Equals("") && !State.Levels[index].Name.ToLower().Contains(State.Search)) continue;
 
 			GameObject button = Instantiate(ButtonPrefab, LevelsGrid.transform);
 
 			int i = index; // `i` is an immutable index
 			button.GetComponent<Button>().onClick.AddListener(() => UpdateSelection(i));
 
-			if (index == _selectedIndex)
+			if (index == State.SelectedIndex)
 			{
 				button.GetComponent<Button>().colors = _selectedColors;
 			}
 
-			button.GetComponentInChildren<Text>().text = _levels[index].Name;
-		}
-
-		if (_selectedIndex >= 0)
-		{
-			LevelTitle.text = _levels[_selectedIndex].Name;
-			LevelDescription.text = _levels[_selectedIndex].Description;
-			LoadButton.SetActive(true);
-		}
-		else
-		{
-			LevelTitle.text = "";
-			LevelDescription.text = "";
-			LoadButton.SetActive(false);
+			button.GetComponentInChildren<Text>().text = State.Levels[index].Name;
 		}
 	}
 
 	public void UpdateSearch(string search)
 	{
-		_search = search.ToLower();
-		UpdateDisplay();
+		State = new LevelListState
+		{
+			Search = search.ToLower()
+		};
 	}
 
 	private void UpdateSelection(int index)
 	{
-		_selectedIndex = index;
-		UpdateDisplay();
+		State = new LevelListState
+		{
+			SelectedIndex = index
+		};
 	}
 
 	public void ReloadLevels()
 	{
-		_selectedIndex = -1;
 		ReadLevels();
-		UpdateDisplay();
+		State = new LevelListState
+		{
+			SelectedIndex = -1
+		};
 	}
 
 	public void PlaySelectedLevel()
 	{
-		StartCoroutine(PlayLevel(_selectedIndex));
+		StartCoroutine(PlayLevel(State.SelectedIndex.Value));
 	}
 
 	private IEnumerator PlayLevel(int index)
@@ -163,7 +156,7 @@ public class LevelManager : MonoBehaviour
 
 //		while (!load.isDone) yield return null;
 		Debug.Log("Loading level " + index);
-		
+
 		yield return null;
 	}
 }
