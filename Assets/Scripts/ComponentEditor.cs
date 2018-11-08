@@ -58,7 +58,6 @@ public class ComponentEditor : MonoBehaviour
 			{
 				GameObject gridComponent = Grid.Instance.GetGridComponent(Grid.Instance.Selected);
 				Instantiate(gridComponent, ComponentPreview.transform);
-				// LOL super hacky. Is there a better way?
 				ComponentName.text = gridComponent.GetComponent<Operator>().OpName;
                 currentlySelectedComponent = Grid.Instance.GetGridComponent(Grid.Instance.Selected);
                 for (int i = 0; i < directionButtons.Length; i++)
@@ -96,7 +95,6 @@ public class ComponentEditor : MonoBehaviour
     }
     private void Update()
     {
-       
         if(Grid.Instance.GetGridComponent(Grid.Instance.Selected) == null)
         {
             //Remove component editor content and clear green selection square
@@ -237,7 +235,13 @@ public class ComponentEditor : MonoBehaviour
                 Grid.Instance.GetGridComponent(Grid.Instance.Selected).GetComponent<Transmitter>().OutputDirection = v;
                 break;
         }
+        
         InitializeArrows(selection);
+
+        if (currentlySelectedComponent != null)
+        {
+            Grid.Instance.UpdateAdjacentWires(currentlySelectedComponent.GetComponent<Transmitter>().Location);
+        }
     }
     public void SetArrowDirection(int d)
     {
@@ -342,7 +346,6 @@ public class ComponentEditor : MonoBehaviour
             directionButtons[i].GetComponent<Image>().color = newColor;
             directionButtons[i].transform.localRotation = Quaternion.Euler(new Vector3(0, 0, newAngle));
         }
-
     }
     public void SetActiveSprite(int x)
     {
