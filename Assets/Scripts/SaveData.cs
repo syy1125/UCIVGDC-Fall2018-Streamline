@@ -119,6 +119,7 @@ public static class SaveData {
         System.IO.File.WriteAllText(path, string.Empty);
         StreamWriter writer = new StreamWriter(path,false);
         GameObject g = null;
+       
         for(int i = 0; i < Grid.Instance.Width; i++)
         {
             for(int j = 0; j < Grid.Instance.Height; j++)
@@ -184,7 +185,6 @@ public static class SaveData {
                 result += GetDirection(g.GetComponent<Transmitter>().OutputDirection).ToString();
             }
         }
-       
         return result;
     }
 }

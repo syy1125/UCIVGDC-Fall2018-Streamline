@@ -23,13 +23,14 @@ public class GameController : MonoBehaviour {
     public ValueDisplayManager displayManager;
     [HideInInspector]
     public bool isSetUp = false;
+    public int levelNum;
 	void Start () {
         gameGrid = Grid.Instance;
         gameMenuOpen = false;
         clearConfirmationOpen = false;
         simState = SimState.EDITING;
-        
-	}
+        SaveData.LoadData(levelNum);
+    }
 
 
     public void Step() {
@@ -149,6 +150,16 @@ public class GameController : MonoBehaviour {
         Wire.GlobalTearDown();
         displayManager.DestroyAllValueDisplays();
     }
-    
+    public void SaveGame()
+    {
+        Debug.Log("Saving game...");
+        SaveData.WriteData(levelNum);
+    }
+    public IEnumerator LoadSolution()
+    {
+        Debug.Log("Loading Data...");
+        yield return new WaitForEndOfFrame();
+        SaveData.LoadData(levelNum);
+    }
     
 }
