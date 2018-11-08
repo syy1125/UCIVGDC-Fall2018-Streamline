@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Wire : MonoBehaviour
@@ -71,33 +72,55 @@ public class Wire : MonoBehaviour
 		UpdateAllTextures();
 	}
 
-	private static bool HasRedWireAt(Vector2Int location)
+	private bool HasRedWireAt(Vector2Int direction)
 	{
-		GameObject g = Grid.Instance.InGrid(location) ? Grid.Instance.GetGridComponent(location) : null;
+		GameObject g = Grid.Instance.GetGridComponent(Location + direction);
 		return g != null && g.GetComponent<Wire>() != null && g.GetComponent<Wire>().HasRed;
 	}
 
-	private static bool HasGreenWireAt(Vector2Int location)
+	private bool HasGreenWireAt(Vector2Int direction)
 	{
-		GameObject wireTile = Grid.Instance.GetGridComponent(location);
+		GameObject wireTile = Grid.Instance.GetGridComponent(Location + direction);
 		return wireTile != null && wireTile.GetComponent<Wire>() != null && wireTile.GetComponent<Wire>().HasGreen;
+	}
+
+	private bool TileTransmits(Vector2Int direction)
+	{
+		GameObject tile = Grid.Instance.GetGridComponent(Location + direction);
+		return Grid.Instance.IsOperator(tile)
+		       && tile.GetComponent<Transmitter>().TransmissionDirections().Contains(direction * -1);
+	}
+
+	private bool TileReceives(Vector2Int direction)
+	{
+		GameObject tile = Grid.Instance.GetGridComponent(Location + direction);
+		return Grid.Instance.IsOperator(tile)
+		       && tile.GetComponent<Receiver>().ReceptionDirections().Contains(direction * -1);
 	}
 
 	public void UpdateTexture(Parts wireParts, Predicate<Vector2Int> shouldConnect)
 	{
-		bool selfHasColor = shouldConnect(Location);
+		bool selfHasColor = shouldConnect(Vector2Int.zero);
 
 		wireParts.Center.SetActive(selfHasColor);
-		wireParts.Up.SetActive(selfHasColor && shouldConnect(Location + Vector2Int.up));
-		wireParts.Down.SetActive(selfHasColor && shouldConnect(Location + Vector2Int.down));
-		wireParts.Left.SetActive(selfHasColor && shouldConnect(Location + Vector2Int.left));
-		wireParts.Right.SetActive(selfHasColor && shouldConnect(Location + Vector2Int.right));
+		wireParts.Up.SetActive(selfHasColor && shouldConnect(Vector2Int.up));
+		wireParts.Down.SetActive(selfHasColor && shouldConnect(Vector2Int.down));
+		wireParts.Left.SetActive(selfHasColor && shouldConnect(Vector2Int.left));
+		wireParts.Right.SetActive(selfHasColor && shouldConnect(Vector2Int.right));
 	}
 
 	public void UpdateAllTextures()
 	{
-		UpdateTexture(RedParts, HasRedWireAt);
-		UpdateTexture(GreenParts, HasGreenWireAt);
+		UpdateTexture(RedParts, direction =>
+			HasRedWireAt(direction)
+			|| TileTransmits(direction)
+			|| TileReceives(direction)
+		);
+		UpdateTexture(GreenParts, direction =>
+			HasGreenWireAt(direction)
+			|| TileTransmits(direction)
+			|| TileReceives(direction)
+		);
 	}
 
 	private static void ForAllWires(Action<Wire> action)

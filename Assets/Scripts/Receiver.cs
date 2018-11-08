@@ -18,6 +18,11 @@ public class Receiver : MonoBehaviour
 		GetSignal(InputDirection2, num => Num2 = num);
 	}
 
+	public virtual Vector2Int[] ReceptionDirections()
+	{
+		return new[] {InputDirection1, InputDirection2};
+	}
+
 	protected void GetSignal(Vector2Int direction, Action<int> setNum)
 	{
 		Grid grid = Grid.Instance;

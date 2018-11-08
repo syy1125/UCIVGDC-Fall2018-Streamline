@@ -19,4 +19,9 @@ public class OmniReceiver : Receiver
 			GetSignal(direction, signal => Num1 += signal);
 		}
 	}
+
+	public override Vector2Int[] ReceptionDirections()
+	{
+		return Directions;
+	}
 }
