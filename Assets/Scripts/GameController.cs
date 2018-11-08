@@ -24,6 +24,7 @@ public class GameController : MonoBehaviour {
     [HideInInspector]
     public bool isSetUp = false;
     public int levelNum;
+    public Transform wireEffectPrefab;
 	void Start () {
         gameGrid = Grid.Instance;
         gameMenuOpen = false;
@@ -34,7 +35,7 @@ public class GameController : MonoBehaviour {
 
 
     public void Step() {
-
+        WireEffect.ClearExploredSet();
         for (int h=0; h < gameGrid.Height; ++h) {
             for (int w = 0; w < gameGrid.Width; ++w) {
                 GameObject g = gameGrid.GetGridComponent(h, w);
@@ -50,6 +51,7 @@ public class GameController : MonoBehaviour {
                 GameObject g = gameGrid.GetGridComponent(h, w);
                 if (gameGrid.IsOperator(g)) {
                     g.GetComponent<Transmitter>().Step();
+                    SpawnEffect(g.GetComponent<Transmitter>());
                 }
             }
         }
@@ -132,6 +134,47 @@ public class GameController : MonoBehaviour {
 
 
         
+    }
+    private void SpawnEffect(Transmitter tr)
+    {
+        if (Grid.Instance.GetGridComponent(tr.Location + tr.OutputDirection) == null)
+            return;
+        Wire wire = Grid.Instance.GetGridComponent(tr.Location + tr.OutputDirection).GetComponent<Wire>();
+        Receiver op = Grid.Instance.GetGridComponent(tr.Location + tr.OutputDirection).GetComponent<Receiver>();
+        if (wire != null)
+        {
+            if (wire.HasRed)
+            {
+                Transform effect = Instantiate(wireEffectPrefab, tr.transform.position, Quaternion.identity);
+                effect.GetComponent<WireEffect>().destTile = wire.Location;
+                effect.GetComponent<WireEffect>().destination = wire.RedParts.Center.transform.position;
+                effect.GetComponent<WireEffect>().SetColor(Color.red);
+                effect.GetComponent<WireEffect>().followColor = WireEffect.FollowColor.RED;
+
+            }
+            if (wire.HasGreen)
+            {
+                Transform effect = Instantiate(wireEffectPrefab, tr.transform.position, Quaternion.identity);
+                effect.GetComponent<WireEffect>().destTile = wire.Location;
+                effect.GetComponent<WireEffect>().destination = wire.GreenParts.Center.transform.position;
+                effect.GetComponent<WireEffect>().SetColor(Color.green);
+                effect.GetComponent<WireEffect>().followColor = WireEffect.FollowColor.GREEN;
+
+            }
+        }
+        if(op != null)
+        {
+            if(op.Location+op.InputDirection1 == tr.Location || op.Location+op.InputDirection2 == tr.Location)
+            {
+                Transform effect = Instantiate(wireEffectPrefab, tr.transform.position, Quaternion.identity);
+                effect.GetComponent<WireEffect>().destTile = op.Location;
+                effect.GetComponent<WireEffect>().destination = op.transform.position;
+                effect.GetComponent<WireEffect>().SetColor(Color.red);
+                effect.GetComponent<WireEffect>().followColor = WireEffect.FollowColor.RED;
+
+            }
+        }
+
     }
     public void SetUpSimulation()
     {
