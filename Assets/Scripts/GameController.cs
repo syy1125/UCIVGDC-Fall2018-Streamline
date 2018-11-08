@@ -28,6 +28,7 @@ public class GameController : MonoBehaviour {
         gameMenuOpen = false;
         clearConfirmationOpen = false;
         simState = SimState.EDITING;
+        
 	}
 
 
@@ -65,7 +66,16 @@ public class GameController : MonoBehaviour {
                 {
                     mouseDragging = false;
                 }
-                
+                /*
+                if (Input.GetKeyDown(KeyCode.O))
+                {
+                    SaveData.LoadData(0);
+                }
+                if (Input.GetKeyDown(KeyCode.P))
+                {
+                    SaveData.WriteData(0);
+                }
+                */
                 break;
             case SimState.RUNNING:
                 if(stepTimer > stepDelay)
