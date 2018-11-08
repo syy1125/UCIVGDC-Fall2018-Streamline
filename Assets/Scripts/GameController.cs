@@ -148,7 +148,7 @@ public class GameController : MonoBehaviour {
                 Transform effect = Instantiate(wireEffectPrefab, tr.transform.position, Quaternion.identity);
                 effect.GetComponent<WireEffect>().destTile = wire.Location;
                 effect.GetComponent<WireEffect>().destination = wire.RedParts.Center.transform.position;
-                effect.GetComponent<WireEffect>().SetColor(Color.red);
+                effect.GetComponent<WireEffect>().SetColor(effect.GetComponent<WireEffect>().redColor);
                 effect.GetComponent<WireEffect>().followColor = WireEffect.FollowColor.RED;
 
             }
@@ -157,7 +157,7 @@ public class GameController : MonoBehaviour {
                 Transform effect = Instantiate(wireEffectPrefab, tr.transform.position, Quaternion.identity);
                 effect.GetComponent<WireEffect>().destTile = wire.Location;
                 effect.GetComponent<WireEffect>().destination = wire.GreenParts.Center.transform.position;
-                effect.GetComponent<WireEffect>().SetColor(Color.green);
+                effect.GetComponent<WireEffect>().SetColor(effect.GetComponent<WireEffect>().greenColor);
                 effect.GetComponent<WireEffect>().followColor = WireEffect.FollowColor.GREEN;
 
             }
@@ -169,9 +169,9 @@ public class GameController : MonoBehaviour {
                 Transform effect = Instantiate(wireEffectPrefab, tr.transform.position, Quaternion.identity);
                 effect.GetComponent<WireEffect>().destTile = op.Location;
                 effect.GetComponent<WireEffect>().destination = op.transform.position;
-                effect.GetComponent<WireEffect>().SetColor(Color.red);
+                effect.GetComponent<WireEffect>().SetColor(effect.GetComponent<WireEffect>().redColor);
                 effect.GetComponent<WireEffect>().followColor = WireEffect.FollowColor.RED;
-
+                effect.GetComponent<WireEffect>().noSpread = true;
             }
         }
 

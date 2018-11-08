@@ -15,14 +15,17 @@ public class WireEffect : MonoBehaviour {
     public Vector2Int destTile;
     public Vector2 destination;
     public float speed;
-    public Color myColor;
     private TrailRenderer tr;
     public Transform effectPrefab;
     private bool atDestination;
     public FollowColor followColor;
+    [HideInInspector]
+    public bool noSpread = false;
+    public Color greenColor;
+    public Color redColor;
 	void Awake () {
         tr = GetComponent<TrailRenderer>();
-        SetColor(myColor);
+        SetColor(redColor);
         atDestination = false;
 	}
 	
@@ -34,11 +37,13 @@ public class WireEffect : MonoBehaviour {
             transform.position = destination;
             if (!atDestination)
             {
+                Destroy(gameObject, tr.time);
                 if (followColor == FollowColor.GREEN)
                     exploredGreenTiles.Add(destTile);
                 else if (followColor == FollowColor.RED)
                     exploredRedTiles.Add(destTile);
-                SpawnMoreEffects();
+                if(!noSpread)
+                    SpawnMoreEffects();
             }
             atDestination = true;
             
@@ -49,7 +54,6 @@ public class WireEffect : MonoBehaviour {
 	}
     public void SetColor(Color c)
     {
-        myColor = c;
         tr.startColor = c;
         tr.endColor = c;
     }
@@ -90,74 +94,52 @@ public class WireEffect : MonoBehaviour {
         
         Wire wire = null;
         Receiver op = null;
-        if (followColor == FollowColor.RED)
+        WireEffect we = null;
+        for (int i = 0; i < neighbors.Length; i++)
         {
-            for(int i = 0; i < neighbors.Length; i++)
+            if (neighbors[i] == null)
+                continue;
+            wire = neighbors[i].GetComponent<Wire>();
+            op = neighbors[i].GetComponent<Receiver>();
+            if (wire != null)
             {
-                if (neighbors[i] == null)
-                    continue;
-                wire = neighbors[i].GetComponent<Wire>();
-                op = neighbors[i].GetComponent<Receiver>();
-                if (wire != null)
+                if (followColor == FollowColor.RED && wire.HasRed && !exploredRedTiles.Contains(wire.Location))
                 {
-                    if (wire.HasRed && !exploredRedTiles.Contains(wire.Location))
-                    {
-                        Transform newEffect = Instantiate(effectPrefab, origin, Quaternion.identity);
-                        newEffect.GetComponent<WireEffect>().destTile = wire.Location;
-                        newEffect.GetComponent<WireEffect>().destination = (Vector2)wire.RedParts.Center.transform.position;
-                        newEffect.GetComponent<WireEffect>().SetColor(Color.red);
-                        newEffect.GetComponent<WireEffect>().followColor = FollowColor.RED;
-
-                    }
-                } else if(op != null)
+                    Transform newEffect = Instantiate(effectPrefab, origin, Quaternion.identity);
+                    we = newEffect.GetComponent<WireEffect>();
+                    we.destTile = wire.Location;
+                    we.destination = (Vector2)wire.RedParts.Center.transform.position;
+                    we.SetColor(redColor);
+                    we.followColor = FollowColor.RED;
+                }
+                else if (followColor == FollowColor.GREEN && wire.HasGreen && !exploredGreenTiles.Contains(wire.Location))
                 {
-                    if(myLocation == op.Location+op.InputDirection1 
-                        || myLocation == op.Location + op.InputDirection2)
-                    {
-                        Transform newEffect = Instantiate(effectPrefab, origin, Quaternion.identity);
-                        newEffect.GetComponent<WireEffect>().destTile = op.Location;
-                        newEffect.GetComponent<WireEffect>().destination = (Vector2)op.transform.position;
-                        newEffect.GetComponent<WireEffect>().SetColor(Color.red);
-                        newEffect.GetComponent<WireEffect>().followColor = FollowColor.RED;
-
-                    }
+                    Transform newEffect = Instantiate(effectPrefab, origin, Quaternion.identity);
+                    we = newEffect.GetComponent<WireEffect>();
+                    we.destTile = wire.Location;
+                    we.destination = (Vector2)wire.GreenParts.Center.transform.position;
+                    we.SetColor(greenColor);
+                    we.followColor = FollowColor.GREEN;
+                }
+            }
+            else if (op != null)
+            {
+                if (myLocation == op.Location + op.InputDirection1
+                    || myLocation == op.Location + op.InputDirection2)
+                {
+                    Transform newEffect = Instantiate(effectPrefab, origin, Quaternion.identity);
+                    we = newEffect.GetComponent<WireEffect>();
+                    we.destTile = op.Location;
+                    we.destination = (Vector2)op.transform.position;
+                    if (followColor == FollowColor.RED)
+                        we.SetColor(redColor);
+                    else
+                        we.SetColor(greenColor);
+                    we.followColor = followColor;
+                    we.noSpread = true;
                 }
             }
         }
-        if (followColor == FollowColor.GREEN)
-        {
-            for (int i = 0; i < neighbors.Length; i++)
-            {
-                if (neighbors[i] == null)
-                    continue;
-                wire = neighbors[i].GetComponent<Wire>();
-                op = neighbors[i].GetComponent<Receiver>();
-                if (wire != null)
-                {
-                    if (wire.HasGreen && !exploredGreenTiles.Contains(wire.Location))
-                    {
-                        Transform newEffect = Instantiate(effectPrefab, origin, Quaternion.identity);
-                        newEffect.GetComponent<WireEffect>().destTile = wire.Location;
-                        newEffect.GetComponent<WireEffect>().destination = (Vector2)wire.GreenParts.Center.transform.position;
-                        newEffect.GetComponent<WireEffect>().SetColor(Color.green);
-                        newEffect.GetComponent<WireEffect>().followColor = FollowColor.GREEN;
 
-                    }
-                }
-                else if(op != null)
-                {
-                    if (myLocation == op.Location + op.InputDirection1
-                        || myLocation == op.Location + op.InputDirection2)
-                    {
-                        Transform newEffect = Instantiate(effectPrefab, origin, Quaternion.identity);
-                        newEffect.GetComponent<WireEffect>().destTile = op.Location;
-                        newEffect.GetComponent<WireEffect>().destination = (Vector2)op.transform.position;
-                        newEffect.GetComponent<WireEffect>().SetColor(Color.green);
-                        newEffect.GetComponent<WireEffect>().followColor = FollowColor.GREEN;
-
-                    }
-                }
-            }
-        }
     }
 }
