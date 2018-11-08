@@ -30,7 +30,7 @@ public class LevelDisplay : StatefulUI<LevelDisplayState>
 		{
 			GameLevel level = state.Levels[state.SelectedIndex.Value];
 			Title.text = level.Name;
-			Description.text = level.Description;
+			Description.text = string.Join(" ", level.Description);
 			LoadButton.SetActive(true);
 		}
 		else

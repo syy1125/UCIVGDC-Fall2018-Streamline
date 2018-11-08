@@ -25,7 +25,7 @@ public class GameLevel
 	public string FileName;
 
 	public string Name;
-	public string Description;
+	public string[] Description = new string[0];
 
 	public LevelTest[] Tests = new LevelTest[0];
 

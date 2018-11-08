@@ -1,6 +1,8 @@
 {
   "Name": "Bleh",
-  "Description": "asdfasdfasdf",
+  "Description": [
+    "asdfasdfasdf"
+  ],
   "Tests": [
     {
       "Input1": [1, 2, 3],

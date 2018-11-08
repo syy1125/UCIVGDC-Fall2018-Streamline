@@ -1,6 +1,9 @@
 {
   "Name": "Signals on a Wire",
-  "Description": "Signal strength is one of the most basic concepts in Streamline. A signal travels instantaneously down a wire. When multiple signals are sent into the same wire, the wire has a signal strength equal to the sum of all incoming signals.",
+  "Description": [
+    "Signal strength is one of the most basic concepts in Streamline. A signal travels instantaneously down a wire.",
+    "When multiple signals are sent into the same wire, the wire has a signal strength equal to the sum of all incoming signals."
+  ],
   "Tests": [
     {
       "Input1": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
