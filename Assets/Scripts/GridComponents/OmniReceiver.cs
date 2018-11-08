@@ -11,14 +11,12 @@ public class OmniReceiver : Receiver
 		Vector2Int.right
 	};
 
-	public int Num { get; private set; }
-
 	public override void Step()
 	{
-		Num = 0;
+		Num1 = 0;
 		foreach (Vector2Int direction in Directions)
 		{
-			GetSignal(direction, signal => Num += signal);
+			GetSignal(direction, signal => Num1 += signal);
 		}
 	}
 }

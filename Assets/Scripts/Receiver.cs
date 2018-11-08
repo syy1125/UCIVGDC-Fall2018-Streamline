@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Receiver : MonoBehaviour
 {
-	public int Num1 { get; private set; }
+	public int Num1 { get; protected set; }
 	public int Num2 { get; private set; }
 
 	public Vector2Int Location;
