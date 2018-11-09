@@ -77,7 +77,7 @@ TrailRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 10
-  m_Time: 0.08
+  m_Time: 0.03
   m_Parameters:
     serializedVersion: 2
     widthMultiplier: 0.2
@@ -148,7 +148,7 @@ TrailRenderer:
     alignment: 0
     textureMode: 0
     generateLightingData: 0
-  m_MinVertexDistance: 0.03
+  m_MinVertexDistance: 0.01
   m_Autodestruct: 1
   m_Emitting: 1
 --- !u!114 &114984588538567150
@@ -164,7 +164,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   destTile: {x: 0, y: 0}
   destination: {x: 0, y: 0}
-  speed: 45
+  speed: 35
   effectPrefab: {fileID: 4743055532203228}
   followColor: 0
   noSpread: 0

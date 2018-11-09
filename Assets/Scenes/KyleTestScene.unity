@@ -10636,7 +10636,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   escapeKey: 27
   gameMenuUIGroup: {fileID: 100346205}
-  stepDelay: 0.65
+  stepDelay: 0.35
   displayManager: {fileID: 1200660255}
   isSetUp: 0
   levelNum: 0

@@ -9,8 +9,8 @@ public class WireEffect : MonoBehaviour {
     {
         RED, GREEN
     }
-    public static HashSet<Vector2Int> exploredRedTiles = new HashSet<Vector2Int>();
-    public static HashSet<Vector2Int> exploredGreenTiles = new HashSet<Vector2Int>();
+    private HashSet<Vector2Int> exploredRedTiles;
+    private HashSet<Vector2Int> exploredGreenTiles;
 
     public Vector2Int destTile;
     public Vector2 destination;
@@ -27,6 +27,8 @@ public class WireEffect : MonoBehaviour {
         tr = GetComponent<TrailRenderer>();
         SetColor(redColor);
         atDestination = false;
+        exploredRedTiles = null;
+        exploredGreenTiles = null;
 	}
 	
 	// Update is called once per frame
@@ -37,7 +39,7 @@ public class WireEffect : MonoBehaviour {
             transform.position = destination;
             if (!atDestination)
             {
-                Destroy(gameObject, tr.time);
+                //Destroy(gameObject, tr.time);
                 if (followColor == FollowColor.GREEN)
                     exploredGreenTiles.Add(destTile);
                 else if (followColor == FollowColor.RED)
@@ -57,11 +59,12 @@ public class WireEffect : MonoBehaviour {
         tr.startColor = c;
         tr.endColor = c;
     }
-    public static void ClearExploredSet()
+    public void SetHashSets(ref HashSet<Vector2Int> exploredRed, ref HashSet<Vector2Int> exploredGreen)
     {
-        exploredRedTiles.Clear();
-        exploredGreenTiles.Clear();
+        exploredRedTiles = exploredRed;
+        exploredGreenTiles = exploredGreen;
     }
+    
     private void SpawnMoreEffects()
     {
         Grid grid = Grid.Instance;
@@ -107,6 +110,7 @@ public class WireEffect : MonoBehaviour {
                 {
                     Transform newEffect = Instantiate(effectPrefab, origin, Quaternion.identity);
                     we = newEffect.GetComponent<WireEffect>();
+                    we.SetHashSets(ref exploredRedTiles, ref exploredGreenTiles);
                     we.destTile = wire.Location;
                     we.destination = (Vector2)wire.RedParts.Center.transform.position;
                     we.SetColor(redColor);
@@ -116,6 +120,7 @@ public class WireEffect : MonoBehaviour {
                 {
                     Transform newEffect = Instantiate(effectPrefab, origin, Quaternion.identity);
                     we = newEffect.GetComponent<WireEffect>();
+                    we.SetHashSets(ref exploredRedTiles, ref exploredGreenTiles);
                     we.destTile = wire.Location;
                     we.destination = (Vector2)wire.GreenParts.Center.transform.position;
                     we.SetColor(greenColor);
@@ -129,17 +134,26 @@ public class WireEffect : MonoBehaviour {
                 {
                     Transform newEffect = Instantiate(effectPrefab, origin, Quaternion.identity);
                     we = newEffect.GetComponent<WireEffect>();
+                    we.SetHashSets(ref exploredRedTiles, ref exploredGreenTiles);
                     we.destTile = op.Location;
                     we.destination = (Vector2)op.transform.position;
                     if (followColor == FollowColor.RED)
+                    {
                         we.SetColor(redColor);
+                        we.destination += (Vector2)(self.GetComponent<Wire>().RedParts.Center.transform.position 
+                            - self.GetComponent<Wire>().transform.position);
+                    }
                     else
+                    {
                         we.SetColor(greenColor);
+                        we.destination += (Vector2)(self.GetComponent<Wire>().GreenParts.Center.transform.position 
+                            - self.GetComponent<Wire>().transform.position);
+                    }
                     we.followColor = followColor;
                     we.noSpread = true;
                 }
             }
         }
-
+    
     }
 }
