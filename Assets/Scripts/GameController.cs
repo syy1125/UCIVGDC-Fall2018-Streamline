@@ -23,7 +23,8 @@ public class GameController : MonoBehaviour {
     public ValueDisplayManager displayManager;
     [HideInInspector]
     public bool isSetUp = false;
-    public int levelNum;
+    public static string levelName = "TestLevel";
+    public static int solutionNum = 0;
     public Transform wireEffectPrefab;
     
 	void Start () {
@@ -31,7 +32,7 @@ public class GameController : MonoBehaviour {
         gameMenuOpen = false;
         clearConfirmationOpen = false;
         simState = SimState.EDITING;
-        SaveData.LoadData(levelNum);
+        SaveData.LoadData(levelName, solutionNum);
     }
 
 
@@ -204,13 +205,12 @@ public class GameController : MonoBehaviour {
     public void SaveGame()
     {
         Debug.Log("Saving game...");
-        SaveData.WriteData(levelNum);
+        SaveData.WriteData(levelName,solutionNum);
     }
-    public IEnumerator LoadSolution()
+    public void LoadSolution()
     {
         Debug.Log("Loading Data...");
-        yield return new WaitForEndOfFrame();
-        SaveData.LoadData(levelNum);
+        SaveData.LoadData(levelName,solutionNum);
     }
     
 }

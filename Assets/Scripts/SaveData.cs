@@ -6,6 +6,7 @@ public static class SaveData {
 
 
     /*
+     *         C:/Users/[USER]/AppData/LocalLow/DefaultCompany/Streamline
      * Data format:
      * Tab separated values (tsv)
      * Each level has separate save file, which is "SaveData" + levelNumber
@@ -13,25 +14,28 @@ public static class SaveData {
      * Constant:    [Component Type],[X],[Y],[OutputDirection],[Value]
      * Wires:       [Component Type],[X],[Y],[Enum--RED,GREEN,BOTH]
      */
-    public static void LoadData(int level)
+    public static void LoadData(string levelName, int solutionNum)
     {
         string path = Application.persistentDataPath;
-        path += "\\SaveData" + level + ".txt";
-        StreamReader streamReader = new StreamReader(path);
-        while (!streamReader.EndOfStream)
+        path += "\\SaveData" + levelName + solutionNum.ToString() + ".txt";
+        if (File.Exists(path))
         {
-            string line = streamReader.ReadLine();
-            string[] data = line.Split('\t');
-            int[] values = new int[data.Length];
-            for (int i = 0; i < data.Length; i++)
+            StreamReader streamReader = new StreamReader(path);
+            while (!streamReader.EndOfStream)
             {
-                values[i] = int.Parse(data[i]);
+                string line = streamReader.ReadLine();
+                string[] data = line.Split('\t');
+                int[] values = new int[data.Length];
+                for (int i = 0; i < data.Length; i++)
+                {
+                    values[i] = int.Parse(data[i]);
+                }
+                LoadComponent(values);
+
+
             }
-            LoadComponent(values);
-            
-            
+            streamReader.Close();
         }
-        streamReader.Close();
     }
     private enum Components
     {
@@ -111,11 +115,11 @@ public static class SaveData {
             return 2;
         return 3;
     }
-    public static void WriteData(int level)
+    public static void WriteData(string levelName, int solutionNum)
     {
         //C:/Users/[USER]/AppData/LocalLow/DefaultCompany/Streamline
         string path = Application.persistentDataPath;
-        path += "\\SaveData" + level + ".txt";
+        path += "\\SaveData" + levelName + solutionNum.ToString() + ".txt";
         System.IO.File.WriteAllText(path, string.Empty);
         StreamWriter writer = new StreamWriter(path,false);
         GameObject g = null;
