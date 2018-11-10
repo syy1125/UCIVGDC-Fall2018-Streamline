@@ -148,7 +148,14 @@ public class Grid : MonoBehaviour
     }
     public void DestroyGridComponent(int x, int y)
     {
-        Destroy(GetGridComponent(x,y));
+        GameObject g = GetGridComponent(x, y);
+        if(g != null && IsOperator(g) && (g.GetComponent<Operator>().OpName.Equals("Importer") || g.GetComponent<Operator>().OpName.Equals("Output")))
+        {
+            //Do not delete importers/exporters
+            return;
+        }
+
+            Destroy(GetGridComponent(x,y));
         _gridComponents[x][y] = null;
     }
     public void DestroyGridComponent(Vector2Int pos)
@@ -310,13 +317,9 @@ public class Grid : MonoBehaviour
         {
             for(int j = 0; j < Width; j++)
             {
-                g = GetGridComponent(i, j);
-                //Do not delete importers/exporters
-                if (g != null && !(IsOperator(g) && (g.GetComponent<Operator>().OpName.Equals("Importer")
-                    || g.GetComponent<Operator>().OpName.Equals("Output"))))
-                {
-                    DestroyGridComponent(i, j);
-                }
+                
+                DestroyGridComponent(i, j);
+                
             }
         }
     }
