@@ -15,6 +15,7 @@ public class GameController : MonoBehaviour {
     public static bool gameMenuOpen;
     public static bool clearConfirmationOpen;
     public static bool mouseDragging;
+    public string errorPrefab = "ErrorHighlight";
     public static SimState simState;
     public KeyCode escapeKey;
     public UIGroup gameMenuUIGroup;
@@ -78,16 +79,7 @@ public class GameController : MonoBehaviour {
                     gameMenuUIGroup.EnableUI();
                 }
                 
-                /*
-                if (Input.GetKeyDown(KeyCode.O))
-                {
-                    SaveData.LoadData(0);
-                }
-                if (Input.GetKeyDown(KeyCode.P))
-                {
-                    SaveData.WriteData(0);
-                }
-                */
+              
                 break;
             case SimState.RUNNING:
                 if(stepTimer > stepDelay)
@@ -112,12 +104,37 @@ public class GameController : MonoBehaviour {
 	}
     public void OnStepButtonPress()
     {
-        if(simState == SimState.PAUSED)
+        switch (simState)
         {
-            Step();
-        } else if(simState == SimState.RUNNING)
+            case SimState.PAUSED:
+                Step();
+                break;
+            case SimState.RUNNING:
+                SetSimState((int)SimState.PAUSED);
+                break;
+            case SimState.EDITING:
+                SetSimState((int)SimState.PAUSED);
+                Step();
+                break;
+            case SimState.CRASHED:
+                simState = SimState.PAUSED;
+                CrashSimulation();
+                break;
+        }
+    }
+    public void PlayPauseToggle()
+    {
+        switch (simState)
         {
-            simState = SimState.PAUSED;
+            case SimState.EDITING:
+                SetSimState((int)SimState.RUNNING);
+                break;
+            case SimState.RUNNING:
+                SetSimState((int)SimState.PAUSED);
+                break;
+            case SimState.PAUSED:
+                SetSimState((int)SimState.RUNNING);
+                break;
         }
     }
     public void SetSimState(int s)
@@ -165,6 +182,11 @@ public class GameController : MonoBehaviour {
                 {
                     TearDownSimulation();
                     simState = SimState.EDITING;
+                } else if(newSimState == SimState.RUNNING)
+                {
+                    TearDownSimulation();
+                    SetUpSimulation();
+                    simState = SimState.RUNNING;
                 }
                 break;
         }
@@ -174,8 +196,13 @@ public class GameController : MonoBehaviour {
     }
     public static void CrashSimulation()
     {
-        GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>().SetSimState((int)SimState.CRASHED);
+        if (simState != SimState.CRASHED)
+        {
+            GameController gc = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
+            gc.SetSimState((int)SimState.CRASHED);
+        }
     }
+    
     private void SpawnEffect(ref HashSet<Vector2Int> redSet, ref HashSet<Vector2Int> greenSet, Transmitter tr)
     {
         if (Grid.Instance.GetGridComponent(tr.Location + tr.OutputDirection) == null)

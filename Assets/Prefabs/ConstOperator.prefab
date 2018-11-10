@@ -44,8 +44,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Location: {x: 0, y: 0}
-  InputDirection1: {x: 0, y: -1}
-  InputDirection2: {x: 0, y: 1}
+  InputDirection1: {x: 0, y: 0}
+  InputDirection2: {x: 0, y: 0}
 --- !u!114 &114406989443996896
 MonoBehaviour:
   m_ObjectHideFlags: 1

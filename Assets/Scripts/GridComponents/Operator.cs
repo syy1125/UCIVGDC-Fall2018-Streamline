@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public abstract class Operator : MonoBehaviour {
+    public string errorHighlight = "ErrorHighlight";
 	protected int num1;
 	protected int num2;
 	protected int result;
@@ -30,4 +31,10 @@ public abstract class Operator : MonoBehaviour {
         result = Mathf.Clamp(result, MIN, MAX);
 		transmitter.Send(result);
 	}
+    protected void Crash()
+    {
+        GameController.CrashSimulation();
+        Instantiate(Resources.Load(errorHighlight),transform);
+
+    }
 }

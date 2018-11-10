@@ -75,19 +75,19 @@ public static class SaveData {
                 op.GetComponent<Transmitter>().OutputDirection = GetDirection(values[5]);
                 break;
             case Components.SUB:
-                op = grid.SetGridComponent(coords, grid.addition).transform;
+                op = grid.SetGridComponent(coords, grid.subtraction).transform;
                 op.GetComponent<Receiver>().InputDirection1 = GetDirection(values[3]);
                 op.GetComponent<Receiver>().InputDirection2 = GetDirection(values[4]);
                 op.GetComponent<Transmitter>().OutputDirection = GetDirection(values[5]);
                 break;
             case Components.MULT:
-                op = grid.SetGridComponent(coords, grid.addition).transform;
+                op = grid.SetGridComponent(coords, grid.multiplication).transform;
                 op.GetComponent<Receiver>().InputDirection1 = GetDirection(values[3]);
                 op.GetComponent<Receiver>().InputDirection2 = GetDirection(values[4]);
                 op.GetComponent<Transmitter>().OutputDirection = GetDirection(values[5]);
                 break;
             case Components.DIV:
-                op = grid.SetGridComponent(coords, grid.addition).transform;
+                op = grid.SetGridComponent(coords, grid.division).transform;
                 op.GetComponent<Receiver>().InputDirection1 = GetDirection(values[3]);
                 op.GetComponent<Receiver>().InputDirection2 = GetDirection(values[4]);
                 op.GetComponent<Transmitter>().OutputDirection = GetDirection(values[5]);

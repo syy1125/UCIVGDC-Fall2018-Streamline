@@ -215,7 +215,8 @@ public class Grid : MonoBehaviour
             Selected = location;
             return;
         }
-        
+        if (GameController.simState != SimState.EDITING)
+            return;
         if (!ValidPlacement(location, ComponentSelection.cursorSelection))
             return;
         switch (ComponentSelection.cursorSelection)

@@ -17,7 +17,7 @@ public class Divide : Operator {
         }
         else if (num2 == 0)
         {
-            GameController.CrashSimulation();
+            Crash();
         }
         else
         {
