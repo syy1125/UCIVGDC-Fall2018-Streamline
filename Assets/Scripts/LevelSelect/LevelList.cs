@@ -24,8 +24,12 @@ public class GameLevel
 	[NonSerialized]
 	public string FileName;
 
-	public string Name;
+	public string Name = "Level";
+	// Description is an overview of the level.
 	public string[] Description = new string[0];
+	// Objective is the task the player needs to achieve in a level.
+	public string[] Objective = null;
+	// Objective may be null, in which case it defaults to the level's description.
 
 	public LevelTest[] Tests = new LevelTest[0];
 
