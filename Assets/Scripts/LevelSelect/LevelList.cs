@@ -158,6 +158,7 @@ public class LevelList : StatefulUI<LevelListState>
 			level.Tests[0].Input1,
 			level.Tests[0].Input2
 		};
+		GameController.gameLevel = level;
 		
 		SceneManager.LoadScene("CircuitGrid");
 	}
