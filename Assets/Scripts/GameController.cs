@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.UI;
 
 public enum SimState
 {
@@ -23,16 +23,25 @@ public class GameController : MonoBehaviour {
     public ValueDisplayManager displayManager;
     [HideInInspector]
     public bool isSetUp = false;
-    public static string levelName = "TestLevel";
+    public static GameLevel gameLevel = new GameLevel();
     public static int solutionNum = 0;
     public Transform wireEffectPrefab;
-    
+    public Text levelNameText;
+    public Text levelDescription;
+    public string levelOverride = "";
 	void Start () {
         gameGrid = Grid.Instance;
         gameMenuOpen = false;
         clearConfirmationOpen = false;
         simState = SimState.EDITING;
-        SaveData.LoadData(levelName, solutionNum);
+        if (!levelOverride.Equals(""))
+            SaveData.LoadData(levelOverride, 0);
+        else
+            SaveData.LoadData(gameLevel.Name, solutionNum);
+        levelNameText.text = gameLevel.Name;
+        
+        levelDescription.text = string.Join(" ", gameLevel.Description);
+
     }
 
 
@@ -61,6 +70,10 @@ public class GameController : MonoBehaviour {
     }
 	// Update is called once per frame
 	void Update () {
+        if (mouseDragging && !Input.GetMouseButton(0)) //Left mouse button
+        {
+            mouseDragging = false;
+        }
         switch (simState)
         {
             case SimState.EDITING:
@@ -68,10 +81,7 @@ public class GameController : MonoBehaviour {
                 {  
                     gameMenuUIGroup.EnableUI();
                 }
-                if (mouseDragging && !Input.GetMouseButton(0)) //Left mouse button
-                {
-                    mouseDragging = false;
-                }
+                
                 /*
                 if (Input.GetKeyDown(KeyCode.O))
                 {
@@ -205,12 +215,12 @@ public class GameController : MonoBehaviour {
     public void SaveGame()
     {
         Debug.Log("Saving game...");
-        SaveData.WriteData(levelName,solutionNum);
+        SaveData.WriteData(gameLevel.Name,solutionNum);
     }
     public void LoadSolution()
     {
         Debug.Log("Loading Data...");
-        SaveData.LoadData(levelName,solutionNum);
+        SaveData.LoadData(gameLevel.Name,solutionNum);
     }
     
 }

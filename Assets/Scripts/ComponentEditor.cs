@@ -11,21 +11,7 @@ public class ComponentEditor : MonoBehaviour
 	public Text ComponentName;
     public Text helpText;
 	public GameObject ComponentPreview;
-    /*
-	[Serializable]
-	public class DirectionGroup
-	{
-		public GameObject Input1;
-		public GameObject Input2;
-		public GameObject Output;
-	}
-
-	public DirectionGroup Up;
-	public DirectionGroup Down;
-	public DirectionGroup Left;
-	public DirectionGroup Right;
-    */
-    
+   
     
     public static ArrowSelection selection = ArrowSelection.NONE;
     private GameObject currentlySelectedComponent;
@@ -36,14 +22,19 @@ public class ComponentEditor : MonoBehaviour
     public GameObject input2Button;
     public GameObject outputButton;
     public GameObject constEditor;
+    private Image[] ioUnderlines;
     public RectTransform mimicArrows;
     public Color input1Color;
     public Color input2Color;
     public Color outputColor;
     public DirectionButton[] directionButtons;
-    private void Start()
+    private void Awake()
     {
-        
+        ioUnderlines = new Image[3];
+        ioUnderlines[0] = input1Button.GetComponentsInChildren<Image>()[1];
+        ioUnderlines[1] = input2Button.GetComponentsInChildren<Image>()[1];
+        ioUnderlines[2] = outputButton.GetComponentsInChildren<Image>()[1];
+
     }
     public void UpdateUI()
 	{
@@ -57,8 +48,12 @@ public class ComponentEditor : MonoBehaviour
 			if (Grid.Instance.IsOperator(Grid.Instance.GetGridComponent(Grid.Instance.Selected)))
 			{
 				GameObject gridComponent = Grid.Instance.GetGridComponent(Grid.Instance.Selected);
-				Instantiate(gridComponent, ComponentPreview.transform);
-				ComponentName.text = gridComponent.GetComponent<Operator>().OpName;
+				GameObject previewedObject = Instantiate(gridComponent, ComponentPreview.transform);
+                foreach (Transform t in previewedObject.transform)
+                {
+                    Destroy(t.gameObject);
+                }
+                ComponentName.text = gridComponent.GetComponent<Operator>().OpName;
                 currentlySelectedComponent = Grid.Instance.GetGridComponent(Grid.Instance.Selected);
                 for (int i = 0; i < directionButtons.Length; i++)
                 {
@@ -92,18 +87,20 @@ public class ComponentEditor : MonoBehaviour
         SetButtonsActive(false);
         SetArrowSelection(ArrowSelection.NONE);
         helpText.text = "";
+        Grid.Instance.Selected = new Vector2Int(-1, -1);
+        for (int i = 0; i < directionButtons.Length; i++)
+        {
+            directionButtons[i].GetComponent<Image>().enabled = false;
+        }
     }
     private void Update()
     {
+        DrawButtonUnderlines();
         if(Grid.Instance.GetGridComponent(Grid.Instance.Selected) == null)
         {
             //Remove component editor content and clear green selection square
             ClearSelection();
-            Grid.Instance.Selected = new Vector2Int(-1,-1);
-            for(int i = 0; i < directionButtons.Length; i++)
-            {
-                directionButtons[i].GetComponent<Image>().enabled = false;
-            }
+            
         }
         if (Grid.Instance.GetGridComponent(Grid.Instance.Selected) != null 
             && Grid.Instance.IsOperator(Grid.Instance.GetGridComponent(Grid.Instance.Selected)))
@@ -125,6 +122,7 @@ public class ComponentEditor : MonoBehaviour
             SetButtonsActive(false);
             SetMimicArrows(null, Vector2.zero, Vector2.zero);
             currentlySelectedComponent = null;
+            helpText.text = "";
         }
 
     }
@@ -158,24 +156,31 @@ public class ComponentEditor : MonoBehaviour
             SetArrowDirection(Vector2Int.down);
         }
         //Tab and Shift+Tab
-        if (Input.GetKeyDown(KeyCode.Tab))
+        int x = ((int)selection)-1; //0->IN1,1->IN2,2->OUT
+        if (Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.Tab))
         {
-            int x = ((int)selection)-1; //0->IN1,1->IN2,2->OUT
-           
-            if (Input.GetKeyDown(KeyCode.LeftShift))
-            {
-                x -= 1;
-                x = x % 3;
-                x += 1;
-                SetArrowSelection((ArrowSelection)x);
-            } else
-            {
-                x += 1;
-                x = x % 3;
-                x += 1;
-                SetArrowSelection((ArrowSelection)x);
-            }
+            x -= 1;
+            if (x < 0)
+                x = 2;
+            x += 1;
+            SetArrowSelection((ArrowSelection)x);
         }
+        else if(Input.GetKeyDown(KeyCode.Tab))
+        {
+            x += 1;
+            x = x % 3;
+            x += 1;
+            SetArrowSelection((ArrowSelection)x);
+        }
+
+
+    }
+    private void DrawButtonUnderlines()
+    {
+        ioUnderlines[0].enabled = selection == ArrowSelection.IN1;
+        ioUnderlines[1].enabled = selection == ArrowSelection.IN2;
+        ioUnderlines[2].enabled = selection == ArrowSelection.OUT;
+
     }
     private void SetButtonsActive(bool b)
     {
@@ -218,11 +223,14 @@ public class ComponentEditor : MonoBehaviour
     public void SetArrowSelection(int i)
     {
         //Buttons use this function
+        
         selection = (ArrowSelection)i;
         InitializeArrows((ArrowSelection)i);
     }
     public void SetArrowDirection(Vector2Int v)
     {
+        if (GameController.simState != SimState.EDITING)
+            return;
         switch (selection)
         {
             case ArrowSelection.IN1:
@@ -245,6 +253,8 @@ public class ComponentEditor : MonoBehaviour
     }
     public void SetArrowDirection(int d)
     {
+        if (GameController.simState != SimState.EDITING)
+            return;
         switch (d)
         {
             case 0:
@@ -350,6 +360,7 @@ public class ComponentEditor : MonoBehaviour
     public void SetActiveSprite(int x)
     {
         //x is index of directionButton to activate
+        
         for(int i = 0; i < directionButtons.Length; i++)
         {
             directionButtons[i].SetActivated(false);
@@ -367,7 +378,9 @@ public class ComponentEditor : MonoBehaviour
     }
     public void IncrementConst(Text t)
     {
-        if(currentlySelectedComponent.GetComponent<Constant>() != null)
+        if (GameController.simState != SimState.EDITING)
+            return;
+        if (currentlySelectedComponent.GetComponent<Constant>() != null)
         {
             Constant constant = currentlySelectedComponent.GetComponent<Constant>();
             constant.number += 1;
@@ -379,6 +392,8 @@ public class ComponentEditor : MonoBehaviour
     }
     public void DecrementConst(Text t)
     {
+        if (GameController.simState != SimState.EDITING)
+            return;
         if (currentlySelectedComponent.GetComponent<Constant>() != null)
         {
             Constant constant = currentlySelectedComponent.GetComponent<Constant>();
