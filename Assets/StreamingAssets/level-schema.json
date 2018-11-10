@@ -17,7 +17,7 @@
       }
     },
     
-    "Objectives": {
+    "Objective": {
       "description": "The tasks that player need to achieve. The array elements will be joined similar to Description. If this field is not set, it will be replaced with Description during runtime.",
       "type": "array",
       "items": {
