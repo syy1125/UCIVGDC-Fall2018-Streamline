@@ -147,16 +147,14 @@ public class LevelList : StatefulUI<LevelListState>
 
 	public void PlaySelectedLevel()
 	{
-		StartCoroutine(PlayLevel(State.SelectedIndex.Value));
-	}
+		GameLevel level = State.Levels[State.SelectedIndex.Value];
 
-	private IEnumerator PlayLevel(int index)
-	{
-//		AsyncOperation load = SceneManager.LoadSceneAsync("");
-
-//		while (!load.isDone) yield return null;
-		Debug.Log("Loading level " + index);
-
-		yield return null;
+		Importer.Sequences = new[]
+		{
+			level.Tests[0].Input1,
+			level.Tests[0].Input2
+		};
+		
+		SceneManager.LoadScene("CircuitGrid");
 	}
 }

@@ -88,6 +88,7 @@ public class Wire : MonoBehaviour
 	{
 		GameObject tile = Grid.Instance.GetGridComponent(Location + direction);
 		return Grid.Instance.IsOperator(tile)
+		       && tile.GetComponent<Transmitter>() != null
 		       && tile.GetComponent<Transmitter>().TransmissionDirections().Contains(direction * -1);
 	}
 
@@ -95,6 +96,7 @@ public class Wire : MonoBehaviour
 	{
 		GameObject tile = Grid.Instance.GetGridComponent(Location + direction);
 		return Grid.Instance.IsOperator(tile)
+		       && tile.GetComponent<Receiver>() != null
 		       && tile.GetComponent<Receiver>().ReceptionDirections().Contains(direction * -1);
 	}
 

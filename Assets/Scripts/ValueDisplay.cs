@@ -8,7 +8,7 @@ public class ValueDisplay : MonoBehaviour {
     private Text text;
     private enum CopyType
     {
-        TRANSMITTER, WIRE,
+        TRANSMITTER, WIRE, RECEIVER
     }
     private CopyType type;
     private Object copyFrom;
@@ -18,7 +18,13 @@ public class ValueDisplay : MonoBehaviour {
         {
             type = CopyType.TRANSMITTER;
             copyFrom = transform.parent.GetComponent<Transmitter>();
-        } else if(transform.parent.GetComponent<Wire>() != null)
+        } 
+        else if (transform.parent.GetComponent<Receiver>() != null)
+        {
+            type = CopyType.RECEIVER;
+            copyFrom = transform.parent.GetComponent<Receiver>();
+        }
+        else if(transform.parent.GetComponent<Wire>() != null)
         {
             type = CopyType.WIRE;
             copyFrom = transform.parent.GetComponent<Wire>();
@@ -29,10 +35,13 @@ public class ValueDisplay : MonoBehaviour {
 	void Update () {
         switch (type)
         {
-            case CopyType.TRANSMITTER:
+            case CopyType.TRANSMITTER: // Operators
                 text.text = "" + ((Transmitter)copyFrom).Signal;
                 break;
-            case CopyType.WIRE:
+            case CopyType.RECEIVER: // Exporters
+                text.text = "" + ((Receiver) copyFrom).Num1;
+                break;
+            case CopyType.WIRE: // Wires
                 text.text = "" + ((Wire)copyFrom).SignalStrength;
                 break;
         }

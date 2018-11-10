@@ -14,12 +14,16 @@ public class Grid : MonoBehaviour
     [HideInInspector]
     public Transform[][] buttonList;
 
+    public ColArray[] Columns;
+
     public GameObject wire;
     public GameObject addition;
     public GameObject subtraction;
     public GameObject multiplication;
     public GameObject division;
     public GameObject constant;
+    public GameObject importer;
+    public GameObject exporter;
     private GameObject[][] _gridComponents;
 
     public Color SelectedColor;
@@ -76,13 +80,14 @@ public class Grid : MonoBehaviour
     }
 
     private void Start () {
-        buildGridButtons();
         
         _gridComponents = new GameObject[Width][];
         for (int x = 0; x < Width; x++)
         {
             _gridComponents[x] = new GameObject[Height];
         }
+        
+        buildGridButtons();
 	}
 
     public bool InGrid(int x, int y)
@@ -175,6 +180,21 @@ public class Grid : MonoBehaviour
                 buttonList[x][y] = newButton;
             }
         }
+        
+        // Set up imports and exports
+        GameObject importer1 = SetGridComponent(0, Height - 1, importer);
+        importer1.GetComponent<Importer>().SequenceIndex = 0;
+        importer1.GetComponent<Importer>().outputColumn = Columns[0];
+        
+        GameObject importer2 = SetGridComponent(0, 0, importer);
+        importer2.GetComponent<Importer>().SequenceIndex = 1;
+        importer2.GetComponent<Importer>().outputColumn = Columns[1];
+        
+        GameObject exporter1 = SetGridComponent(Width - 1, 0, exporter);
+        exporter1.GetComponent<Exporter>().outputColumns = new [] {Columns[2]};
+        
+        GameObject exporter2 = SetGridComponent(Width - 1, Height - 1, exporter);
+        exporter2.GetComponent<Exporter>().outputColumns = new [] {Columns[3]};
     }
     public Transform getGridButton(int x, int y)
     {
@@ -279,8 +299,8 @@ public class Grid : MonoBehaviour
     }
     public bool IsOperator(GameObject g)
     {
-        //return g != null && g.GetComponent<Operator>() != null);
-        return g != null && g.CompareTag("Operator");   //placeholder until Operator class is built
+        return g != null && g.GetComponent<Operator>() != null;
+//        return g != null && g.CompareTag("Operator");   //placeholder until Operator class is built
             
     }
     public void ClearGrid()

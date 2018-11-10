@@ -200,6 +200,8 @@ public class GameController : MonoBehaviour {
             return;
         isSetUp = false;
         Wire.GlobalTearDown();
+        Grid.Instance.GetGridComponent(0,0).GetComponent<Importer>().Reset();
+        Grid.Instance.GetGridComponent(0,Grid.Instance.Height-1).GetComponent<Importer>().Reset();
         displayManager.DestroyAllValueDisplays();
     }
     public void SaveGame()
