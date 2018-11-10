@@ -191,10 +191,10 @@ public class Grid : MonoBehaviour
         importer2.GetComponent<Importer>().outputColumn = Columns[1];
         
         GameObject exporter1 = SetGridComponent(Width - 1, 0, exporter);
-        exporter1.GetComponent<Exporter>().outputColumns = new [] {Columns[2]};
+        exporter1.GetComponent<Exporter>().outputColumn = Columns[2];
         
         GameObject exporter2 = SetGridComponent(Width - 1, Height - 1, exporter);
-        exporter2.GetComponent<Exporter>().outputColumns = new [] {Columns[3]};
+        exporter2.GetComponent<Exporter>().outputColumn = Columns[3];
     }
     public Transform getGridButton(int x, int y)
     {

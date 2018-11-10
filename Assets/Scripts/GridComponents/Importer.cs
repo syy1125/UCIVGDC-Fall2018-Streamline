@@ -24,11 +24,13 @@ public class Importer : Operator
 	public override void Step()
 	{
 		result = _sequence[Mathf.Min(_index++, _sequence.Length - 1)];
+		outputColumn.AddValue(result);
 		SendToTransmitter();
 	}
 
-	public void Reset()
+	public void ResetState()
 	{
 		_index = 0;
+		outputColumn.ClearNums();
 	}
 }
