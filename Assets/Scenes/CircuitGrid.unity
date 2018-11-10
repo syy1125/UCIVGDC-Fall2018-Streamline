@@ -12113,14 +12113,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   none: q
-  eraser: w
-  redWire: e
-  greenWire: r
+  eraser: e
+  redWire: r
+  greenWire: g
   addition: a
   subtraction: s
-  multiplication: d
-  division: f
-  constant: g
+  multiplication: x
+  division: d
+  constant: c
 --- !u!1 &1834132873
 GameObject:
   m_ObjectHideFlags: 0
