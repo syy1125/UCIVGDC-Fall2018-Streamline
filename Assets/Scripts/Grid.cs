@@ -305,11 +305,18 @@ public class Grid : MonoBehaviour
     }
     public void ClearGrid()
     {
+        GameObject g = null;
         for(int i = 0; i < Height; i++)
         {
             for(int j = 0; j < Width; j++)
             {
-                DestroyGridComponent(i, j);
+                g = GetGridComponent(i, j);
+                //Do not delete importers/exporters
+                if (g != null && !(IsOperator(g) && (g.GetComponent<Operator>().OpName.Equals("Importer")
+                    || g.GetComponent<Operator>().OpName.Equals("Output"))))
+                {
+                    DestroyGridComponent(i, j);
+                }
             }
         }
     }

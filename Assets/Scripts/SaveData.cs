@@ -20,6 +20,7 @@ public static class SaveData {
         path += "\\SaveData" + levelName + solutionNum.ToString() + ".txt";
         if (File.Exists(path))
         {
+            Debug.Log("Loading Data from " + path);
             StreamReader streamReader = new StreamReader(path);
             while (!streamReader.EndOfStream)
             {
@@ -35,6 +36,10 @@ public static class SaveData {
 
             }
             streamReader.Close();
+        } else
+        {
+            Debug.Log("Save File not Found: " + path);
+
         }
     }
     private enum Components
@@ -121,6 +126,7 @@ public static class SaveData {
         string path = Application.persistentDataPath;
         path += "\\SaveData" + levelName + solutionNum.ToString() + ".txt";
         System.IO.File.WriteAllText(path, string.Empty);
+        Debug.Log("Saving Data to " + path);
         StreamWriter writer = new StreamWriter(path,false);
         GameObject g = null;
        
@@ -129,8 +135,9 @@ public static class SaveData {
             for(int j = 0; j < Grid.Instance.Height; j++)
             {
                 g = Grid.Instance.GetGridComponent(i, j);
-                if(g != null)
-                    writer.WriteLine(TranslateComponent(i, j, g));
+                string componentData = TranslateComponent(i, j, g);
+                if (!componentData.Equals(""))
+                    writer.WriteLine(componentData);
             }
         }
         writer.Close();  
@@ -138,7 +145,7 @@ public static class SaveData {
     public static string TranslateComponent(int x, int y, GameObject g)
     {
         if (g == null)
-            return null;
+            return "";
         string result = "";
         Grid grid = Grid.Instance;
         if (grid.IsWire(g))
@@ -174,6 +181,9 @@ public static class SaveData {
                 case "Constant":
                     result += ((int)Components.CONSTANT).ToString() + "\t";
                     break;
+                default:
+                    //Do not save importers and exporters
+                    return "";
             }
             result += x.ToString() + "\t";
             result += y.ToString() + "\t";

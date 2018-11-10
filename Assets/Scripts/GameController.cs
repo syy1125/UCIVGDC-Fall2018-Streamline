@@ -18,6 +18,7 @@ public class GameController : MonoBehaviour {
     public static SimState simState;
     public KeyCode escapeKey;
     public UIGroup gameMenuUIGroup;
+    public UIGroup crashUIGroup;
     public float stepDelay;
     private float stepTimer = 0;
     public ValueDisplayManager displayManager;
@@ -139,6 +140,10 @@ public class GameController : MonoBehaviour {
                 } else if(newSimState == SimState.PAUSED)
                 {
                     simState = SimState.PAUSED;
+                } else if(newSimState == SimState.CRASHED)
+                {
+                    crashUIGroup.EnableUI();
+                    simState = SimState.CRASHED;
                 }
                 break;
             case SimState.PAUSED:
@@ -149,15 +154,27 @@ public class GameController : MonoBehaviour {
                 {
                     TearDownSimulation();
                     simState = SimState.EDITING;
+                } else if (newSimState == SimState.CRASHED)
+                {
+                    crashUIGroup.EnableUI();
+                    simState = SimState.CRASHED;
                 }
                 break;
             case SimState.CRASHED:
-
+                if(newSimState == SimState.EDITING)
+                {
+                    TearDownSimulation();
+                    simState = SimState.EDITING;
+                }
                 break;
         }
 
 
         
+    }
+    public static void CrashSimulation()
+    {
+        GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>().SetSimState((int)SimState.CRASHED);
     }
     private void SpawnEffect(ref HashSet<Vector2Int> redSet, ref HashSet<Vector2Int> greenSet, Transmitter tr)
     {
@@ -232,16 +249,22 @@ public class GameController : MonoBehaviour {
     }
     public void SaveGame()
     {
-        Debug.Log("Saving game...");
-        SaveData.WriteData(gameLevel.Name,solutionNum);
+        string saveFile = "";
+        if (!levelOverride.Equals(""))
+            saveFile = levelOverride;
+        else
+            saveFile = gameLevel.Name;
+        SaveData.WriteData(saveFile, solutionNum);
     }
     public void LoadSolution()
     {
-        Debug.Log("Loading Data...");
+        string saveFile = "";
         if (!levelOverride.Equals(""))
-            SaveData.LoadData(levelOverride, 0);
+            saveFile = levelOverride;
         else
-            SaveData.LoadData(gameLevel.Name, solutionNum);
+            saveFile = gameLevel.Name;
+
+        SaveData.LoadData(saveFile, solutionNum);
         levelNameText.text = gameLevel.Name;
         if (gameLevel.Objective == null)
             levelDescription.text = string.Join(" ", gameLevel.Description);

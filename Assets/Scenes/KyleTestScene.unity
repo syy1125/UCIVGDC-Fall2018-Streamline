@@ -8415,7 +8415,6 @@ GameObject:
   - component: {fileID: 1053215916}
   - component: {fileID: 1053215915}
   - component: {fileID: 1053215914}
-  - component: {fileID: 1053215913}
   m_Layer: 5
   m_Name: ConfirmationButton
   m_TagString: Untagged
@@ -8442,36 +8441,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1053215913
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1053215911}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: -1862395651, guid: f70555f144d8491a825f0804e09c671c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Delegates:
-  - eventID: 0
-    callback:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 1446972765}
-          m_MethodName: SetSelectedGameObject
-          m_Mode: 2
-          m_Arguments:
-            m_ObjectArgument: {fileID: 1053215911}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
-      m_TypeName: UnityEngine.EventSystems.EventTrigger+TriggerEvent, UnityEngine.UI,
-        Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  delegates: []
 --- !u!114 &1053215914
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8484,7 +8453,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 4
+    m_Mode: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
@@ -8511,8 +8480,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1446972765}
-        m_MethodName: YesPress
+      - m_Target: {fileID: 2106472802}
+        m_MethodName: DisableUI
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -10879,8 +10848,8 @@ RectTransform:
   m_Father: {fileID: 1078355693}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0.45}
-  m_AnchorMax: {x: 1, y: 0.9}
+  m_AnchorMin: {x: 0, y: 0.4}
+  m_AnchorMax: {x: 1, y: 0.8}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: -10, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -10916,7 +10885,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: ':Division by ZERO:'
+  m_Text: Division by ZERO
 --- !u!222 &1466567991
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -11287,7 +11256,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: ':FATAL ERROR:'
+  m_Text: '>FATAL ERROR<'
 --- !u!222 &1537376856
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -11361,6 +11330,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   escapeKey: 27
   gameMenuUIGroup: {fileID: 100346205}
+  crashUIGroup: {fileID: 2106472802}
   stepDelay: 0.35
   displayManager: {fileID: 1200660255}
   isSetUp: 0
@@ -12362,7 +12332,7 @@ MonoBehaviour:
   m_Script: {fileID: 1980459831, guid: f70555f144d8491a825f0804e09c671c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 800, y: 600}
@@ -13226,6 +13196,7 @@ Transform:
   - {fileID: 789051987}
   - {fileID: 428633325}
   - {fileID: 1752453047}
+  - {fileID: 2106472801}
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -14081,13 +14052,14 @@ GameObject:
   - component: {fileID: 2106472800}
   - component: {fileID: 2106472799}
   - component: {fileID: 2106472798}
+  - component: {fileID: 2106472802}
   m_Layer: 5
   m_Name: CrashCanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &2106472798
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14131,9 +14103,9 @@ Canvas:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 2106472797}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
-  m_RenderMode: 1
+  m_RenderMode: 0
   m_Camera: {fileID: 968018974}
   m_PlaneDistance: 100
   m_PixelPerfect: 0
@@ -14157,14 +14129,28 @@ RectTransform:
   m_Children:
   - {fileID: 1203945598}
   - {fileID: 1078355693}
-  m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_Father: {fileID: 1934268127}
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &2106472802
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2106472797}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2b117d0728dea014f9c5b1b41259ee75, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  defaultButton: {fileID: 0}
+  parentGroup: {fileID: 0}
+  focused: 0
 --- !u!1 &2125276859
 GameObject:
   m_ObjectHideFlags: 0

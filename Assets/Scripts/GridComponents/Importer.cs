@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class Importer : Operator
 {
-	public static int[][] Sequences = new int[2][];
+	public static int[][] Sequences = new int[2][] { new int[1] { 0 }, new int[1] { 0 } };
 	
 	public ColArray outputColumn;
 	public int SequenceIndex;

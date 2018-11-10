@@ -11,7 +11,18 @@ public class Divide : Operator {
 
 	public override void Step() {
 		GetFromReceiver();
-		result = (num2 != 0) ? num1 / num2 : 0;
+        if (num1 == 0 && num2 == 0)
+        {
+            result = 0;
+        }
+        else if (num2 == 0)
+        {
+            GameController.CrashSimulation();
+        }
+        else
+        {
+            result = num1 / num2;
+        }
 		SendToTransmitter();
 	}
 }
