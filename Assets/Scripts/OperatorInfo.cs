@@ -35,6 +35,10 @@ public static class OperatorInfo {
                 return new bool[] { true, true, true };
             case "Constant":
                 return new bool[] { false, false, true };
+            case "Output":
+                return new bool[] { false, false, false };
+            case "Importer":
+                return new bool[] { false, false, false };
         }
     }
     

@@ -64,7 +64,7 @@ public class ComponentEditor : MonoBehaviour
                     SetArrowSelection(ArrowSelection.IN1);
                 else if(mask[1])
                     SetArrowSelection(ArrowSelection.IN2);
-                else
+                else if(mask[2])
                     SetArrowSelection(ArrowSelection.OUT);
 
                 return;

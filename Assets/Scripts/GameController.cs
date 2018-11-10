@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public enum SimState
 {
-    EDITING,RUNNING,PAUSED,
+    EDITING,RUNNING,PAUSED,CRASHED
 }
 
 public class GameController : MonoBehaviour {
@@ -34,13 +34,8 @@ public class GameController : MonoBehaviour {
         gameMenuOpen = false;
         clearConfirmationOpen = false;
         simState = SimState.EDITING;
-        if (!levelOverride.Equals(""))
-            SaveData.LoadData(levelOverride, 0);
-        else
-            SaveData.LoadData(gameLevel.Name, solutionNum);
-        levelNameText.text = gameLevel.Name;
-        
-        levelDescription.text = string.Join(" ", gameLevel.Description);
+        LoadSolution();
+
 
     }
 
@@ -108,9 +103,22 @@ public class GameController : MonoBehaviour {
             case SimState.PAUSED:
 
                 break;
+            case SimState.CRASHED:
+
+                break;
         }
         
 	}
+    public void OnStepButtonPress()
+    {
+        if(simState == SimState.PAUSED)
+        {
+            Step();
+        } else if(simState == SimState.RUNNING)
+        {
+            simState = SimState.PAUSED;
+        }
+    }
     public void SetSimState(int s)
     {
         SimState newSimState = (SimState)s;
@@ -142,6 +150,9 @@ public class GameController : MonoBehaviour {
                     TearDownSimulation();
                     simState = SimState.EDITING;
                 }
+                break;
+            case SimState.CRASHED:
+
                 break;
         }
 
@@ -227,7 +238,15 @@ public class GameController : MonoBehaviour {
     public void LoadSolution()
     {
         Debug.Log("Loading Data...");
-        SaveData.LoadData(gameLevel.Name,solutionNum);
+        if (!levelOverride.Equals(""))
+            SaveData.LoadData(levelOverride, 0);
+        else
+            SaveData.LoadData(gameLevel.Name, solutionNum);
+        levelNameText.text = gameLevel.Name;
+        if (gameLevel.Objective == null)
+            levelDescription.text = string.Join(" ", gameLevel.Description);
+        else
+            levelDescription.text = string.Join(" ", gameLevel.Objective);
     }
     
 }
