@@ -9,6 +9,6 @@ EditorBuildSettings:
     path: Assets/Scenes/LevelSelect.unity
     guid: a665887a7dc18b341add92b751423f4d
   - enabled: 1
-    path: Assets/Scenes/Main.unity
-    guid: 2cda990e2423bbf4892e6590ba056729
+    path: Assets/Scenes/CircuitGrid.unity
+    guid: bf8807a242b207c4cb9135d622a420f4
   m_configObjects: {}

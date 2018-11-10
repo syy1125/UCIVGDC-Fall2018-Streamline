@@ -117,7 +117,7 @@ public static class SaveData {
     }
     public static void WriteData(string levelName, int solutionNum)
     {
-        //C:/Users/[USER]/AppData/LocalLow/DefaultCompany/Streamline
+        //C:/Users/[USER]/AppData/LocalLow/Streamline/Streamline
         string path = Application.persistentDataPath;
         path += "\\SaveData" + levelName + solutionNum.ToString() + ".txt";
         System.IO.File.WriteAllText(path, string.Empty);

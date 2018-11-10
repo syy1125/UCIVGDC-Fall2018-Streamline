@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Exporter : Operator {
 
-    public ColArray[] outputColumns; //values will be distributed from left to right, looping
+    public ColArray outputColumn; //values will be distributed from left to right, looping
     private int colIndex = 0;
 
     protected override void Start()
@@ -17,9 +17,13 @@ public class Exporter : Operator {
     {
         //Output only reads from num1 var
         GetFromReceiver();
-        outputColumns[colIndex].AddValue(num1);
+        outputColumn.AddValue(num1);
         colIndex++;
-        colIndex = colIndex % outputColumns.Length;
     }
-    
+
+    public void ResetState()
+    {
+        colIndex++;
+        outputColumn.ClearNums();
+    }
 }

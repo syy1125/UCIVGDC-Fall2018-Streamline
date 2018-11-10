@@ -210,6 +210,13 @@ public class GameController : MonoBehaviour {
             return;
         isSetUp = false;
         Wire.GlobalTearDown();
+
+        Grid grid = Grid.Instance;
+        grid.GetGridComponent(0,0).GetComponent<Importer>().ResetState();
+        grid.GetGridComponent(0,grid.Height - 1).GetComponent<Importer>().ResetState();
+        grid.GetGridComponent(grid.Width - 1, 0).GetComponent<Exporter>().ResetState();
+        grid.GetGridComponent(grid.Width - 1, grid.Height - 1).GetComponent<Exporter>().ResetState();
+        
         displayManager.DestroyAllValueDisplays();
     }
     public void SaveGame()

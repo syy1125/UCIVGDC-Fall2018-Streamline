@@ -5,26 +5,32 @@ using UnityEngine;
 
 public class Importer : Operator
 {
+	public static int[][] Sequences;
+	
 	public ColArray outputColumn;
-	public int[] Sequence;
+	public int SequenceIndex;
 
+	private int[] _sequence;
 	private int _index;
 
 	protected override void Start()
 	{
 		base.Start();
 		OpName = "Importer";
+		_sequence = Sequences[SequenceIndex];
 		_index = 0;
 	}
 
 	public override void Step()
 	{
-		result = Sequence[Mathf.Min(_index++, Sequence.Length - 1)];
+		result = _sequence[Mathf.Min(_index++, _sequence.Length - 1)];
+		outputColumn.AddValue(result);
 		SendToTransmitter();
 	}
 
-	public void Reset()
+	public void ResetState()
 	{
 		_index = 0;
+		outputColumn.ClearNums();
 	}
 }
