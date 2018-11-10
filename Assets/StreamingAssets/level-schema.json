@@ -1,0 +1,65 @@
+{
+  "title": "Streamline Level Definition",
+  "type": "object",
+  "required": ["Name", "Description", "Tests"],
+  
+  "properties": {
+    
+    "Name": {
+      "type": "string"
+    },
+    
+    "Description": {
+      "description": "An overview of what this level requires the player to do. This field is turned into an array to keep line length managable. During runtime, the array elements will be joined into a single line, with a space between them.",
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    
+    "Objectives": {
+      "description": "The tasks that player need to achieve. The array elements will be joined similar to Description. If this field is not set, it will be replaced with Description during runtime.",
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    
+    "Tests": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          
+          "Input1": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          },
+          
+          "Input2": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          },
+          
+          "Output1": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          },
+          
+          "Output2": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          }
+        }
+      }
+    }
+  }
+}
