@@ -89,8 +89,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 99a13c7e18ad5fd42bc2464631bc0795, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  outputColumns:
-  - {fileID: 0}
+  errorHighlight: ErrorHighlight
+  outputColumn: {fileID: 0}
 --- !u!114 &114942782825341678
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -102,7 +102,7 @@ MonoBehaviour:
   m_Script: {fileID: -900027084, guid: f70555f144d8491a825f0804e09c671c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
+  m_EffectColor: {r: 0, g: 0, b: 0, a: 1}
   m_EffectDistance: {x: 1, y: -1}
   m_UseGraphicAlpha: 1
 --- !u!222 &222757450821987338

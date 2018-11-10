@@ -42,7 +42,7 @@ public class ConfirmationUIGroup : UIGroup {
         if (!focused)
             return;
         this.DisableUI();
-        gameMenuUIGroup.DisableUI();
+        gameMenuUIGroup.EnableUI();
     }
     public IEnumerator EscapePress()
     {

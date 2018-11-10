@@ -57,7 +57,7 @@ MonoBehaviour:
   m_Script: {fileID: -900027084, guid: f70555f144d8491a825f0804e09c671c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
+  m_EffectColor: {r: 0, g: 0, b: 0, a: 1}
   m_EffectDistance: {x: 1, y: -1}
   m_UseGraphicAlpha: 1
 --- !u!114 &114430985990362506
@@ -84,6 +84,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3dac5a7c45c9ad246ae3293c886e3c4a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  errorHighlight: ErrorHighlight
   outputColumn: {fileID: 0}
   SequenceIndex: 0
 --- !u!114 &114924233715478766

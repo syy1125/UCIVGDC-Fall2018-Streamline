@@ -70,6 +70,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3891f940f629427693fe3560f698577, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  errorHighlight: ErrorHighlight
 --- !u!114 &114947944329752044
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -81,7 +82,7 @@ MonoBehaviour:
   m_Script: {fileID: -900027084, guid: f70555f144d8491a825f0804e09c671c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
+  m_EffectColor: {r: 0, g: 0, b: 0, a: 1}
   m_EffectDistance: {x: 1, y: -1}
   m_UseGraphicAlpha: 1
 --- !u!114 &114973036531543002

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-
+using UnityEngine.SceneManagement;
 public enum SimState
 {
     EDITING,RUNNING,PAUSED,CRASHED
@@ -15,7 +15,6 @@ public class GameController : MonoBehaviour {
     public static bool gameMenuOpen;
     public static bool clearConfirmationOpen;
     public static bool mouseDragging;
-    public string errorPrefab = "ErrorHighlight";
     public static SimState simState;
     public KeyCode escapeKey;
     public UIGroup gameMenuUIGroup;
@@ -298,5 +297,10 @@ public class GameController : MonoBehaviour {
         else
             levelDescription.text = string.Join(" ", gameLevel.Objective);
     }
-    
+    public void GoToMainMenu(bool autoSave)
+    {
+        if (autoSave)
+            SaveGame();
+        SceneManager.LoadScene("MainMenu");
+    }
 }

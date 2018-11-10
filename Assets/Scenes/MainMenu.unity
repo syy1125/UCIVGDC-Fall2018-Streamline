@@ -228,7 +228,7 @@ Canvas:
   m_GameObject: {fileID: 233191477}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 0
+  m_RenderMode: 1
   m_Camera: {fileID: 278267975}
   m_PlaneDistance: 100
   m_PixelPerfect: 0
@@ -238,7 +238,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 5
   m_TargetDisplay: 0
 --- !u!224 &233191481
 RectTransform:
@@ -271,8 +271,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b50784cf014aa5843b9b3d3240dc766e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  levelSelectScene: 
-  creditsScene: 
+  levelSelectScene: LevelSelect
+  creditsScene: Credits
 --- !u!1 &278267973
 GameObject:
   m_ObjectHideFlags: 0
