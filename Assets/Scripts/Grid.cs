@@ -13,8 +13,7 @@ public class Grid : MonoBehaviour
     public Transform gridButtonPrefab;
     [HideInInspector]
     public Transform[][] buttonList;
-
-    public ColArray[] Columns;
+    public GameObject columnsParent;
 
     public GameObject wire;
     public GameObject addition;
@@ -191,17 +190,30 @@ public class Grid : MonoBehaviour
         // Set up imports and exports
         GameObject importer1 = SetGridComponent(0, Height - 1, importer);
         importer1.GetComponent<Importer>().SequenceIndex = 0;
-        importer1.GetComponent<Importer>().outputColumn = Columns[0];
+        importer1.GetComponent<Importer>().outputColumn = MakeOutputColumn("Input");
         
         GameObject importer2 = SetGridComponent(0, 0, importer);
         importer2.GetComponent<Importer>().SequenceIndex = 1;
-        importer2.GetComponent<Importer>().outputColumn = Columns[1];
+        importer2.GetComponent<Importer>().outputColumn = MakeOutputColumn("Input");
         
         GameObject exporter1 = SetGridComponent(Width - 1, 0, exporter);
-        exporter1.GetComponent<Exporter>().outputColumn = Columns[2];
+        exporter1.GetComponent<Exporter>().outputColumn = MakeOutputColumn("Output");
         
         GameObject exporter2 = SetGridComponent(Width - 1, Height - 1, exporter);
-        exporter2.GetComponent<Exporter>().outputColumn = Columns[3];
+        exporter2.GetComponent<Exporter>().outputColumn = MakeOutputColumn("Output");
+    }
+    private ColArray MakeOutputColumn(string type)
+    {
+        string inputColumn = "InputColumn";
+        string outputColumn = "OutputColumn";
+        if (type.Equals("Input"))
+        {
+            return ((GameObject)Instantiate(Resources.Load(inputColumn), columnsParent.transform)).GetComponentInChildren<ColArray>();
+        } else if (type.Equals("Output"))
+        {
+            return ((GameObject)Instantiate(Resources.Load(outputColumn), columnsParent.transform)).GetComponentsInChildren<ColArray>()[1];
+        }
+        return null;
     }
     public Transform getGridButton(int x, int y)
     {
@@ -308,8 +320,13 @@ public class Grid : MonoBehaviour
     public bool IsOperator(GameObject g)
     {
         return g != null && g.GetComponent<Operator>() != null;
-//        return g != null && g.CompareTag("Operator");   //placeholder until Operator class is built
-            
+//        return g != null && g.CompareTag("Operator");   //placeholder until Operator class is built          
+    }
+    public bool IsImporterOrExporter(GameObject g)
+    {
+        if (g == null || !IsOperator(g))
+            return false;
+        return (g.GetComponent<Importer>() != null) || (g.GetComponent<Exporter>() != null);
     }
     public void ClearGrid()
     {

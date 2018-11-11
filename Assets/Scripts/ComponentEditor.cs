@@ -60,13 +60,14 @@ public class ComponentEditor : MonoBehaviour
                     directionButtons[i].GetComponent<Image>().enabled = true;
                 }
                 bool[] mask = OperatorInfo.GetIOMask(currentlySelectedComponent.GetComponent<Operator>().OpName);
-                if(mask[0])
+                if (mask[0])
                     SetArrowSelection(ArrowSelection.IN1);
-                else if(mask[1])
+                else if (mask[1])
                     SetArrowSelection(ArrowSelection.IN2);
-                else if(mask[2])
+                else if (mask[2])
                     SetArrowSelection(ArrowSelection.OUT);
-
+                else
+                    SetArrowSelection(ArrowSelection.NONE);
                 return;
 			} else
             {
@@ -274,42 +275,7 @@ public class ComponentEditor : MonoBehaviour
                 break;
         }
     }
-    /*
-    public void OnEndDrag()
-    {
-        int angle = 0;
-        switch (selection)
-        {
-            case ArrowSelection.IN1:
-                angle = (int)(Mathf.Round((inputArrow1.transform.rotation.eulerAngles.z % 360) / 90) * 90);
-                break;
-            case ArrowSelection.IN2:
-                angle = (int)(Mathf.Round((inputArrow2.transform.rotation.eulerAngles.z % 360) / 90) * 90);
-                break;
-            case ArrowSelection.OUT:
-                angle = (int)(Mathf.Round((outputArrow.transform.rotation.eulerAngles.z % 360) / 90) * 90);
-                break;
-        }
-        switch (angle)
-        {
-            case 0:
-                SetArrowDirection(Vector2Int.right);
-                break;
-            case 90:
-                SetArrowDirection(Vector2Int.up);
-                break;
-            case 180:
-                SetArrowDirection(Vector2Int.left);
-                break;
-            case 270:
-                SetArrowDirection(Vector2Int.down);
-                break;
-            default:
-                Debug.Log("Angle not 0,90,180,270: " + angle);
-                break;
-        }
-    }
-    */
+    
     public void InitializeArrows(ArrowSelection s)
     {
         Color newColor = Color.white;
