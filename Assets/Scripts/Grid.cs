@@ -86,7 +86,8 @@ public class Grid : MonoBehaviour
             _gridComponents[x] = new GameObject[Height];
         }
         
-        buildGridButtons();
+        BuildGridButtons();
+        SetUpColumnIO();
 	}
 
     public bool InGrid(int x, int y)
@@ -161,7 +162,7 @@ public class Grid : MonoBehaviour
     {
         DestroyGridComponent(pos.x, pos.y);
     }
-    private void buildGridButtons()
+    private void BuildGridButtons()
     {
         //Create grid of buttons with x,y coordinates
         buttonList = new Transform[Width][];
@@ -186,8 +187,10 @@ public class Grid : MonoBehaviour
                 buttonList[x][y] = newButton;
             }
         }
-        
-        // Set up imports and exports
+    }
+
+    private void SetUpColumnIO()
+    {
         GameObject importer1 = SetGridComponent(0, Height - 1, importer);
         importer1.GetComponent<Importer>().SequenceIndex = 0;
         importer1.GetComponent<Importer>().outputColumn = MakeOutputColumn("Input");
@@ -202,6 +205,7 @@ public class Grid : MonoBehaviour
         GameObject exporter2 = SetGridComponent(Width - 1, Height - 1, exporter);
         exporter2.GetComponent<Exporter>().outputColumn = MakeOutputColumn("Output");
     }
+    
     private ColArray MakeOutputColumn(string type)
     {
         string inputColumn = "InputColumn";
