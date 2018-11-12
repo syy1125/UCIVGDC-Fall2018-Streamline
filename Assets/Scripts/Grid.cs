@@ -1,5 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 
@@ -198,32 +197,35 @@ public class Grid : MonoBehaviour
 
     private void SetUpColumnIO()
     {
-        
         _importer1 = SetGridComponent(0, Height - 1, importer);
-        _importer1.GetComponent<Importer>().outputColumn = MakeOutputColumn("Input");
+        _importer1.GetComponent<Importer>().outputColumn = MakeImporterColumn();
         
         _importer2 = SetGridComponent(0, 0, importer);
-        _importer2.GetComponent<Importer>().outputColumn = MakeOutputColumn("Input");
-        
+        _importer2.GetComponent<Importer>().outputColumn = MakeImporterColumn();
+
         _exporter1 = SetGridComponent(Width - 1, 0, exporter);
-        _exporter1.GetComponent<Exporter>().outputColumn = MakeOutputColumn("Output");
+        ColArray[] exporterColumns = MakeExporterColumn();
+        _exporter1.GetComponent<Exporter>().outputColumn = exporterColumns[1];
         
         _exporter2 = SetGridComponent(Width - 1, Height - 1, exporter);
-        _exporter2.GetComponent<Exporter>().outputColumn = MakeOutputColumn("Output");
+        exporterColumns = MakeExporterColumn();
+        _exporter2.GetComponent<Exporter>().outputColumn = exporterColumns[1];
     }
-    
-    private ColArray MakeOutputColumn(string type)
+
+    private ColArray MakeImporterColumn()
     {
-        string inputColumn = "InputColumn";
-        string outputColumn = "OutputColumn";
-        if (type.Equals("Input"))
-        {
-            return ((GameObject)Instantiate(Resources.Load(inputColumn), columnsParent.transform)).GetComponentInChildren<ColArray>();
-        } else if (type.Equals("Output"))
-        {
-            return ((GameObject)Instantiate(Resources.Load(outputColumn), columnsParent.transform)).GetComponentsInChildren<ColArray>()[1];
-        }
-        return null;
+        return Instantiate(
+            Resources.Load("InputColumn") as GameObject,
+            columnsParent.transform
+        ).GetComponentInChildren<ColArray>();
+    }
+
+    private ColArray[] MakeExporterColumn()
+    {
+        return Instantiate(
+            Resources.Load("OutputColumn") as GameObject,
+            columnsParent.transform
+        ).GetComponentsInChildren<ColArray>();
     }
 
     private void InitializeTestSequence(int testIndex)
