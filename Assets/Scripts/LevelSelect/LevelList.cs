@@ -153,11 +153,6 @@ public class LevelList : StatefulUI<LevelListState>
 	{
 		GameLevel level = State.Levels[State.SelectedIndex.Value];
 
-		Importer.Sequences = new[]
-		{
-			level.Tests[0].Input1,
-			level.Tests[0].Input2
-		};
 		GameController.gameLevel = level;
 		
 		SceneManager.LoadScene("CircuitGrid");

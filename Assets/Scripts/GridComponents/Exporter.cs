@@ -1,9 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿public class Exporter : Operator {
 
-public class Exporter : Operator {
-
+    public int[] expectedOutput = { 0 };
+    
     public ColArray outputColumn; //values will be distributed from left to right, looping
     private int colIndex = 0;
 

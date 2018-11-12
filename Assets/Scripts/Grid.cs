@@ -25,6 +25,11 @@ public class Grid : MonoBehaviour
     public GameObject exporter;
     private GameObject[][] _gridComponents;
 
+    private GameObject _importer1;
+    private GameObject _importer2;
+    private GameObject _exporter1;
+    private GameObject _exporter2;
+
     public Color SelectedColor;
 
     private ColorBlock SelectedButtonColors
@@ -88,6 +93,8 @@ public class Grid : MonoBehaviour
         
         BuildGridButtons();
         SetUpColumnIO();
+        // TODO different test index in subsequent tests
+        InitializeTestSequence(0);
 	}
 
     public bool InGrid(int x, int y)
@@ -191,19 +198,18 @@ public class Grid : MonoBehaviour
 
     private void SetUpColumnIO()
     {
-        GameObject importer1 = SetGridComponent(0, Height - 1, importer);
-        importer1.GetComponent<Importer>().SequenceIndex = 0;
-        importer1.GetComponent<Importer>().outputColumn = MakeOutputColumn("Input");
         
-        GameObject importer2 = SetGridComponent(0, 0, importer);
-        importer2.GetComponent<Importer>().SequenceIndex = 1;
-        importer2.GetComponent<Importer>().outputColumn = MakeOutputColumn("Input");
+        _importer1 = SetGridComponent(0, Height - 1, importer);
+        _importer1.GetComponent<Importer>().outputColumn = MakeOutputColumn("Input");
         
-        GameObject exporter1 = SetGridComponent(Width - 1, 0, exporter);
-        exporter1.GetComponent<Exporter>().outputColumn = MakeOutputColumn("Output");
+        _importer2 = SetGridComponent(0, 0, importer);
+        _importer2.GetComponent<Importer>().outputColumn = MakeOutputColumn("Input");
         
-        GameObject exporter2 = SetGridComponent(Width - 1, Height - 1, exporter);
-        exporter2.GetComponent<Exporter>().outputColumn = MakeOutputColumn("Output");
+        _exporter1 = SetGridComponent(Width - 1, 0, exporter);
+        _exporter1.GetComponent<Exporter>().outputColumn = MakeOutputColumn("Output");
+        
+        _exporter2 = SetGridComponent(Width - 1, Height - 1, exporter);
+        _exporter2.GetComponent<Exporter>().outputColumn = MakeOutputColumn("Output");
     }
     
     private ColArray MakeOutputColumn(string type)
@@ -219,6 +225,17 @@ public class Grid : MonoBehaviour
         }
         return null;
     }
+
+    private void InitializeTestSequence(int testIndex)
+    {
+        GameLevel level = GameController.gameLevel;
+        
+        _importer1.GetComponent<Importer>().Sequence = level.Tests[testIndex].Input1;
+        _importer2.GetComponent<Importer>().Sequence = level.Tests[testIndex].Input2;
+        _exporter1.GetComponent<Exporter>().expectedOutput = level.Tests[testIndex].Output1;
+        _exporter2.GetComponent<Exporter>().expectedOutput = level.Tests[testIndex].Output2;
+    }
+    
     public Transform getGridButton(int x, int y)
     {
         // (x,y) == (col,row)
