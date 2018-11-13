@@ -12,10 +12,10 @@ using Debug = UnityEngine.Debug;
 [Serializable]
 public class LevelTest
 {
-	public int[] Input1;
-	public int[] Input2;
-	public int[] Output1;
-	public int[] Output2;
+	public int[] Input1 = {};
+	public int[] Input2 = {};
+	public int[] Output1 = {};
+	public int[] Output2 = {};
 }
 
 [Serializable]
