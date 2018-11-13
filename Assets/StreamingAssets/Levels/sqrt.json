@@ -1,0 +1,12 @@
+{
+  "Name": "Square Root",
+  "Description": [
+    "Take the square root of the input from I1. All inputs are guaranteed to be non-negative."
+  ],
+  "Tests": [
+    {
+      "Input1": [9],
+      "Output1": [3]
+    }
+  ]
+}
