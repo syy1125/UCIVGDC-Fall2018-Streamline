@@ -18,7 +18,10 @@ public class ColArray : MonoBehaviour {
         nums = new List<int>();
         ClearNums();
     }
-
+    public int Length()
+    {
+        return nums.Count;
+    }
     public void ClearNums()
     {
         nums = new List<int>();

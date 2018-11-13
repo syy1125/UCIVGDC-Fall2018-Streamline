@@ -130,7 +130,7 @@ public class WireEffect : MonoBehaviour {
             else if (op != null)
             {
                 if (myLocation == op.Location + op.InputDirection1
-                    || myLocation == op.Location + op.InputDirection2)
+                    || myLocation == op.Location + op.InputDirection2 || (op.GetComponent<Operator>().OpName.Equals("Output")))
                 {
                     Transform newEffect = Instantiate(effectPrefab, origin, Quaternion.identity);
                     we = newEffect.GetComponent<WireEffect>();
