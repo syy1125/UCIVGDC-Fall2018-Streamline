@@ -25,6 +25,17 @@ public static class OperatorInfo {
                 return "[NEXT] -> [ANY]";
             case "Output":
                 return "[ANY] -> [OUT]";
+            case "Equality":
+                return "<Color=#00d2d6>In.1</Color> == <Color=#c9d300>In.2</Color> -> "+ Equality.TRUEVALUE+ 
+                        "\n<Color=#00d2d6>In.1</Color> != <Color=#c9d300>In.2</Color> -> " + Equality.FALSEVALUE;
+            case "LessThan":
+                return "<Color=#00d2d6>In.1</Color> < <Color=#c9d300>In.2</Color> -> "+LessThan.TRUEVALUE + 
+                        "\n<Color=#00d2d6>In.1</Color> >= <Color=#c9d300>In.2</Color> -> "+LessThan.FALSEVALUE;
+            case "Compare":
+                string result = "<Color=#00d2d6>In.1</Color> < <Color=#c9d300>In.2</Color> -> "+ Compare.LESSVALUE;
+                result += "\n<Color=#00d2d6>In.1</Color> == <Color=#c9d300>In.2</Color> -> "+ Compare.EQUALVALUE;
+                result += "\n<Color=#00d2d6>In.1</Color> > <Color=#c9d300>In.2</Color> -> "+ Compare.GREATERVALUE;
+                return result;
         }
     }
     public static bool[] GetIOMask(string opName)

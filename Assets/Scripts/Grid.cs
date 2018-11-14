@@ -20,8 +20,11 @@ public class Grid : MonoBehaviour
     public GameObject multiplication;
     public GameObject division;
     public GameObject constant;
+    public GameObject equality;
+    public GameObject lessThan;
     public GameObject importer;
     public GameObject exporter;
+
     private GameObject[][] _gridComponents;
 
     private GameObject _importer1;
@@ -294,6 +297,12 @@ public class Grid : MonoBehaviour
             case Selection.CONSTANT:
                 SetGridComponent(location, constant);
                 break;
+            case Selection.EQUALITY:
+                SetGridComponent(location, equality);
+                break;
+            case Selection.LESSTHAN:
+                SetGridComponent(location, lessThan);
+                break;
         }
         
         UpdateAdjacentWires(location);
@@ -324,15 +333,7 @@ public class Grid : MonoBehaviour
                 if (IsWire(g) && !g.GetComponent<Wire>().HasGreen)
                     return true;
                 break;
-            case Selection.ADD:
-                return !(IsOperator(g) || IsWire(g));
-            case Selection.SUB:
-                return !(IsOperator(g) || IsWire(g));
-            case Selection.MULT:
-                return !(IsOperator(g) || IsWire(g));
-            case Selection.DIV:
-                return !(IsOperator(g) || IsWire(g));
-            case Selection.CONSTANT:
+            default:
                 return !(IsOperator(g) || IsWire(g));
         }
         return result;

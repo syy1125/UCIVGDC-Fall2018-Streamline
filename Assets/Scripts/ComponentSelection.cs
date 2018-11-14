@@ -5,7 +5,7 @@ using UnityEngine.UI;
 public enum Selection
 {
     NONE, ERASER, REDWIRE, GREENWIRE,
-    ADD, SUB, MULT, DIV, CONSTANT, IMPORT, EXPORT
+    ADD, SUB, MULT, DIV, CONSTANT, EQUALITY, LESSTHAN, IMPORT, EXPORT
 }
 public class ComponentSelection : MonoBehaviour {
 
@@ -20,6 +20,8 @@ public class ComponentSelection : MonoBehaviour {
     public string multiplication;
     public string division;
     public string constant;
+    public string equality;
+    public string lessThan;
     public static Selection cursorSelection;
     private Image image;
 	void Start () {
@@ -59,8 +61,13 @@ public class ComponentSelection : MonoBehaviour {
         } else if (Input.GetKeyDown(constant))
         {
             setSelection(Selection.CONSTANT);
+        } else if (Input.GetKeyDown(equality))
+        {
+            setSelection(Selection.EQUALITY);
+        } else if (Input.GetKeyDown(lessThan))
+        {
+            setSelection(Selection.LESSTHAN);
         }
-
 	}
     public Selection getSelection()
     {

@@ -44,7 +44,7 @@ public static class SaveData {
     }
     private enum Components
     {
-        WIRE, ADD, SUB, MULT, DIV, CONSTANT
+        WIRE, ADD, SUB, MULT, DIV, CONSTANT, EQUALITY, LESSTHAN
     }
     private enum WireType
     {
@@ -88,6 +88,18 @@ public static class SaveData {
                 break;
             case Components.DIV:
                 op = grid.SetGridComponent(coords, grid.division).transform;
+                op.GetComponent<Receiver>().InputDirection1 = GetDirection(values[3]);
+                op.GetComponent<Receiver>().InputDirection2 = GetDirection(values[4]);
+                op.GetComponent<Transmitter>().OutputDirection = GetDirection(values[5]);
+                break;
+            case Components.EQUALITY:
+                op = grid.SetGridComponent(coords, grid.equality).transform;
+                op.GetComponent<Receiver>().InputDirection1 = GetDirection(values[3]);
+                op.GetComponent<Receiver>().InputDirection2 = GetDirection(values[4]);
+                op.GetComponent<Transmitter>().OutputDirection = GetDirection(values[5]);
+                break;
+            case Components.LESSTHAN:
+                op = grid.SetGridComponent(coords, grid.lessThan).transform;
                 op.GetComponent<Receiver>().InputDirection1 = GetDirection(values[3]);
                 op.GetComponent<Receiver>().InputDirection2 = GetDirection(values[4]);
                 op.GetComponent<Transmitter>().OutputDirection = GetDirection(values[5]);
@@ -180,6 +192,12 @@ public static class SaveData {
                     break;
                 case "Constant":
                     result += ((int)Components.CONSTANT).ToString() + "\t";
+                    break;
+                case "Equality":
+                    result += ((int)Components.EQUALITY).ToString() + "\t";
+                    break;
+                case "LessThan":
+                    result += ((int)Components.LESSTHAN).ToString() + "\t";
                     break;
                 default:
                     //Do not save importers and exporters
