@@ -309,10 +309,14 @@ public class GameController : MonoBehaviour {
         Wire.GlobalTearDown();
 
         Grid grid = Grid.Instance;
-        grid.GetGridComponent(0,0).GetComponent<Importer>().ResetState();
-        grid.GetGridComponent(0,grid.Height - 1).GetComponent<Importer>().ResetState();
-        grid.GetGridComponent(grid.Width - 1, 0).GetComponent<Exporter>().ResetState();
-        grid.GetGridComponent(grid.Width - 1, grid.Height - 1).GetComponent<Exporter>().ResetState();
+        if(Grid.LevelIOMask[0])
+            grid.GetGridComponent(0,grid.Height - 1).GetComponent<Importer>().ResetState();
+        if(Grid.LevelIOMask[1])
+            grid.GetGridComponent(0,0).GetComponent<Importer>().ResetState();
+        if(Grid.LevelIOMask[2])
+            grid.GetGridComponent(grid.Width - 1, 0).GetComponent<Exporter>().ResetState();
+        if(Grid.LevelIOMask[3])
+            grid.GetGridComponent(grid.Width - 1, grid.Height - 1).GetComponent<Exporter>().ResetState();
         
         ValueDisplayManager.DestroyAllValueDisplays();
     }
