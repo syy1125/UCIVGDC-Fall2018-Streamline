@@ -32,4 +32,17 @@
     {
         return expectedOutputColumn.Matches(outputColumn);
     }
+    public override string GetHint()
+    {
+        return "[ANY] -> [OUT]";
+
+	}
+    public override bool[] GetIOMask()
+	{
+		return new bool[3]{false,false,false};
+	}
+    public override string SaveString()
+	{
+		return "";
+	}
 }

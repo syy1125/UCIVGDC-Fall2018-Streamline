@@ -32,4 +32,16 @@ public class Importer : Operator
 	{
 		_index = 0;
 	}
+	public override string GetHint()
+	{
+		return "[NEXT] -> [ANY]";
+	}
+	public override bool[] GetIOMask()
+	{
+		return new bool[3]{false,false,false};
+	}
+	public override string SaveString()
+	{
+		return "";
+	}
 }

@@ -5,7 +5,7 @@ using UnityEngine.UI;
 public enum Selection
 {
     NONE, ERASER, REDWIRE, GREENWIRE,
-    ADD, SUB, MULT, DIV, CONSTANT, EQUALITY, LESSTHAN, IMPORT, EXPORT
+    ADD, SUB, MULT, DIV, CONSTANT, EQUALITY, LESSTHAN, COMPARE, IMPORTER, EXPORTER
 }
 public class ComponentSelection : MonoBehaviour {
 

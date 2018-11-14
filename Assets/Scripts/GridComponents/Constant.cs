@@ -15,4 +15,27 @@ public class Constant : Operator {
 		result = number;
 		SendToTransmitter();
 	}
+	public override string GetHint()
+    {
+		return "Value -> Out.1";
+	}
+	public override bool[] GetIOMask()
+	{
+		return new bool[3]{false,false,true};
+	}
+	public override void LoadConfig(int[] constructor)
+	{
+		GetComponent<Transmitter>().OutputDirection = SaveData.GetDirection(constructor[3]);
+        GetComponent<Constant>().number = constructor[4];
+	}
+	public override string SaveString()
+	{
+		Transmitter t = GetComponent<Transmitter>();
+		string result = "" + (int)Selection.CONSTANT + '\t';
+		result += "" + t.Location.x + '\t';
+		result += "" + t.Location.y + '\t';
+		result += "" + SaveData.GetDirection(t.OutputDirection) + '\t';
+		result += number.ToString();
+		return result;
+	}
 }

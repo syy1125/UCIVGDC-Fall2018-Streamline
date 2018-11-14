@@ -44,7 +44,7 @@ public class GameController : MonoBehaviour {
         gameGrid = Grid.Instance;
         
         LoadSolution();
-
+       
 
     }
 
@@ -297,7 +297,7 @@ public class GameController : MonoBehaviour {
         grid.GetGridComponent(grid.Width - 1, 0).GetComponent<Exporter>().ResetState();
         grid.GetGridComponent(grid.Width - 1, grid.Height - 1).GetComponent<Exporter>().ResetState();
         
-        displayManager.DestroyAllValueDisplays();
+        ValueDisplayManager.DestroyAllValueDisplays();
     }
     public void SaveGame()
     {

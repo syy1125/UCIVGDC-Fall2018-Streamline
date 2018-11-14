@@ -22,7 +22,7 @@ public class MimicArrow : MonoBehaviour {
 	}
     void UpdateArrow()
     {
-        bool[] mask = OperatorInfo.GetIOMask(selectedComponent.GetComponent<Operator>().OpName);
+        bool[] mask = selectedComponent.GetComponent<Operator>().GetIOMask();
         
         Vector2Int v = Vector2Int.zero;
         switch (copySelection)

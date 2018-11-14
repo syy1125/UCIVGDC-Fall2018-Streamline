@@ -36,7 +36,7 @@ public class ValueDisplayManager : MonoBehaviour {
         Transform vDisplay = Instantiate(displayPrefab, target);
         ValueDisplays.Add(vDisplay.GetComponent<ValueDisplay>());
     }
-    public void DestroyAllValueDisplays()
+    public static void DestroyAllValueDisplays()
     {
         GameObject g = null;
         for(int i = ValueDisplays.Count-1; i >= 0; i--)

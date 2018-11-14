@@ -255,4 +255,19 @@ public class Wire : MonoBehaviour
 		_redNetwork = null;
 		_greenNetwork = null;
 	}
+	public string SaveString()
+	{
+		string result = "";
+		result += "" + (int)Selection.REDWIRE + "\t";	//can be either REDWIRE or GREENWIRE
+														//redness or greenness is encoded later
+		result += "" + Location.x + "\t";
+		result += "" + Location.y + "\t";
+		if (HasGreen && HasRed)
+			result += "" + (int)SaveData.WireType.BOTH;
+		else if(HasGreen)
+			result += "" + (int)SaveData.WireType.GREEN;
+		else
+			result += "" + (int)SaveData.WireType.RED;
+		return result;
+	}
 }

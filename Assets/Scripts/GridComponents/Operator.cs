@@ -13,6 +13,7 @@ public abstract class Operator : MonoBehaviour {
     public static int MAX = 999;
     public static int MIN = -999;
 	public string OpName { get; protected set; }
+	
 
 	public abstract void Step();
 
@@ -37,4 +38,19 @@ public abstract class Operator : MonoBehaviour {
         Instantiate(Resources.Load(errorHighlight),transform);
 
     }
+	public virtual string GetHint()
+	{
+		return "";
+	}
+	public virtual bool[] GetIOMask()
+	{
+		return new bool[3]{true,true,true};
+	}
+	public virtual void LoadConfig(int[] constructor)
+	{
+		GetComponent<Receiver>().InputDirection1 = SaveData.GetDirection(constructor[3]);
+        GetComponent<Receiver>().InputDirection2 = SaveData.GetDirection(constructor[4]);
+        GetComponent<Transmitter>().OutputDirection = SaveData.GetDirection(constructor[5]);
+	}
+	public abstract string SaveString();	
 }

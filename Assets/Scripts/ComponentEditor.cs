@@ -59,7 +59,7 @@ public class ComponentEditor : MonoBehaviour
                 {
                     directionButtons[i].GetComponent<Image>().enabled = true;
                 }
-                bool[] mask = OperatorInfo.GetIOMask(currentlySelectedComponent.GetComponent<Operator>().OpName);
+                bool[] mask = currentlySelectedComponent.GetComponent<Operator>().GetIOMask();
                 if (mask[0])
                     SetArrowSelection(ArrowSelection.IN1);
                 else if (mask[1])
@@ -112,7 +112,7 @@ public class ComponentEditor : MonoBehaviour
             //Make selecting arrow buttons visible
             currentlySelectedComponent = Grid.Instance.GetGridComponent(Grid.Instance.Selected);
             CheckForInput();
-            helpText.text = OperatorInfo.GetOperatorHint(currentlySelectedComponent.GetComponent<Operator>().OpName);
+            helpText.text = currentlySelectedComponent.GetComponent<Operator>().GetHint();
             SetButtonsActive(true);
             SetMimicArrows(Grid.Instance.GetGridComponent(Grid.Instance.Selected).transform.parent, Vector2.zero, Vector2.one);
         }
@@ -187,7 +187,7 @@ public class ComponentEditor : MonoBehaviour
     {
         if (b)
         {
-            bool[] mask = OperatorInfo.GetIOMask(currentlySelectedComponent.GetComponent<Operator>().OpName);
+            bool[] mask = currentlySelectedComponent.GetComponent<Operator>().GetIOMask();
             input1Button.SetActive(mask[0]);
             input2Button.SetActive(mask[1]);
             outputButton.SetActive(mask[2]);

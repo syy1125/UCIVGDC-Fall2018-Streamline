@@ -357,6 +357,7 @@ public class Grid : MonoBehaviour
     public void ClearGrid()
     {
         GameObject g = null;
+        ValueDisplayManager.DestroyAllValueDisplays();
         for(int i = 0; i < Height; i++)
         {
             for(int j = 0; j < Width; j++)

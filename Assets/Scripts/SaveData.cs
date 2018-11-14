@@ -42,11 +42,8 @@ public static class SaveData {
 
         }
     }
-    private enum Components
-    {
-        WIRE, ADD, SUB, MULT, DIV, CONSTANT, EQUALITY, LESSTHAN
-    }
-    private enum WireType
+    
+    public enum WireType
     {
         RED, GREEN, BOTH
     }
@@ -54,59 +51,47 @@ public static class SaveData {
     {
         Grid grid = Grid.Instance;
         Vector2Int coords = new Vector2Int(values[1], values[2]);
-        Transform op = null;
-        switch ((Components)values[0])
+        Operator op = null;
+        switch ((Selection)values[0])
         {
-            case Components.WIRE:
+            case Selection.GREENWIRE:
+            case Selection.REDWIRE:
                 Wire w = grid.SetGridComponent(coords, grid.wire).GetComponent<Wire>();
                 w.Location = coords;
                 w.HasGreen = ((WireType)values[3] == WireType.GREEN || (WireType)values[3] == WireType.BOTH);
                 w.HasRed = ((WireType)values[3] == WireType.RED || (WireType)values[3] == WireType.BOTH);
                 break;
-            case Components.CONSTANT:
-                Transform c = grid.SetGridComponent(coords, grid.constant).transform;
-                c.GetComponent<Transmitter>().OutputDirection = GetDirection(values[3]);
-                c.GetComponent<Constant>().number = values[4];
+            case Selection.CONSTANT:
+                Constant c = grid.SetGridComponent(coords, grid.constant).GetComponent<Constant>();
+                c.LoadConfig(values);
                 break;
-            case Components.ADD:
-                op = grid.SetGridComponent(coords, grid.addition).transform;
-                op.GetComponent<Receiver>().InputDirection1 = GetDirection(values[3]);
-                op.GetComponent<Receiver>().InputDirection2 = GetDirection(values[4]);
-                op.GetComponent<Transmitter>().OutputDirection = GetDirection(values[5]);
+            case Selection.ADD:
+                op = grid.SetGridComponent(coords, grid.addition).GetComponent<Operator>();
+                op.LoadConfig(values);
                 break;
-            case Components.SUB:
-                op = grid.SetGridComponent(coords, grid.subtraction).transform;
-                op.GetComponent<Receiver>().InputDirection1 = GetDirection(values[3]);
-                op.GetComponent<Receiver>().InputDirection2 = GetDirection(values[4]);
-                op.GetComponent<Transmitter>().OutputDirection = GetDirection(values[5]);
+            case Selection.SUB:
+                op = grid.SetGridComponent(coords, grid.subtraction).GetComponent<Operator>();
+                op.LoadConfig(values);
                 break;
-            case Components.MULT:
-                op = grid.SetGridComponent(coords, grid.multiplication).transform;
-                op.GetComponent<Receiver>().InputDirection1 = GetDirection(values[3]);
-                op.GetComponent<Receiver>().InputDirection2 = GetDirection(values[4]);
-                op.GetComponent<Transmitter>().OutputDirection = GetDirection(values[5]);
+            case Selection.MULT:
+                op = grid.SetGridComponent(coords, grid.multiplication).GetComponent<Operator>();
+                op.LoadConfig(values);
                 break;
-            case Components.DIV:
-                op = grid.SetGridComponent(coords, grid.division).transform;
-                op.GetComponent<Receiver>().InputDirection1 = GetDirection(values[3]);
-                op.GetComponent<Receiver>().InputDirection2 = GetDirection(values[4]);
-                op.GetComponent<Transmitter>().OutputDirection = GetDirection(values[5]);
+            case Selection.DIV:
+                op = grid.SetGridComponent(coords, grid.division).GetComponent<Operator>();
+                op.LoadConfig(values);
                 break;
-            case Components.EQUALITY:
-                op = grid.SetGridComponent(coords, grid.equality).transform;
-                op.GetComponent<Receiver>().InputDirection1 = GetDirection(values[3]);
-                op.GetComponent<Receiver>().InputDirection2 = GetDirection(values[4]);
-                op.GetComponent<Transmitter>().OutputDirection = GetDirection(values[5]);
+            case Selection.EQUALITY:
+                op = grid.SetGridComponent(coords, grid.equality).GetComponent<Operator>();
+                op.LoadConfig(values);
                 break;
-            case Components.LESSTHAN:
-                op = grid.SetGridComponent(coords, grid.lessThan).transform;
-                op.GetComponent<Receiver>().InputDirection1 = GetDirection(values[3]);
-                op.GetComponent<Receiver>().InputDirection2 = GetDirection(values[4]);
-                op.GetComponent<Transmitter>().OutputDirection = GetDirection(values[5]);
+            case Selection.LESSTHAN:
+                op = grid.SetGridComponent(coords, grid.lessThan).GetComponent<Operator>();
+                op.LoadConfig(values);
                 break;
         }
     }
-    private static Vector2Int GetDirection(int x)
+    public static Vector2Int GetDirection(int x)
     {
         switch (x)
         {
@@ -122,7 +107,7 @@ public static class SaveData {
                 return Vector2Int.right;
         }
     }
-    private static int GetDirection(Vector2Int v)
+    public static int GetDirection(Vector2Int v)
     {
         if (v == Vector2Int.right)
             return 0;
@@ -162,60 +147,11 @@ public static class SaveData {
         Grid grid = Grid.Instance;
         if (grid.IsWire(g))
         {
-            Wire wire = g.GetComponent<Wire>();
-            result += "" + (int)Components.WIRE + "\t";
-            result += "" + x + "\t";
-            result += "" + y + "\t";
-            if (wire.HasGreen && wire.HasRed)
-                result += "" + (int)WireType.BOTH;
-            else if(wire.HasGreen)
-                result += "" + (int)WireType.GREEN;
-            else
-                result += "" + (int)WireType.RED;
-
+            result = g.GetComponent<Wire>().SaveString();
         }
         else if (grid.IsOperator(g))
         {
-            switch (g.GetComponent<Operator>().OpName)
-            {
-                case "Add":
-                    result += ((int)Components.ADD).ToString() + "\t";
-                    break;
-                case "Subtract":
-                    result += ((int)Components.SUB).ToString() + "\t";
-                    break;
-                case "Multiply":
-                    result += ((int)Components.MULT).ToString() + "\t";
-                    break;
-                case "Divide":
-                    result += ((int)Components.DIV).ToString() + "\t";
-                    break;
-                case "Constant":
-                    result += ((int)Components.CONSTANT).ToString() + "\t";
-                    break;
-                case "Equality":
-                    result += ((int)Components.EQUALITY).ToString() + "\t";
-                    break;
-                case "LessThan":
-                    result += ((int)Components.LESSTHAN).ToString() + "\t";
-                    break;
-                default:
-                    //Do not save importers and exporters
-                    return "";
-            }
-            result += x.ToString() + "\t";
-            result += y.ToString() + "\t";
-            if (g.GetComponent<Constant>() != null)
-            {
-                result += GetDirection(g.GetComponent<Transmitter>().OutputDirection).ToString() + "\t";
-                result += g.GetComponent<Constant>().number.ToString();
-            }
-            else
-            {
-                result += GetDirection(g.GetComponent<Receiver>().InputDirection1).ToString() + "\t";
-                result += GetDirection(g.GetComponent<Receiver>().InputDirection2).ToString() + "\t";
-                result += GetDirection(g.GetComponent<Transmitter>().OutputDirection).ToString();
-            }
+            result = g.GetComponent<Operator>().SaveString();
         }
         return result;
     }

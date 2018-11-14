@@ -4,53 +4,35 @@ using UnityEngine;
 
 public static class OperatorInfo {
     
-
-    public static string GetOperatorHint(string opName)
+   
+    public static Selection GetTypeOf(Operator g)
     {
-        switch (opName)
+        switch(g.GetComponent<Operator>().OpName)
         {
             default:
-                return "";
+                return Selection.NONE;
             case "Add":
-                return "<Color=#00d2d6>In.1</Color> + <Color=#c9d300>In.2</Color> -> Out.1";
+                return Selection.ADD;
             case "Subtract":
-                return "<Color=#00d2d6>In.1</Color> - <Color=#c9d300>In.2</Color> -> Out.1";
+                return Selection.SUB;
             case "Multiply":
-                return "<Color=#00d2d6>In.1</Color> x <Color=#c9d300>In.2</Color> -> Out.1";
+                return Selection.MULT;
             case "Divide":
-                return "<Color=#00d2d6>In.1</Color> / <Color=#c9d300>In.2</Color> -> Out.1";
+                return Selection.DIV;
             case "Constant":
-                return "Value -> Out.1";
+                return Selection.CONSTANT;
             case "Importer":
-                return "[NEXT] -> [ANY]";
+                return Selection.IMPORTER;
             case "Output":
-                return "[ANY] -> [OUT]";
+                return Selection.EXPORTER;
             case "Equality":
-                return "<Color=#00d2d6>In.1</Color> == <Color=#c9d300>In.2</Color> -> "+ Equality.TRUEVALUE+ 
-                        "\n<Color=#00d2d6>In.1</Color> != <Color=#c9d300>In.2</Color> -> " + Equality.FALSEVALUE;
+                return Selection.EQUALITY;
             case "LessThan":
-                return "<Color=#00d2d6>In.1</Color> < <Color=#c9d300>In.2</Color> -> "+LessThan.TRUEVALUE + 
-                        "\n<Color=#00d2d6>In.1</Color> >= <Color=#c9d300>In.2</Color> -> "+LessThan.FALSEVALUE;
+                return Selection.LESSTHAN;
             case "Compare":
-                string result = "<Color=#00d2d6>In.1</Color> < <Color=#c9d300>In.2</Color> -> "+ Compare.LESSVALUE;
-                result += "\n<Color=#00d2d6>In.1</Color> == <Color=#c9d300>In.2</Color> -> "+ Compare.EQUALVALUE;
-                result += "\n<Color=#00d2d6>In.1</Color> > <Color=#c9d300>In.2</Color> -> "+ Compare.GREATERVALUE;
-                return result;
+                return Selection.COMPARE;
         }
-    }
-    public static bool[] GetIOMask(string opName)
-    {
-        switch (opName)
-        {
-            default:
-                return new bool[] { true, true, true };
-            case "Constant":
-                return new bool[] { false, false, true };
-            case "Output":
-                return new bool[] { false, false, false };
-            case "Importer":
-                return new bool[] { false, false, false };
-        }
+
     }
     
 	
