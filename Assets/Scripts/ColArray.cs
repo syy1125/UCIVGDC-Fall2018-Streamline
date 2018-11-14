@@ -9,7 +9,7 @@ public class ColArray : MonoBehaviour {
     private List<int> nums;
     [HideInInspector]
     public int columnHeight;
-	void Start () {
+	void Awake () {
         text = new List<Text>();
         foreach (Transform child in transform)
         {

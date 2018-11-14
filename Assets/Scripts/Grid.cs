@@ -205,10 +205,12 @@ public class Grid : MonoBehaviour
 
         _exporter1 = SetGridComponent(Width - 1, 0, exporter);
         ColArray[] exporterColumns = MakeExporterColumn();
+        _exporter1.GetComponent<Exporter>().expectedOutputColumn = exporterColumns[0];
         _exporter1.GetComponent<Exporter>().outputColumn = exporterColumns[1];
         
         _exporter2 = SetGridComponent(Width - 1, Height - 1, exporter);
         exporterColumns = MakeExporterColumn();
+        _exporter2.GetComponent<Exporter>().expectedOutputColumn = exporterColumns[0];
         _exporter2.GetComponent<Exporter>().outputColumn = exporterColumns[1];
     }
 

@@ -15,18 +15,21 @@ public class Importer : Operator
 		base.Start();
 		OpName = "Importer";
 		_index = 0;
+		for(int i = 0; i < Sequence.Length; i++)
+		{
+			outputColumn.AddValue(Sequence[i]);
+		}
 	}
 
 	public override void Step()
 	{
 		result = Sequence[Mathf.Min(_index++, Sequence.Length - 1)];
-		outputColumn.AddValue(result);
+		//outputColumn.AddValue(result);
 		SendToTransmitter();
 	}
 
 	public void ResetState()
 	{
 		_index = 0;
-		outputColumn.ClearNums();
 	}
 }

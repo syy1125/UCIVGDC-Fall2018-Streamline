@@ -2,13 +2,18 @@
 
     public int[] expectedOutput = { 0 };
     
-    public ColArray outputColumn; //values will be distributed from left to right, looping
+    public ColArray outputColumn;
+    public ColArray expectedOutputColumn;
     private int colIndex = 0;
 
     protected override void Start()
     {
         base.Start();
         OpName = "Output";
+        for(int i = 0; i < expectedOutput.Length; i++)
+        {
+            expectedOutputColumn.AddValue(expectedOutput[i]);
+        }
     }
 
     public override void Step()
