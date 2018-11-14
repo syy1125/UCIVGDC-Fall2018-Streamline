@@ -11,14 +11,17 @@ public enum SimState
 public class GameController : MonoBehaviour {
 
     // Use this for initialization
+    public static List<Exporter> outputColumns;
     private Grid gameGrid;
     public static bool gameMenuOpen;
     public static bool clearConfirmationOpen;
     public static bool mouseDragging;
+    public static bool levelWon;
     public static SimState simState;
     public KeyCode escapeKey;
     public UIGroup gameMenuUIGroup;
     public UIGroup crashUIGroup;
+    public UIGroup levelWonGroup;
     public float stepDelay;
     private float stepTimer = 0;
     public ValueDisplayManager displayManager;
@@ -30,11 +33,16 @@ public class GameController : MonoBehaviour {
     public Text levelNameText;
     public Text levelDescription;
     public string levelOverride = "";
-	void Start () {
-        gameGrid = Grid.Instance;
+	void Awake(){
+        outputColumns = new List<Exporter>();
         gameMenuOpen = false;
         clearConfirmationOpen = false;
         simState = SimState.EDITING;
+        levelWon = false;
+    }
+    void Start () {
+        gameGrid = Grid.Instance;
+        
         LoadSolution();
 
 
@@ -98,6 +106,12 @@ public class GameController : MonoBehaviour {
             case SimState.CRASHED:
 
                 break;
+        }
+        if(!levelWon && IsLevelWon())
+        {
+            SetSimState((int)SimState.PAUSED);
+            levelWon = true;
+            levelWonGroup.EnableUI();
         }
         
 	}
@@ -170,6 +184,7 @@ public class GameController : MonoBehaviour {
                 {
                     TearDownSimulation();
                     simState = SimState.EDITING;
+                    levelWon = false;
                 } else if (newSimState == SimState.CRASHED)
                 {
                     crashUIGroup.EnableUI();
@@ -189,7 +204,10 @@ public class GameController : MonoBehaviour {
                 }
                 break;
         }
-
+        if(IsLevelWon())
+        {
+            levelWon = true;
+        }
 
         
     }
@@ -201,7 +219,15 @@ public class GameController : MonoBehaviour {
             gc.SetSimState((int)SimState.CRASHED);
         }
     }
-    
+    public bool IsLevelWon()
+    {
+        foreach(Exporter ex in outputColumns)
+        {
+            if(!ex.allCorrect())
+                return false;
+        }
+        return true;
+    }
     private void SpawnEffect(ref HashSet<Vector2Int> redSet, ref HashSet<Vector2Int> greenSet, Transmitter tr)
     {
         if (Grid.Instance.GetGridComponent(tr.Location + tr.OutputDirection) == null)
@@ -302,5 +328,11 @@ public class GameController : MonoBehaviour {
         if (autoSave)
             SaveGame();
         SceneManager.LoadScene("MainMenu");
+    }
+    public void GoToLevelSelect(bool autoSave)
+    {
+        if(autoSave)
+            SaveGame();
+        SceneManager.LoadScene("LevelSelect");
     }
 }

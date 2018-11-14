@@ -59,4 +59,16 @@ public class ColArray : MonoBehaviour {
         text[nums.Count].text = val.ToString();
         nums.Add(val);
     }
+    public bool Matches(ColArray other)
+    {
+        if(this.Length() != other.Length())
+            return false;
+        int length = Mathf.Min(this.Length(),other.Length());
+        for(int i = 0; i < length ;i++)
+        {
+            if(GetValue(i) != other.GetValue(i))
+                return false;
+        }
+        return true;
+    }
 }

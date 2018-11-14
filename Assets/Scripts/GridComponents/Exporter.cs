@@ -4,7 +4,6 @@
     
     public ColArray outputColumn;
     public ColArray expectedOutputColumn;
-    private int colIndex = 0;
 
     protected override void Start()
     {
@@ -14,19 +13,23 @@
         {
             expectedOutputColumn.AddValue(expectedOutput[i]);
         }
+        GameController.outputColumns.Add(GetComponent<Exporter>());
     }
 
     public override void Step()
     {
         //Output only reads from num1 var
         GetFromReceiver();
-        outputColumn.AddValue(num1);
-        colIndex++;
+        if(num1 != 0)
+            outputColumn.AddValue(num1);
     }
 
     public void ResetState()
     {
-        colIndex++;
         outputColumn.ClearNums();
+    }
+    public bool allCorrect()
+    {
+        return expectedOutputColumn.Matches(outputColumn);
     }
 }
