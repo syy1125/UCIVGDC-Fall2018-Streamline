@@ -10,12 +10,19 @@ public class UIGroup : MonoBehaviour {
     public GameObject defaultButton;
     public UIGroup parentGroup; //can be null
     public bool focused = false;
+    public KeyCode backKey = KeyCode.Escape;
     protected virtual void Start () {
         myCanvas = GetComponent<Canvas>();
         eventSystem = GameObject.Find("EventSystem").GetComponent<EventSystem>();
 
 	}
-	
+	protected virtual void Update()
+    {
+        if (focused && Input.GetKeyDown(backKey))
+        {
+            StartCoroutine(BackKeyPress());
+        }
+    }
 	
     public virtual void EnableUI()
     {
@@ -39,5 +46,11 @@ public class UIGroup : MonoBehaviour {
     {
         eventSystem.SetSelectedGameObject(g);
     }
-    
+    protected virtual IEnumerator BackKeyPress()
+    {
+        yield return new WaitForEndOfFrame();
+        if(parentGroup != null)
+            parentGroup.EnableUI();
+        DisableUI();
+    }
 }

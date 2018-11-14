@@ -89,6 +89,16 @@ public class GameController : MonoBehaviour {
               
                 break;
             case SimState.RUNNING:
+                if(!levelWon && IsLevelWon())
+                {
+                    SetSimState((int)SimState.PAUSED);
+                    levelWon = true;
+                    levelWonGroup.EnableUI();
+                }
+                if(Input.GetKeyDown(escapeKey))
+                {  
+                    SetSimState((int)SimState.PAUSED);
+                }
                 if(stepTimer > stepDelay)
                 {
                     stepTimer = 0;
@@ -101,18 +111,25 @@ public class GameController : MonoBehaviour {
 
                 break;
             case SimState.PAUSED:
-
+                if(!levelWon && IsLevelWon())
+                {
+                    SetSimState((int)SimState.PAUSED);
+                    levelWon = true;
+                    levelWonGroup.EnableUI();
+                }
+                if(Input.GetKeyDown(escapeKey))
+                {  
+                    SetSimState((int)SimState.EDITING);
+                }
                 break;
             case SimState.CRASHED:
-
+                if(Input.GetKeyDown(escapeKey))
+                {  
+                    SetSimState((int)SimState.EDITING);
+                }
                 break;
         }
-        if(!levelWon && IsLevelWon())
-        {
-            SetSimState((int)SimState.PAUSED);
-            levelWon = true;
-            levelWonGroup.EnableUI();
-        }
+        
         
 	}
     public void OnStepButtonPress()

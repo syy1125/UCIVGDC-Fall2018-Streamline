@@ -6,17 +6,15 @@ public class ConfirmationUIGroup : UIGroup {
 
     // Use this for initialization
     private Grid grid;
-    public UIGroup gameMenuUIGroup;
-    public KeyCode backKey = KeyCode.Escape;
 	protected override void Start () {
         base.Start();
         grid = GameObject.FindGameObjectWithTag("Grid").GetComponent<Grid>();
 	}
-    private void Update()
+    protected override void Update()
     {
         if (focused && Input.GetKeyDown(backKey))
         {
-            StartCoroutine(EscapePress());
+            StartCoroutine(BackKeyPress());
         }
     }
     public override void EnableUI()
@@ -35,20 +33,15 @@ public class ConfirmationUIGroup : UIGroup {
             return;
         grid.ClearGrid();
         this.DisableUI();
-        gameMenuUIGroup.DisableUI();
+        parentGroup.DisableUI();
     }
     public void NoPress()
     {
         if (!focused)
             return;
         this.DisableUI();
-        gameMenuUIGroup.EnableUI();
+        parentGroup.EnableUI();
     }
-    public IEnumerator EscapePress()
-    {
-        yield return new WaitForEndOfFrame();
-        this.DisableUI();
-        gameMenuUIGroup.EnableUI();
-    }
+    
 
 }
