@@ -362,10 +362,22 @@ public class GameController : MonoBehaviour {
         SaveData.LoadData(saveFile, solutionNum);
         levelNameText.text = gameLevel.Name;
         if (gameLevel.Objective == null)
-            levelDescription.text = string.Join(" ", gameLevel.Description);
+            levelDescription.text = HighlightKeyTerms(gameLevel.Description);
         else
-            levelDescription.text = string.Join(" ", gameLevel.Objective);
+            levelDescription.text = HighlightKeyTerms(gameLevel.Objective);
     }
+    public string HighlightKeyTerms(string[] s)
+    {
+        string[] replaceList = new string[4]{"In.1", "In.2", "Out.1", "Out.2"};
+        string highlightColor = "#ff0000";
+        string result = string.Join(" " , s);
+        for(int i = 0; i < replaceList.Length; i++)
+        {
+            result = result.Replace(replaceList[i], "<color="+highlightColor+">"+replaceList[i]+"</color>");
+            result = result.Replace(replaceList[i].ToLower(), "<color="+highlightColor+">"+replaceList[i].ToLower()+"</color>");
+        }
+        return result;
+    }   
     public void GoToMainMenu(bool autoSave)
     {
         if (autoSave)

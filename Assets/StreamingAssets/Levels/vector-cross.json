@@ -6,8 +6,8 @@
   ],
   "Objective": [
     "The cross product is defined as <x1, y1, z1> ✕ <x2, y2, z2> = <y1*z2 - y2*z1, z1*x2 - z2*x1, x1*y2 - x2*y1>.",
-    "The values from input 1 will be x1, y1, z1, and then 0 afterwards. The values from input 2 will be x2, y2, z2, and then 0 afterwards.",
-    "Send the output in the order of x, y, z to output 1."
+    "The values from In.1 will be x1, y1, z1, and then 0 afterwards. The values from In.2 will be x2, y2, z2, and then 0 afterwards.",
+    "Send the output in the order of x, y, z to Out.1."
   ],
   "Tests": [
     {
