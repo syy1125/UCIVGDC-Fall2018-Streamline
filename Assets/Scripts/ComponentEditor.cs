@@ -55,6 +55,7 @@ public class ComponentEditor : MonoBehaviour
                 }
                 ComponentName.text = gridComponent.GetComponent<Operator>().OpName;
                 currentlySelectedComponent = Grid.Instance.GetGridComponent(Grid.Instance.Selected);
+                DisableStart(previewedObject);
                 for (int i = 0; i < directionButtons.Length; i++)
                 {
                     directionButtons[i].GetComponent<Image>().enabled = true;
@@ -182,6 +183,11 @@ public class ComponentEditor : MonoBehaviour
         ioUnderlines[1].enabled = selection == ArrowSelection.IN2;
         ioUnderlines[2].enabled = selection == ArrowSelection.OUT;
 
+    }
+    private void DisableStart(GameObject g)
+    {
+        if(g.GetComponent<Operator>() != null)
+            g.GetComponent<Operator>().enabled = false;
     }
     private void SetButtonsActive(bool b)
     {
