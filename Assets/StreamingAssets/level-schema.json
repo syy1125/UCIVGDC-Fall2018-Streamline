@@ -9,6 +9,10 @@
       "type": "string"
     },
     
+    "Tutorial": {
+      "type": "string"
+    },
+    
     "Description": {
       "description": "An overview of what this level requires the player to do. This field is turned into an array to keep line length managable. During runtime, the array elements will be joined into a single line, with a space between them.",
       "type": "array",

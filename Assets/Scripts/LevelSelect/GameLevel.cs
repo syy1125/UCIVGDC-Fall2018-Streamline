@@ -17,6 +17,9 @@ public class GameLevel
 
 	public string Name = "Level";
 
+	// Should match one of the tutorial group's object name.
+	public string Tutorial;
+
 	// Description is an overview of the level.
 	public string[] Description = new string[0];
 
