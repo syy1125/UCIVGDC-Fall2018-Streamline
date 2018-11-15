@@ -212,47 +212,53 @@ public class Grid : MonoBehaviour
     private void SetUpColumnIO()
     {
         GameLevel level = GameController.gameLevel;
+        int inputCount = 1;
+        int outputCount = 1;
         if(LevelIOMask[0])
         {
             _importer1 = SetGridComponent(0, Height - 1, importer);
-            _importer1.GetComponent<Importer>().outputColumn = MakeImporterColumn();
+            _importer1.GetComponent<Importer>().outputColumn = MakeImporterColumn(inputCount++);
         }
         if(LevelIOMask[1])
         {
             _importer2 = SetGridComponent(0, 0, importer);
-            _importer2.GetComponent<Importer>().outputColumn = MakeImporterColumn();
+            _importer2.GetComponent<Importer>().outputColumn = MakeImporterColumn(inputCount++);
         }
         ColArray[] exporterColumns = null;
         if(LevelIOMask[2])
         {
             _exporter1 = SetGridComponent(Width - 1, 0, exporter);
-            exporterColumns = MakeExporterColumn();
+            exporterColumns = MakeExporterColumn(outputCount++);
             _exporter1.GetComponent<Exporter>().expectedOutputColumn = exporterColumns[0];
             _exporter1.GetComponent<Exporter>().outputColumn = exporterColumns[1];
         }
         if(LevelIOMask[3])
         {
             _exporter2 = SetGridComponent(Width - 1, Height - 1, exporter);
-            exporterColumns = MakeExporterColumn();
+            exporterColumns = MakeExporterColumn(outputCount++);
             _exporter2.GetComponent<Exporter>().expectedOutputColumn = exporterColumns[0];
             _exporter2.GetComponent<Exporter>().outputColumn = exporterColumns[1];
         }
     }
 
-    private ColArray MakeImporterColumn()
+    private ColArray MakeImporterColumn(int columnIndex)
     {
-        return Instantiate(
+        GameObject col = Instantiate(
             Resources.Load("InputColumn") as GameObject,
             columnsParent.transform
-        ).GetComponentInChildren<ColArray>();
+        );
+        col.GetComponentsInChildren<Text>()[0].text = "In." + columnIndex;
+        return col.GetComponentInChildren<ColArray>();
     }
 
-    private ColArray[] MakeExporterColumn()
+    private ColArray[] MakeExporterColumn(int columnIndex)
     {
-        return Instantiate(
+        GameObject col =  Instantiate(
             Resources.Load("OutputColumn") as GameObject,
             columnsParent.transform
-        ).GetComponentsInChildren<ColArray>();
+        );
+        col.GetComponentsInChildren<Text>()[0].text = "Out." + columnIndex;
+        return col.GetComponentsInChildren<ColArray>();
     }
 
     private void InitializeTestSequence(int testIndex)
