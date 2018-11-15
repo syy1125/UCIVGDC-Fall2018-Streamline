@@ -57,6 +57,13 @@ public class GameController : MonoBehaviour {
                 GameObject g = gameGrid.GetGridComponent(h, w);
                 if (gameGrid.IsOperator(g)) {
                     g.GetComponent<Receiver>().Step();
+                }
+            }
+        }
+        for (int h=0; h < gameGrid.Height; ++h) {
+            for (int w = 0; w < gameGrid.Width; ++w) {
+                GameObject g = gameGrid.GetGridComponent(h, w);
+                if (gameGrid.IsOperator(g)) {
                     g.GetComponent<Operator>().Step();
                 }
             }
