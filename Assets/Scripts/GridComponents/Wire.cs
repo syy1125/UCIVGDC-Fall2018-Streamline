@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.WSA;
 
 public class Wire : MonoBehaviour
 {
@@ -47,7 +48,7 @@ public class Wire : MonoBehaviour
 		set
 		{
 			_hasRed = value;
-			UpdateTexture(RedParts, HasRedWireAt);
+			UpdateTexture(RedParts, RedWireConnects);
 		}
 	}
 
@@ -57,7 +58,7 @@ public class Wire : MonoBehaviour
 		set
 		{
 			_hasGreen = value;
-			UpdateTexture(GreenParts, HasGreenWireAt);
+			UpdateTexture(GreenParts, GreenWireConnects);
 		}
 	}
 
@@ -72,6 +73,18 @@ public class Wire : MonoBehaviour
 		UpdateAllTextures();
 	}
 
+	private bool RedWireConnects(Vector2Int direction)
+	{
+		return HasRedWireAt(direction)
+		       || TileHasIO(direction);
+	}
+
+	private bool GreenWireConnects(Vector2Int direction)
+	{
+		return HasGreenWireAt(direction)
+		       || TileHasIO(direction);
+	}
+
 	private bool HasRedWireAt(Vector2Int direction)
 	{
 		GameObject g = Grid.Instance.GetGridComponent(Location + direction);
@@ -84,19 +97,15 @@ public class Wire : MonoBehaviour
 		return wireTile != null && wireTile.GetComponent<Wire>() != null && wireTile.GetComponent<Wire>().HasGreen;
 	}
 
-	private bool TileTransmits(Vector2Int direction)
+	private bool TileHasIO(Vector2Int direction)
 	{
 		GameObject tile = Grid.Instance.GetGridComponent(Location + direction);
-		return Grid.Instance.IsOperator(tile)
-		       && tile.GetComponent<Transmitter>() != null
-		       && tile.GetComponent<Transmitter>().TransmissionDirections().Contains(direction * -1);
-	}
 
-	private bool TileReceives(Vector2Int direction)
-	{
-		GameObject tile = Grid.Instance.GetGridComponent(Location + direction);
-		return Grid.Instance.IsOperator(tile)
-		       && tile.GetComponent<Receiver>() != null
+		if (!Grid.Instance.IsOperator(tile)) return false;
+
+		return tile.GetComponent<Transmitter>() != null
+		       && tile.GetComponent<Transmitter>().TransmissionDirections().Contains(direction * -1)
+		       || tile.GetComponent<Receiver>() != null
 		       && tile.GetComponent<Receiver>().ReceptionDirections().Contains(direction * -1);
 	}
 
@@ -113,16 +122,8 @@ public class Wire : MonoBehaviour
 
 	public void UpdateAllTextures()
 	{
-		UpdateTexture(RedParts, direction =>
-			HasRedWireAt(direction)
-			|| TileTransmits(direction)
-			|| TileReceives(direction)
-		);
-		UpdateTexture(GreenParts, direction =>
-			HasGreenWireAt(direction)
-			|| TileTransmits(direction)
-			|| TileReceives(direction)
-		);
+		UpdateTexture(RedParts, RedWireConnects);
+		UpdateTexture(GreenParts, GreenWireConnects);
 	}
 
 	private static void ForAllWires(Action<Wire> action)
@@ -255,19 +256,20 @@ public class Wire : MonoBehaviour
 		_redNetwork = null;
 		_greenNetwork = null;
 	}
+
 	public string SaveString()
 	{
 		string result = "";
-		result += "" + (int)Selection.REDWIRE + "\t";	//can be either REDWIRE or GREENWIRE
-														//redness or greenness is encoded later
+		result += "" + (int) Selection.REDWIRE + "\t"; //can be either REDWIRE or GREENWIRE
+		//redness or greenness is encoded later
 		result += "" + Location.x + "\t";
 		result += "" + Location.y + "\t";
 		if (HasGreen && HasRed)
-			result += "" + (int)SaveData.WireType.BOTH;
-		else if(HasGreen)
-			result += "" + (int)SaveData.WireType.GREEN;
+			result += "" + (int) SaveData.WireType.BOTH;
+		else if (HasGreen)
+			result += "" + (int) SaveData.WireType.GREEN;
 		else
-			result += "" + (int)SaveData.WireType.RED;
+			result += "" + (int) SaveData.WireType.RED;
 		return result;
 	}
 }
