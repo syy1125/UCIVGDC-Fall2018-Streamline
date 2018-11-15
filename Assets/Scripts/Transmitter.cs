@@ -34,4 +34,8 @@ public class Transmitter : MonoBehaviour
 			}
 		}
 	}
+	public void Reset()
+	{
+		Signal = 0;
+	}
 }

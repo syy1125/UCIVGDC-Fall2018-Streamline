@@ -307,8 +307,23 @@ public class GameController : MonoBehaviour {
             return;
         isSetUp = false;
         Wire.GlobalTearDown();
-
         Grid grid = Grid.Instance;
+        Transmitter tr = null;
+        for(int i = 0; i < grid.Height; i++)
+        {
+            for(int j = 0; j < grid.Width; j++)
+            {
+                GameObject g = grid.GetGridComponent(i,j);
+                if(g == null)
+                    continue;
+                tr = g.GetComponent<Transmitter>();
+                if(tr != null)
+                {
+                    tr.Reset();
+                }
+            }
+        }
+
         if(Grid.LevelIOMask[0])
             grid.GetGridComponent(0,grid.Height - 1).GetComponent<Importer>().ResetState();
         if(Grid.LevelIOMask[1])
