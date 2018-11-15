@@ -1,12 +1,17 @@
 {
   "Name": "Square Root",
   "Description": [
-    "Take the square root of the input from I1. All inputs are guaranteed to be non-negative."
+    "Take the square root of the input from I1. All inputs are guaranteed to be non-negative.",
+    "If the input is not a perfect square, truncate the answer."
   ],
   "Tests": [
     {
-      "Input1": [9],
-      "Output1": [3]
+      "Input1": [18],
+      "Output1": [4]
+    },
+    {
+      "Input1": [342],
+      "Output1": [18]
     }
   ]
 }

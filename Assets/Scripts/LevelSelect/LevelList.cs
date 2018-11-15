@@ -25,8 +25,10 @@ public class GameLevel
 	public string FileName;
 
 	public string Name = "Level";
+
 	// Description is an overview of the level.
 	public string[] Description = new string[0];
+
 	// Objective is the task the player needs to achieve in a level.
 	public string[] Objective = null;
 	// Objective may be null, in which case it defaults to the level's description.
@@ -154,7 +156,7 @@ public class LevelList : StatefulUI<LevelListState>
 		GameLevel level = State.Levels[State.SelectedIndex.Value];
 
 		GameController.gameLevel = level;
-		
+
 		SceneManager.LoadScene("CircuitGrid");
 	}
 }
