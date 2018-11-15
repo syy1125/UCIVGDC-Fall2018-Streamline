@@ -31,7 +31,7 @@ public class Constant : Operator {
 	public override string SaveString()
 	{
 		Transmitter t = GetComponent<Transmitter>();
-		string result = "" + (int)Selection.CONSTANT + '\t';
+		string result = "" + (int)ComponentType.CONSTANT + '\t';
 		result += "" + t.Location.x + '\t';
 		result += "" + t.Location.y + '\t';
 		result += "" + SaveData.GetDirection(t.OutputDirection) + '\t';

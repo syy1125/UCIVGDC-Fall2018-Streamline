@@ -259,7 +259,7 @@ public class Wire : MonoBehaviour
 	public string SaveString()
 	{
 		string result = "";
-		result += "" + (int) Selection.REDWIRE + "\t"; //can be either REDWIRE or GREENWIRE
+		result += "" + (int) ComponentType.REDWIRE + "\t"; //can be either REDWIRE or GREENWIRE
 		//redness or greenness is encoded later
 		result += "" + Location.x + "\t";
 		result += "" + Location.y + "\t";

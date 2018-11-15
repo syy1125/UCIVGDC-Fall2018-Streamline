@@ -52,40 +52,40 @@ public static class SaveData {
         Grid grid = Grid.Instance;
         Vector2Int coords = new Vector2Int(values[1], values[2]);
         Operator op = null;
-        switch ((Selection)values[0])
+        switch ((ComponentType)values[0])
         {
-            case Selection.GREENWIRE:
-            case Selection.REDWIRE:
+            case ComponentType.GREENWIRE:
+            case ComponentType.REDWIRE:
                 Wire w = grid.SetGridComponent(coords, grid.wire).GetComponent<Wire>();
                 w.Location = coords;
                 w.HasGreen = ((WireType)values[3] == WireType.GREEN || (WireType)values[3] == WireType.BOTH);
                 w.HasRed = ((WireType)values[3] == WireType.RED || (WireType)values[3] == WireType.BOTH);
                 break;
-            case Selection.CONSTANT:
+            case ComponentType.CONSTANT:
                 Constant c = grid.SetGridComponent(coords, grid.constant).GetComponent<Constant>();
                 c.LoadConfig(values);
                 break;
-            case Selection.ADD:
+            case ComponentType.ADD:
                 op = grid.SetGridComponent(coords, grid.addition).GetComponent<Operator>();
                 op.LoadConfig(values);
                 break;
-            case Selection.SUB:
+            case ComponentType.SUB:
                 op = grid.SetGridComponent(coords, grid.subtraction).GetComponent<Operator>();
                 op.LoadConfig(values);
                 break;
-            case Selection.MULT:
+            case ComponentType.MULT:
                 op = grid.SetGridComponent(coords, grid.multiplication).GetComponent<Operator>();
                 op.LoadConfig(values);
                 break;
-            case Selection.DIV:
+            case ComponentType.DIV:
                 op = grid.SetGridComponent(coords, grid.division).GetComponent<Operator>();
                 op.LoadConfig(values);
                 break;
-            case Selection.EQUALITY:
+            case ComponentType.EQUALITY:
                 op = grid.SetGridComponent(coords, grid.equality).GetComponent<Operator>();
                 op.LoadConfig(values);
                 break;
-            case Selection.LESSTHAN:
+            case ComponentType.LESSTHAN:
                 op = grid.SetGridComponent(coords, grid.lessThan).GetComponent<Operator>();
                 op.LoadConfig(values);
                 break;

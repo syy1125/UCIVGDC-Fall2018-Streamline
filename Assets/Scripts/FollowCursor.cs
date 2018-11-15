@@ -20,18 +20,18 @@ public class FollowCursor : MonoBehaviour {
 	}
     private void updateColors()
     {
-        switch (ComponentSelection.cursorSelection)
+        switch (ComponentSelection.selected)
         {
-            case Selection.NONE:
+            case ComponentType.NONE:
                 image.color = Color.white;
                 break;
-            case Selection.ERASER:
+            case ComponentType.ERASER:
                 image.color = Color.magenta;
                 break;
-            case Selection.REDWIRE:
+            case ComponentType.REDWIRE:
                 image.color = Color.red;
                 break;
-            case Selection.GREENWIRE:
+            case ComponentType.GREENWIRE:
                 image.color = Color.green;
                 break;
             default:

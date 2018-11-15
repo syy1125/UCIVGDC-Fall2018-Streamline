@@ -5,32 +5,32 @@ using UnityEngine;
 public static class OperatorInfo {
     
    
-    public static Selection GetTypeOf(Operator g)
+    public static ComponentType GetTypeOf(Operator g)
     {
         switch(g.GetComponent<Operator>().OpName)
         {
             default:
-                return Selection.NONE;
+                return ComponentType.NONE;
             case "Add":
-                return Selection.ADD;
+                return ComponentType.ADD;
             case "Subtract":
-                return Selection.SUB;
+                return ComponentType.SUB;
             case "Multiply":
-                return Selection.MULT;
+                return ComponentType.MULT;
             case "Divide":
-                return Selection.DIV;
+                return ComponentType.DIV;
             case "Constant":
-                return Selection.CONSTANT;
+                return ComponentType.CONSTANT;
             case "Importer":
-                return Selection.IMPORTER;
+                return ComponentType.IMPORTER;
             case "Output":
-                return Selection.EXPORTER;
+                return ComponentType.EXPORTER;
             case "Equality":
-                return Selection.EQUALITY;
+                return ComponentType.EQUALITY;
             case "LessThan":
-                return Selection.LESSTHAN;
+                return ComponentType.LESSTHAN;
             case "Compare":
-                return Selection.COMPARE;
+                return ComponentType.COMPARE;
         }
 
     }

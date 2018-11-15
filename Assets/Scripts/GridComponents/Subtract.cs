@@ -22,7 +22,7 @@ public class Subtract : Operator {
 	public override string SaveString()
 	{
 		Receiver r = GetComponent<Receiver>();
-		string result = "" + (int)Selection.SUB + '\t';
+		string result = "" + (int)ComponentType.SUB + '\t';
 		result += "" + r.Location.x + '\t';
 		result += "" + r.Location.y + '\t';
 		result += "" + SaveData.GetDirection(r.InputDirection1) + '\t';

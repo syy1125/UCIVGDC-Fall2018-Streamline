@@ -275,21 +275,21 @@ public class Grid : MonoBehaviour
     }
     public void onGridButtonPress(Vector2Int location)
     {
-        if (ComponentSelection.cursorSelection == Selection.NONE)
+        if (ComponentSelection.selected == ComponentType.NONE)
         {
             Selected = location;
             return;
         }
         if (GameController.simState != SimState.EDITING)
             return;
-        if (!ValidPlacement(location, ComponentSelection.cursorSelection))
+        if (!ValidPlacement(location, ComponentSelection.selected))
             return;
-        switch (ComponentSelection.cursorSelection)
+        switch (ComponentSelection.selected)
         {
-            case Selection.ERASER:
+            case ComponentType.ERASER:
                 DestroyGridComponent(location);
                 break;
-            case Selection.REDWIRE:
+            case ComponentType.REDWIRE:
                 if (IsWire(GetGridComponent(location)))
                 {
                     GetGridComponent(location).GetComponent<Wire>().HasRed = true;
@@ -298,7 +298,7 @@ public class Grid : MonoBehaviour
                 SetGridComponent(location, wire).GetComponent<Wire>().Location = location;
                 GetGridComponent(location).GetComponent<Wire>().HasRed = true;
                 break;
-            case Selection.GREENWIRE:
+            case ComponentType.GREENWIRE:
                 if (IsWire(GetGridComponent(location)))
                 {
                     GetGridComponent(location).GetComponent<Wire>().HasGreen = true;
@@ -307,32 +307,33 @@ public class Grid : MonoBehaviour
                 SetGridComponent(location, wire).GetComponent<Wire>().Location = location;
                 GetGridComponent(location).GetComponent<Wire>().HasGreen = true;
                 break;
-            case Selection.ADD:
+            case ComponentType.ADD:
                 SetGridComponent(location, addition);
                 break;
-            case Selection.SUB:
+            case ComponentType.SUB:
                 SetGridComponent(location, subtraction);
                 break;
-            case Selection.MULT:
+            case ComponentType.MULT:
                 SetGridComponent(location, multiplication);
                 break;
-            case Selection.DIV:
+            case ComponentType.DIV:
                 SetGridComponent(location, division);
                 break;
-            case Selection.CONSTANT:
+            case ComponentType.CONSTANT:
                 SetGridComponent(location, constant);
                 break;
-            case Selection.EQUALITY:
+            case ComponentType.EQUALITY:
                 SetGridComponent(location, equality);
                 break;
-            case Selection.LESSTHAN:
+            case ComponentType.LESSTHAN:
                 SetGridComponent(location, lessThan);
                 break;
         }
         
         UpdateAdjacentWires(location);
     }
-    public bool ValidPlacement(Vector2Int position, Selection selection)
+    
+    public bool ValidPlacement(Vector2Int position, ComponentType type)
     {
         bool result = false;
         if (!InGrid(position))
@@ -340,19 +341,19 @@ public class Grid : MonoBehaviour
         GameObject g = GetGridComponent(position);
         if (g == null)
             return true;
-        switch (selection)
+        switch (type)
         {
-            case Selection.NONE:
+            case ComponentType.NONE:
                 return true;
-            case Selection.ERASER:
+            case ComponentType.ERASER:
                 return true;
-            case Selection.REDWIRE:
+            case ComponentType.REDWIRE:
                 if (IsOperator(g))
                     return false;
                 if (IsWire(g) && !g.GetComponent<Wire>().HasRed)
                     return true;
                 break;
-            case Selection.GREENWIRE:
+            case ComponentType.GREENWIRE:
                 if (IsOperator(g))
                     return false;
                 if (IsWire(g) && !g.GetComponent<Wire>().HasGreen)

@@ -34,7 +34,7 @@ public class Compare : Operator {
 	public override string SaveString()
 	{
 		Receiver r = GetComponent<Receiver>();
-		string result = "" + (int)Selection.COMPARE + '\t';
+		string result = "" + (int)ComponentType.COMPARE + '\t';
 		result += "" + r.Location.x + '\t';
 		result += "" + r.Location.y + '\t';
 		result += "" + SaveData.GetDirection(r.InputDirection1) + '\t';
