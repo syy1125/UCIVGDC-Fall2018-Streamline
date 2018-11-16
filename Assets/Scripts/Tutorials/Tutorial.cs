@@ -27,12 +27,17 @@ public class Tutorial : MonoBehaviour
 	private Coroutine _outlineTransition;
 	private Coroutine _textTransition;
 
+	private string TutorialName
+	{
+		get { return gameObject.name; }
+	}
+
 	private void Awake()
 	{
 		string[] completedTutorials = PlayerPrefs.GetString("TutorialProgress", "").Split(':');
 		if (
-			GameController.gameLevel.Name.Equals(gameObject.name)
-			|| Array.BinarySearch(completedTutorials, gameObject.name) >= 0
+			GameController.gameLevel.Name.Equals(TutorialName)
+			|| Array.BinarySearch(completedTutorials, TutorialName) >= 0
 		)
 		{
 //			gameObject.SetActive(false);
@@ -52,6 +57,7 @@ public class Tutorial : MonoBehaviour
 			_outline.GetComponent<RectTransform>(),
 			Steps[0].TextOffset
 		);
+		_hintText.GetComponent<Text>().text = Steps[0].HintText;
 
 		_manager = transform.parent.GetComponent<TutorialManager>();
 	}
@@ -65,6 +71,12 @@ public class Tutorial : MonoBehaviour
 		else
 		{
 			gameObject.SetActive(false);
+
+			string[] completedTutorials = PlayerPrefs.GetString("TutorialProgress", "").Split(':');
+			Array.Resize(ref completedTutorials, completedTutorials.Length + 1);
+			completedTutorials[completedTutorials.Length - 1] = TutorialName;
+			Array.Sort(completedTutorials);
+			PlayerPrefs.SetString("TutorialProgress", string.Join(":", completedTutorials));
 		}
 	}
 
