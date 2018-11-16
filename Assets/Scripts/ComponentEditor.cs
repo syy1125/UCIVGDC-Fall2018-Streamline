@@ -60,6 +60,14 @@ public class ComponentEditor : MonoBehaviour
                 {
                     directionButtons[i].GetComponent<Image>().enabled = true;
                 }
+                if (currentlySelectedComponent.GetComponent<Operator>().OpName.Equals("Constant"))
+                {
+                    UpdateConst(constEditor.GetComponentInChildren<InputField>());
+                    constEditor.SetActive(true);
+                } else
+                {
+                    constEditor.SetActive(false);
+                }
                 bool[] mask = currentlySelectedComponent.GetComponent<Operator>().GetIOMask();
                 if (mask[0])
                     SetArrowSelection(ArrowSelection.IN1);
@@ -197,14 +205,7 @@ public class ComponentEditor : MonoBehaviour
             input1Button.SetActive(mask[0]);
             input2Button.SetActive(mask[1]);
             outputButton.SetActive(mask[2]);
-            if (currentlySelectedComponent.GetComponent<Operator>().OpName.Equals("Constant"))
-            {
-                UpdateConst(constEditor.GetComponentInChildren<Text>());
-                constEditor.SetActive(true);
-            } else
-            {
-                constEditor.SetActive(false);
-            }
+            
         } else
         {
             input1Button.SetActive(false);
@@ -339,6 +340,7 @@ public class ComponentEditor : MonoBehaviour
         }
         directionButtons[x].SetActivated(true);
     }
+    /*
     public void UpdateConst(Text t)
     {
         if (currentlySelectedComponent.GetComponent<Constant>() != null)
@@ -348,6 +350,8 @@ public class ComponentEditor : MonoBehaviour
             t.text = "Value=" + constant.number;
         }
     }
+    
+    
     public void IncrementConst(Text t)
     {
         if (GameController.simState != SimState.EDITING)
@@ -375,4 +379,30 @@ public class ComponentEditor : MonoBehaviour
             t.text = "Value=" + constant.number;
         }
     }
+    */
+    public void SetConstValue(InputField field)
+    {
+        if (currentlySelectedComponent.GetComponent<Constant>() != null)
+        {
+            if(!field.text.Equals(""))
+            {
+                field.text = Mathf.Clamp(Int32.Parse(field.text),Operator.MIN,Operator.MAX).ToString();
+                currentlySelectedComponent.GetComponent<Constant>().number = Int32.Parse(field.text);
+            } else {
+                field.text = "";
+                currentlySelectedComponent.GetComponent<Constant>().number = 0;
+            }
+            
+        }
+    }
+    public void UpdateConst(InputField field)
+    {
+        if (currentlySelectedComponent.GetComponent<Constant>() != null)
+        {
+            Constant constant = currentlySelectedComponent.GetComponent<Constant>();
+            field.text = constant.number.ToString();
+
+        }
+    }
+    
 }
