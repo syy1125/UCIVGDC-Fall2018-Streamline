@@ -40,8 +40,8 @@ public class Tutorial : MonoBehaviour
 			|| Array.BinarySearch(completedTutorials, TutorialName) >= 0
 		)
 		{
-//			gameObject.SetActive(false);
-//			return;
+			gameObject.SetActive(false);
+			return;
 		}
 
 		_outline = Instantiate(Resources.Load<GameObject>("TutorialOutline"), transform);
