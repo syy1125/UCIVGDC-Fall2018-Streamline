@@ -13,45 +13,32 @@ public class ColumnManager : MonoBehaviour
 	private GameObject _exporter2;
 
 	public GameObject ColumnsParent;
+	public Button Left;
+	public Text TestSelection;
+	public Button Right;
 
 	public static bool[] LevelIOMask = {true, true, true, true};
 
 	private int _testIndex;
-
+	
 	public void OnGridReady()
 	{
+		InitIOMask();
+		InitIOTiles();
+		
 		SetTestIndex(0);
 	}
 
-	public void SetTestIndex(int newIndex)
-	{
-		if (newIndex < 0)
-		{
-			throw new IndexOutOfRangeException("Test index cannot be negative.");
-		}
-
-		if (newIndex >= GameController.gameLevel.Tests.Length)
-		{
-			throw new IndexOutOfRangeException("Test index cannot be higher than number of test cases.");
-		}
-
-		_testIndex = newIndex;
-
-		UpdateIOMask();
-		UpdateIOTiles();
-		UpdateTestSequence();
-	}
-
-	private void UpdateIOMask()
+	private void InitIOMask()
 	{
 		GameLevel level = GameController.gameLevel;
 		if (level.Tests.Length > 0)
 		{
 			LevelIOMask = new bool[4];
-			LevelIOMask[0] = level.Tests[_testIndex].Input1.Length > 0;
-			LevelIOMask[1] = level.Tests[_testIndex].Input2.Length > 0;
-			LevelIOMask[2] = level.Tests[_testIndex].Output1.Length > 0;
-			LevelIOMask[3] = level.Tests[_testIndex].Output2.Length > 0;
+			LevelIOMask[0] = level.Tests[0].Input1.Length > 0;
+			LevelIOMask[1] = level.Tests[0].Input2.Length > 0;
+			LevelIOMask[2] = level.Tests[0].Output1.Length > 0;
+			LevelIOMask[3] = level.Tests[0].Output2.Length > 0;
 		}
 		else
 		{
@@ -59,7 +46,7 @@ public class ColumnManager : MonoBehaviour
 		}
 	}
 
-	private void UpdateIOTiles()
+	private void InitIOTiles()
 	{
 		Grid grid = Grid.Instance;
 		int inputCount = 1;
@@ -119,6 +106,24 @@ public class ColumnManager : MonoBehaviour
 		return col.GetComponentsInChildren<ColArray>();
 	}
 
+	public void SetTestIndex(int newIndex)
+	{
+		if (newIndex < 0)
+		{
+			throw new IndexOutOfRangeException("Test index cannot be negative.");
+		}
+
+		if (newIndex >= GameController.gameLevel.Tests.Length && GameController.gameLevel.Tests.Length > 0)
+		{
+			throw new IndexOutOfRangeException("Test index cannot be higher than number of test cases.");
+		}
+
+		_testIndex = newIndex;
+
+		UpdateTestSequence();
+		UpdatePaginationDisplay();
+	}
+
 	private void UpdateTestSequence()
 	{
 		GameLevel level = GameController.gameLevel;
@@ -130,6 +135,16 @@ public class ColumnManager : MonoBehaviour
 			_exporter1.GetComponent<Exporter>().ExpectedOutput = level.Tests[_testIndex].Output1;
 		if (LevelIOMask[3])
 			_exporter2.GetComponent<Exporter>().ExpectedOutput = level.Tests[_testIndex].Output2;
+	}
+
+	private void UpdatePaginationDisplay()
+	{
+		TestSelection.text =
+			(GameController.gameLevel.Tests.Length > 0 ? _testIndex + 1 : 0)
+			+ " / "
+			+ GameController.gameLevel.Tests.Length;
+		Left.interactable = _testIndex > 0;
+		Right.interactable = _testIndex < GameController.gameLevel.Tests.Length - 1;
 	}
 
 	public void OffsetTestIndex(int delta)
