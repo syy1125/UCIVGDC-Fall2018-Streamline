@@ -6,7 +6,17 @@ using UnityEngine;
 public class Importer : Operator
 {
 	public ColArray outputColumn;
-	public int[] Sequence = { 0 };
+	private int[] _sequence = { 0 };
+
+	public int[] Sequence
+	{
+		get { return _sequence; }
+		set
+		{
+			_sequence = value;
+			UpdateColumn();
+		}
+	}
 
 	private int _index;
 
@@ -15,7 +25,14 @@ public class Importer : Operator
 		base.Start();
 		OpName = "Importer";
 		_index = 0;
-		for(int i = 0; i < Sequence.Length; i++)
+
+		UpdateColumn();
+	}
+
+	private void UpdateColumn()
+	{
+		outputColumn.ClearNums();
+		for (int i = 0; i < Sequence.Length; i++)
 		{
 			outputColumn.AddValue(Sequence[i]);
 		}
@@ -32,14 +49,17 @@ public class Importer : Operator
 	{
 		_index = 0;
 	}
+
 	public override string GetHint()
 	{
 		return "[NEXT] -> [ANY]";
 	}
+
 	public override bool[] GetIOMask()
 	{
-		return new bool[3]{false,false,false};
+		return new bool[3] {false, false, false};
 	}
+
 	public override string SaveString()
 	{
 		return "";

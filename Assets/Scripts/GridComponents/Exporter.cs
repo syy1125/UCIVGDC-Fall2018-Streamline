@@ -1,6 +1,17 @@
-﻿public class Exporter : Operator {
+﻿public class Exporter : Operator
+{
 
-    public int[] expectedOutput = { 0 };
+    private int[] _expectedOutput = {0};
+
+    public int[] ExpectedOutput
+    {
+        get { return _expectedOutput;  }
+        set
+        {
+            _expectedOutput = value;
+            UpdateColumns();
+        }
+    }
     
     public ColArray outputColumn;
     public ColArray expectedOutputColumn;
@@ -9,11 +20,19 @@
     {
         base.Start();
         OpName = "Output";
-        for(int i = 0; i < expectedOutput.Length; i++)
+        
+        GameController.outputColumns.Add(this);
+    }
+
+    private void UpdateColumns()
+    {
+        expectedOutputColumn.ClearNums();
+        outputColumn.ClearNums();
+        
+        for (int i = 0; i < ExpectedOutput.Length; i++)
         {
-            expectedOutputColumn.AddValue(expectedOutput[i]);
+             expectedOutputColumn.AddValue(ExpectedOutput[i]);
         }
-        GameController.outputColumns.Add(GetComponent<Exporter>());
     }
 
     public override void Step()
