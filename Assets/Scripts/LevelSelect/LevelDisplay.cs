@@ -11,7 +11,7 @@ public class LevelDisplay : StatefulUI<LevelDisplayState>
 {
 	public Text Title;
 	public Text Description;
-	public GameObject LoadButton;
+	public GameObject[] LoadButtons;
 
 	public LevelList LevelList;
 
@@ -32,13 +32,17 @@ public class LevelDisplay : StatefulUI<LevelDisplayState>
 			GameLevel level = state.Levels[state.SelectedIndex.Value];
 			Title.text = level.Name;
 			Description.text = string.Join(" ", level.Description);
-			LoadButton.SetActive(true);
+			for(int i = 0; i < LoadButtons.Length; i++){
+				LoadButtons[i].SetActive(true);
+			}
 		}
 		else
 		{
 			Title.text = "";
 			Description.text = "";
-			LoadButton.SetActive(false);
+			for(int i = 0; i < LoadButtons.Length; i++){
+				LoadButtons[i].SetActive(false);
+			}
 		}
 	}
 }

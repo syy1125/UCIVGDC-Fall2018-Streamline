@@ -23,9 +23,11 @@ public class LevelList : StatefulUI<LevelListState>
 
 	public Color SelectedColor;
 	private ColorBlock _selectedColors;
+	public static int SolutionIndex;
 
 	private void Start()
 	{
+		SolutionIndex = 0;
 		_selectedColors = new ColorBlock()
 		{
 			colorMultiplier = 1,
@@ -115,8 +117,9 @@ public class LevelList : StatefulUI<LevelListState>
 		};
 	}
 
-	public void PlaySelectedLevel()
+	public void PlaySelectedLevel(int SolutionIndex)
 	{
+		GameController.solutionNum = SolutionIndex;
 		GameLevel level = State.Levels[State.SelectedIndex.Value];
 
 		GameController.gameLevel = level;
