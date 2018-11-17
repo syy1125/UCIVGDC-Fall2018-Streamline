@@ -20,7 +20,7 @@ public class ColumnManager : MonoBehaviour
 		_testIndex = 0;
 
 		UpdateIOMask();
-		SetUpColumnIO();
+		UpdateIOTiles();
 		UpdateTestSequence();
 	}
 
@@ -30,18 +30,18 @@ public class ColumnManager : MonoBehaviour
 		if (level.Tests.Length > 0)
 		{
 			LevelIOMask = new bool[4];
-			LevelIOMask[0] = level.Tests[0].Input1.Length > 0;
-			LevelIOMask[1] = level.Tests[0].Input2.Length > 0;
-			LevelIOMask[2] = level.Tests[0].Output1.Length > 0;
-			LevelIOMask[3] = level.Tests[0].Output2.Length > 0;
+			LevelIOMask[0] = level.Tests[_testIndex].Input1.Length > 0;
+			LevelIOMask[1] = level.Tests[_testIndex].Input2.Length > 0;
+			LevelIOMask[2] = level.Tests[_testIndex].Output1.Length > 0;
+			LevelIOMask[3] = level.Tests[_testIndex].Output2.Length > 0;
 		}
 		else
 		{
-			LevelIOMask = new bool[4] {false, false, false, false};
+			LevelIOMask = new[] {false, false, false, false};
 		}
 	}
 
-	private void SetUpColumnIO()
+	private void UpdateIOTiles()
 	{
 		Grid grid = Grid.Instance;
 		int inputCount = 1;
