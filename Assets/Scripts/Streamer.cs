@@ -16,14 +16,23 @@ public class Streamer : MonoBehaviour {
     public float lifeTime;
     public float scale;
     private TrailRenderer tr;
+    private Vector2 originalDirection;
+    private Vector2 orthoDirection;
 	void Awake () {
         Destroy(gameObject, lifeTime);
         moveTimer = moveDuration;
         tr = GetComponent<TrailRenderer>();
         tr.startWidth = trailWidth*scale;
         tr.endWidth = trailWidth*scale;
+        originalDirection = transform.right;
+        orthoDirection = transform.up;
 	}
-	
+	public void Rotate(float angle)
+    {
+        transform.Rotate(new Vector3(0,0,angle));
+        originalDirection = transform.right;
+        orthoDirection = transform.up;
+    }
 	// Update is called once per frame
 	void Update () {
         if(moveTimer < 0)
@@ -34,14 +43,14 @@ public class Streamer : MonoBehaviour {
             {
                 if(rng < orthogonalChance / 2)
                 {
-                    velocity = new Vector2(rightVelocity, orthogonalVelocity);
+                    velocity = originalDirection*rightVelocity + orthoDirection*orthogonalVelocity;
                 } else
                 {
-                    velocity = new Vector2(rightVelocity, -orthogonalVelocity);
+                    velocity = originalDirection*rightVelocity - orthoDirection*orthogonalVelocity;
                 }
             } else
             {
-                velocity = Vector2.right * rightVelocity;
+                velocity = transform.right * rightVelocity;
             }
         } else
         {
