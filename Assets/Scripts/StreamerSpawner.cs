@@ -15,6 +15,7 @@ public class StreamerSpawner : MonoBehaviour {
     public Color smallColor;
     public Color mediumColor;
     public Color largeColor;
+    public bool randomSpawnDirection = false;
 	void Start () {
         StartCoroutine(SpawnLoop());
     }
@@ -36,6 +37,8 @@ public class StreamerSpawner : MonoBehaviour {
         {
             Vector3 offset = new Vector3(Random.Range(-randomOffset.x, randomOffset.x), Random.Range(-randomOffset.y, randomOffset.y));
             Transform newStreamer = Instantiate(streamerPrefab, transform.position + (Vector3)offset, transform.rotation);
+            if(randomSpawnDirection)
+                newStreamer.GetComponent<Streamer>().Rotate(Random.Range(0,360));
             int rng = (int)Random.Range(0, 3);
             if(rng == 0)
             {
