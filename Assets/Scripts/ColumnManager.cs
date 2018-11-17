@@ -19,7 +19,8 @@ public class ColumnManager : MonoBehaviour
 
 	public static bool[] LevelIOMask = {true, true, true, true};
 
-	public static int TestIndex;
+	// Use `SetTestIndex` or `OffsetTestIndex` to set it. Those correctly trigger side effects.
+	public static int TestIndex { get; private set; }
 	
 	public void OnGridReady()
 	{
