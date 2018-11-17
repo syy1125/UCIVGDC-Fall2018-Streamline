@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections;
+using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class Tutorial : MonoBehaviour
@@ -8,13 +10,16 @@ public class Tutorial : MonoBehaviour
 	[Serializable]
 	public class Step
 	{
+		[HideInInspector]
 		public RectTransform OutlinePosition;
 
 		[TextArea]
 		public string HintText;
 
-		public Vector2 TextOffset;
-		public TextAnchor Anchor;
+		public Vector2Int TextOffset;
+
+		[FormerlySerializedAs("Anchor")]
+		public TextAnchor TextAlign;
 	}
 
 	public Step[] Steps;
@@ -44,6 +49,11 @@ public class Tutorial : MonoBehaviour
 			return;
 		}
 
+		for (int i = 0; i < transform.childCount; i++)
+		{
+			Steps[i].OutlinePosition = transform.GetChild(i).GetComponent<RectTransform>();
+		}
+
 		_outline = Instantiate(Resources.Load<GameObject>("TutorialOutline"), transform);
 		_outline.GetComponent<RectTransform>().anchorMin = Steps[0].OutlinePosition.anchorMin;
 		_outline.GetComponent<RectTransform>().anchorMax = Steps[0].OutlinePosition.anchorMax;
@@ -57,6 +67,7 @@ public class Tutorial : MonoBehaviour
 			_outline.GetComponent<RectTransform>(),
 			Steps[0].TextOffset
 		);
+		_hintText.GetComponent<Text>().alignment = Steps[0].TextAlign;
 		_hintText.GetComponent<Text>().text = Steps[0].HintText;
 
 		_manager = transform.parent.GetComponent<TutorialManager>();
@@ -137,13 +148,13 @@ public class Tutorial : MonoBehaviour
 		yield return new WaitForSeconds(_manager.MoveDuration - 2 * _manager.TextFadeDuration);
 
 		RectTransform outline = Steps[_index].OutlinePosition;
-		Vector2 textOffset = Steps[_index].TextOffset;
+		Vector2Int textOffset = Steps[_index].TextOffset;
 
 		RectTransform t = _hintText.GetComponent<RectTransform>();
 		ResolveTextTransform(t, outline, textOffset);
 
 		hintText.text = Steps[_index].HintText;
-		hintText.alignment = Steps[_index].Anchor;
+		hintText.alignment = Steps[_index].TextAlign;
 
 		// Fade in
 		while (Time.time - startTime < _manager.MoveDuration)
@@ -162,13 +173,41 @@ public class Tutorial : MonoBehaviour
 	private static void ResolveTextTransform(
 		RectTransform textTransform,
 		RectTransform outlinePosition,
-		Vector2 textOffset
+		Vector2Int textOffset
 	)
 	{
+		Debug.Log(textOffset);
+		
 		textTransform.anchorMin = outlinePosition.anchorMin;
 		textTransform.anchorMax = outlinePosition.anchorMax;
 		textTransform.pivot = outlinePosition.pivot;
+		
 		textTransform.offsetMin = outlinePosition.offsetMin + textOffset * outlinePosition.rect.size;
+		
+		if (textOffset.x < 0)
+		{
+			Debug.Log("x<0");
+			textTransform.offsetMin -= new Vector2(outlinePosition.rect.size.x * 9, 0);
+		}
+
+		if (textOffset.y < 0)
+		{
+			Debug.Log("y<0");
+			textTransform.offsetMin -= new Vector2(0, outlinePosition.rect.size.y * 9);
+		}
+
 		textTransform.offsetMax = outlinePosition.offsetMax + textOffset * outlinePosition.rect.size;
+		
+		if (textOffset.x > 0)
+		{
+			Debug.Log("x>0");
+			textTransform.offsetMax += new Vector2(outlinePosition.rect.size.x * 9, 0);
+		}
+
+		if (textOffset.y > 0)
+		{
+			Debug.Log("y>0");
+			textTransform.offsetMax += new Vector2(0, outlinePosition.rect.size.y * 9);
+		}
 	}
 }
