@@ -13,11 +13,11 @@ public class ColumnManager : MonoBehaviour
 
 	public GameObject ColumnsParent;
 
-	private int _testIndex;
+	public static int TestIndex;
 
 	public void OnGridReady()
 	{
-		_testIndex = 0;
+		TestIndex = 0;
 
 		UpdateIOMask();
 		UpdateIOTiles();
@@ -30,10 +30,10 @@ public class ColumnManager : MonoBehaviour
 		if (level.Tests.Length > 0)
 		{
 			LevelIOMask = new bool[4];
-			LevelIOMask[0] = level.Tests[_testIndex].Input1.Length > 0;
-			LevelIOMask[1] = level.Tests[_testIndex].Input2.Length > 0;
-			LevelIOMask[2] = level.Tests[_testIndex].Output1.Length > 0;
-			LevelIOMask[3] = level.Tests[_testIndex].Output2.Length > 0;
+			LevelIOMask[0] = level.Tests[TestIndex].Input1.Length > 0;
+			LevelIOMask[1] = level.Tests[TestIndex].Input2.Length > 0;
+			LevelIOMask[2] = level.Tests[TestIndex].Output1.Length > 0;
+			LevelIOMask[3] = level.Tests[TestIndex].Output2.Length > 0;
 		}
 		else
 		{
@@ -105,13 +105,13 @@ public class ColumnManager : MonoBehaviour
 	{
 		GameLevel level = GameController.gameLevel;
 		if (LevelIOMask[0])
-			_importer1.GetComponent<Importer>().Sequence = level.Tests[_testIndex].Input1;
+			_importer1.GetComponent<Importer>().Sequence = level.Tests[TestIndex].Input1;
 		if (LevelIOMask[1])
-			_importer2.GetComponent<Importer>().Sequence = level.Tests[_testIndex].Input2;
+			_importer2.GetComponent<Importer>().Sequence = level.Tests[TestIndex].Input2;
 		if (LevelIOMask[2])
-			_exporter1.GetComponent<Exporter>().ExpectedOutput = level.Tests[_testIndex].Output1;
+			_exporter1.GetComponent<Exporter>().ExpectedOutput = level.Tests[TestIndex].Output1;
 		if (LevelIOMask[3])
-			_exporter2.GetComponent<Exporter>().ExpectedOutput = level.Tests[_testIndex].Output2;
+			_exporter2.GetComponent<Exporter>().ExpectedOutput = level.Tests[TestIndex].Output2;
 	}
 
 	public static bool[] LevelIOMask = new bool[4] {true, true, true, true};
