@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 public enum ArrowSelection
 {
     NONE, IN1, IN2, OUT,
@@ -28,13 +29,16 @@ public class ComponentEditor : MonoBehaviour
     public Color input2Color;
     public Color outputColor;
     public DirectionButton[] directionButtons;
+    private EventSystem eventSystem;
+    private bool[] IOMask;
     private void Awake()
     {
         ioUnderlines = new Image[3];
         ioUnderlines[0] = input1Button.GetComponentsInChildren<Image>()[1];
         ioUnderlines[1] = input2Button.GetComponentsInChildren<Image>()[1];
         ioUnderlines[2] = outputButton.GetComponentsInChildren<Image>()[1];
-
+        eventSystem = GameObject.Find("EventSystem").GetComponent<EventSystem>();
+        IOMask = new bool[3];
     }
     public void UpdateUI()
 	{
@@ -68,12 +72,12 @@ public class ComponentEditor : MonoBehaviour
                 {
                     constEditor.SetActive(false);
                 }
-                bool[] mask = currentlySelectedComponent.GetComponent<Operator>().GetIOMask();
-                if (mask[0])
+                IOMask = currentlySelectedComponent.GetComponent<Operator>().GetIOMask();
+                if (IOMask[0])
                     SetArrowSelection(ArrowSelection.IN1);
-                else if (mask[1])
+                else if (IOMask[1])
                     SetArrowSelection(ArrowSelection.IN2);
-                else if (mask[2])
+                else if (IOMask[2])
                     SetArrowSelection(ArrowSelection.OUT);
                 else
                     SetArrowSelection(ArrowSelection.NONE);
@@ -139,46 +143,58 @@ public class ComponentEditor : MonoBehaviour
     private void CheckForInput()
     {
         //1,2,3 button switching
-        if (Input.GetKeyDown(input1Key))
+        if (Input.GetKeyDown(input1Key) && IOMask[0])
         {
             SetArrowSelection(ArrowSelection.IN1);
         }
-        else if (Input.GetKeyDown(input2Key))
+        else if (Input.GetKeyDown(input2Key) && IOMask[1])
         {
             SetArrowSelection(ArrowSelection.IN2);
         }
-        else if (Input.GetKeyDown(outputKey))
+        else if (Input.GetKeyDown(outputKey) && IOMask[2])
         {
             SetArrowSelection(ArrowSelection.OUT);
         }
-        //Arrow key control
-        if (Input.GetKeyDown(KeyCode.RightArrow))
+        if(!(constEditor.activeSelf && eventSystem.currentSelectedGameObject == constEditor.GetComponentInChildren<InputField>().gameObject))
         {
-            SetArrowDirection(Vector2Int.right);
-        } else if (Input.GetKeyDown(KeyCode.UpArrow))
-        {
-            SetArrowDirection(Vector2Int.up);
-        } else if (Input.GetKeyDown(KeyCode.LeftArrow))
-        {
-            SetArrowDirection(Vector2Int.left);
-        } else if (Input.GetKeyDown(KeyCode.DownArrow))
-        {
-            SetArrowDirection(Vector2Int.down);
+            //Arrow key control
+            if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D))
+            {
+                SetArrowDirection(Vector2Int.right);
+            } else if (Input.GetKeyDown(KeyCode.UpArrow)|| Input.GetKeyDown(KeyCode.W))
+            {
+                SetArrowDirection(Vector2Int.up);
+            } else if (Input.GetKeyDown(KeyCode.LeftArrow)|| Input.GetKeyDown(KeyCode.A))
+            {
+                SetArrowDirection(Vector2Int.left);
+            } else if (Input.GetKeyDown(KeyCode.DownArrow)|| Input.GetKeyDown(KeyCode.S))
+            {
+                SetArrowDirection(Vector2Int.down);
+            }
         }
         //Tab and Shift+Tab
         int x = ((int)selection)-1; //0->IN1,1->IN2,2->OUT
         if (Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.Tab))
         {
-            x -= 1;
-            if (x < 0)
-                x = 2;
+            do
+            {
+                x -= 1;
+                if(x < 0)
+                    x = 2;
+            }
+            while(!IOMask[x]);
             x += 1;
             SetArrowSelection((ArrowSelection)x);
         }
         else if(Input.GetKeyDown(KeyCode.Tab))
         {
-            x += 1;
-            x = x % 3;
+            do
+            {
+                x += 1;
+                if(x >= 3)
+                    x = 0;
+            }
+            while(!IOMask[x]);
             x += 1;
             SetArrowSelection((ArrowSelection)x);
         }
@@ -201,10 +217,9 @@ public class ComponentEditor : MonoBehaviour
     {
         if (b)
         {
-            bool[] mask = currentlySelectedComponent.GetComponent<Operator>().GetIOMask();
-            input1Button.SetActive(mask[0]);
-            input2Button.SetActive(mask[1]);
-            outputButton.SetActive(mask[2]);
+            input1Button.SetActive(IOMask[0]);
+            input2Button.SetActive(IOMask[1]);
+            outputButton.SetActive(IOMask[2]);
             
         } else
         {

@@ -19,7 +19,7 @@ public class ColumnManager : MonoBehaviour
 
 	public static bool[] LevelIOMask = {true, true, true, true};
 
-	private int _testIndex;
+	public static int TestIndex;
 	
 	public void OnGridReady()
 	{
@@ -118,7 +118,7 @@ public class ColumnManager : MonoBehaviour
 			throw new IndexOutOfRangeException("Test index cannot be higher than number of test cases.");
 		}
 
-		_testIndex = newIndex;
+		TestIndex = newIndex;
 
 		UpdateTestSequence();
 		UpdatePaginationDisplay();
@@ -128,27 +128,27 @@ public class ColumnManager : MonoBehaviour
 	{
 		GameLevel level = GameController.gameLevel;
 		if (LevelIOMask[0])
-			_importer1.GetComponent<Importer>().Sequence = level.Tests[_testIndex].Input1;
+			_importer1.GetComponent<Importer>().Sequence = level.Tests[TestIndex].Input1;
 		if (LevelIOMask[1])
-			_importer2.GetComponent<Importer>().Sequence = level.Tests[_testIndex].Input2;
+			_importer2.GetComponent<Importer>().Sequence = level.Tests[TestIndex].Input2;
 		if (LevelIOMask[2])
-			_exporter1.GetComponent<Exporter>().ExpectedOutput = level.Tests[_testIndex].Output1;
+			_exporter1.GetComponent<Exporter>().ExpectedOutput = level.Tests[TestIndex].Output1;
 		if (LevelIOMask[3])
-			_exporter2.GetComponent<Exporter>().ExpectedOutput = level.Tests[_testIndex].Output2;
+			_exporter2.GetComponent<Exporter>().ExpectedOutput = level.Tests[TestIndex].Output2;
 	}
 
 	private void UpdatePaginationDisplay()
 	{
 		TestSelection.text =
-			(GameController.gameLevel.Tests.Length > 0 ? _testIndex + 1 : 0)
+			(GameController.gameLevel.Tests.Length > 0 ? TestIndex + 1 : 0)
 			+ " / "
 			+ GameController.gameLevel.Tests.Length;
-		Left.interactable = _testIndex > 0;
-		Right.interactable = _testIndex < GameController.gameLevel.Tests.Length - 1;
+		Left.interactable = TestIndex > 0;
+		Right.interactable = TestIndex < GameController.gameLevel.Tests.Length - 1;
 	}
 
 	public void OffsetTestIndex(int delta)
 	{
-		SetTestIndex(_testIndex + delta);
+		SetTestIndex(TestIndex + delta);
 	}
 }

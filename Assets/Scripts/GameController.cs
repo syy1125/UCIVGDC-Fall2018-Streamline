@@ -33,6 +33,8 @@ public class GameController : MonoBehaviour {
     public Text levelNameText;
     public Text levelDescription;
     public string levelOverride = "";
+    [HideInInspector]
+    public static bool[] TestCaseCompletion;
 	void Awake(){
         outputColumns = new List<Exporter>();
         gameMenuOpen = false;
@@ -44,6 +46,7 @@ public class GameController : MonoBehaviour {
         gameGrid = Grid.Instance;
         
         LoadSolution();
+        TestCaseCompletion = new bool[gameLevel.Tests.Length];
     }
 
 
@@ -226,6 +229,10 @@ public class GameController : MonoBehaviour {
                 }
                 break;
         }
+        if(TestCaseComplete())
+        {
+            TestCaseCompletion[ColumnManager.TestIndex] = true;
+        }
         if(IsLevelWon())
         {
             levelWon = true;
@@ -242,6 +249,15 @@ public class GameController : MonoBehaviour {
         }
     }
     public bool IsLevelWon()
+    {
+        for(int i = 0 ; i < TestCaseCompletion.Length; i++)
+        {
+            if(!TestCaseCompletion[i])
+                return false;
+        }
+        return true;
+    }
+    public bool TestCaseComplete()
     {
         foreach(Exporter ex in outputColumns)
         {
@@ -305,6 +321,10 @@ public class GameController : MonoBehaviour {
         Wire.GlobalSetUp();
         displayManager.AddAllValueDisplays();
         stepTimer = stepDelay;
+        for(int i = 0; i < TestCaseCompletion.Length; i++)
+        {
+            TestCaseCompletion[i] = false;
+        }
     }
     public void TearDownSimulation()
     {
