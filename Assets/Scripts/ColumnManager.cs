@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class ColumnManager : MonoBehaviour
@@ -13,11 +14,28 @@ public class ColumnManager : MonoBehaviour
 
 	public GameObject ColumnsParent;
 
+	public static bool[] LevelIOMask = {true, true, true, true};
+
 	private int _testIndex;
 
 	public void OnGridReady()
 	{
-		_testIndex = 0;
+		SetTestIndex(0);
+	}
+
+	public void SetTestIndex(int newIndex)
+	{
+		if (newIndex < 0)
+		{
+			throw new IndexOutOfRangeException("Test index cannot be negative.");
+		}
+
+		if (newIndex >= GameController.gameLevel.Tests.Length)
+		{
+			throw new IndexOutOfRangeException("Test index cannot be higher than number of test cases.");
+		}
+
+		_testIndex = newIndex;
 
 		UpdateIOMask();
 		UpdateIOTiles();
@@ -114,5 +132,8 @@ public class ColumnManager : MonoBehaviour
 			_exporter2.GetComponent<Exporter>().ExpectedOutput = level.Tests[_testIndex].Output2;
 	}
 
-	public static bool[] LevelIOMask = new bool[4] {true, true, true, true};
+	public void OffsetTestIndex(int delta)
+	{
+		SetTestIndex(_testIndex + delta);
+	}
 }
