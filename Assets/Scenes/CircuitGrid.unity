@@ -3658,7 +3658,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Master: {fileID: 1824452280}
-  Keybind: v
+  Keybind: g
   Type: 10
 --- !u!1 &543545148
 GameObject:
@@ -6563,7 +6563,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Master: {fileID: 1824452280}
-  Keybind: d
+  Keybind: v
   Type: 7
 --- !u!1 &1047255404
 GameObject:
@@ -8324,7 +8324,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Master: {fileID: 1824452280}
-  Keybind: g
+  Keybind: f
   Type: 3
 --- !u!1 &1419856561
 GameObject:
@@ -9597,7 +9597,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Master: {fileID: 1824452280}
-  Keybind: a
+  Keybind: z
   Type: 4
 --- !u!1 &1659400659
 GameObject:
@@ -10404,7 +10404,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Master: {fileID: 1824452280}
-  Keybind: x
+  Keybind: c
   Type: 6
 --- !u!1 &1771140726
 GameObject:
@@ -11216,7 +11216,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Master: {fileID: 1824452280}
-  Keybind: s
+  Keybind: x
   Type: 5
 --- !u!1 &1978182405
 GameObject:
@@ -11441,7 +11441,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Master: {fileID: 1824452280}
-  Keybind: c
+  Keybind: b
   Type: 8
 --- !u!1 &2035567876
 GameObject:
