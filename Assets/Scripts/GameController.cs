@@ -44,8 +44,6 @@ public class GameController : MonoBehaviour {
         gameGrid = Grid.Instance;
         
         LoadSolution();
-       
-
     }
 
 
@@ -331,13 +329,13 @@ public class GameController : MonoBehaviour {
             }
         }
 
-        if(Grid.LevelIOMask[0])
+        if(ColumnManager.LevelIOMask[0])
             grid.GetGridComponent(0,grid.Height - 1).GetComponent<Importer>().ResetState();
-        if(Grid.LevelIOMask[1])
+        if(ColumnManager.LevelIOMask[1])
             grid.GetGridComponent(0,0).GetComponent<Importer>().ResetState();
-        if(Grid.LevelIOMask[2])
+        if(ColumnManager.LevelIOMask[2])
             grid.GetGridComponent(grid.Width - 1, 0).GetComponent<Exporter>().ResetState();
-        if(Grid.LevelIOMask[3])
+        if(ColumnManager.LevelIOMask[3])
             grid.GetGridComponent(grid.Width - 1, grid.Height - 1).GetComponent<Exporter>().ResetState();
         
         ValueDisplayManager.DestroyAllValueDisplays();

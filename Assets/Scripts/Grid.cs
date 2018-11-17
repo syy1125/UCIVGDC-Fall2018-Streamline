@@ -1,5 +1,6 @@
 ﻿using System.Globalization;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 
@@ -28,13 +29,9 @@ public class Grid : MonoBehaviour
 
     private GameObject[][] _gridComponents;
 
-    private GameObject _importer1;
-    private GameObject _importer2;
-    private GameObject _exporter1;
-    private GameObject _exporter2;
+    public UnityEvent OnGridReady;
 
     public Color SelectedColor;
-    public static bool[] LevelIOMask = new bool[4]{true,true,true,true};
 
     private ColorBlock SelectedButtonColors
     {
@@ -87,28 +84,17 @@ public class Grid : MonoBehaviour
         }
     }
 
-    private void Start () {
-        
+    private void Start ()
+    {
+        // Build grid
         _gridComponents = new GameObject[Width][];
         for (int x = 0; x < Width; x++)
         {
             _gridComponents[x] = new GameObject[Height];
         }
-        GameLevel level = GameController.gameLevel;
-        if(level.Tests.Length > 0){
-            LevelIOMask = new bool[4];
-            LevelIOMask[0] = level.Tests[0].Input1.Length > 0;
-            LevelIOMask[1] = level.Tests[0].Input2.Length > 0;
-            LevelIOMask[2] = level.Tests[0].Output1.Length > 0;
-            LevelIOMask[3] = level.Tests[0].Output2.Length > 0;
-        } else {
-            LevelIOMask = new bool[4]{false,false,false,false};
-        }
-
         BuildGridButtons();
-        SetUpColumnIO();
-        // TODO different test index in subsequent tests
-        InitializeTestSequence(0);
+        
+        OnGridReady.Invoke();
 	}
 
     public bool InGrid(int x, int y)
@@ -208,75 +194,6 @@ public class Grid : MonoBehaviour
                 buttonList[x][y] = newButton;
             }
         }
-    }
-
-    private void SetUpColumnIO()
-    {
-        GameLevel level = GameController.gameLevel;
-        int inputCount = 1;
-        int outputCount = 1;
-        if(LevelIOMask[0])
-        {
-            _importer1 = SetGridComponent(0, Height - 1, importer);
-            _importer1.GetComponent<Text>().text = "I"+ inputCount;
-            _importer1.GetComponent<Importer>().outputColumn = MakeImporterColumn(inputCount++);
-        }
-        if(LevelIOMask[1])
-        {
-            _importer2 = SetGridComponent(0, 0, importer);
-            _importer2.GetComponent<Text>().text = "I"+ inputCount;
-            _importer2.GetComponent<Importer>().outputColumn = MakeImporterColumn(inputCount++);
-        }
-        ColArray[] exporterColumns = null;
-        if(LevelIOMask[2])
-        {
-            _exporter1 = SetGridComponent(Width - 1, 0, exporter);
-            _exporter1.GetComponent<Text>().text = "O"+ outputCount;
-            exporterColumns = MakeExporterColumn(outputCount++);
-            _exporter1.GetComponent<Exporter>().expectedOutputColumn = exporterColumns[0];
-            _exporter1.GetComponent<Exporter>().outputColumn = exporterColumns[1];
-        }
-        if(LevelIOMask[3])
-        {
-            _exporter2 = SetGridComponent(Width - 1, Height - 1, exporter);
-            _exporter2.GetComponent<Text>().text = "O"+ outputCount;
-            exporterColumns = MakeExporterColumn(outputCount++);
-            _exporter2.GetComponent<Exporter>().expectedOutputColumn = exporterColumns[0];
-            _exporter2.GetComponent<Exporter>().outputColumn = exporterColumns[1];
-        }
-    }
-
-    private ColArray MakeImporterColumn(int columnIndex)
-    {
-        GameObject col = Instantiate(
-            Resources.Load<GameObject>("InputColumn"),
-            columnsParent.transform
-        );
-        col.GetComponentsInChildren<Text>()[0].text = "In." + columnIndex;
-        return col.GetComponentInChildren<ColArray>();
-    }
-
-    private ColArray[] MakeExporterColumn(int columnIndex)
-    {
-        GameObject col =  Instantiate(
-            Resources.Load<GameObject>("OutputColumn"),
-            columnsParent.transform
-        );
-        col.GetComponentsInChildren<Text>()[0].text = "Out." + columnIndex;
-        return col.GetComponentsInChildren<ColArray>();
-    }
-
-    private void InitializeTestSequence(int testIndex)
-    {
-        GameLevel level = GameController.gameLevel;
-        if(LevelIOMask[0])
-            _importer1.GetComponent<Importer>().Sequence = level.Tests[testIndex].Input1;
-        if(LevelIOMask[1])
-            _importer2.GetComponent<Importer>().Sequence = level.Tests[testIndex].Input2;
-        if(LevelIOMask[2])
-            _exporter1.GetComponent<Exporter>().expectedOutput = level.Tests[testIndex].Output1;
-        if(LevelIOMask[3])
-            _exporter2.GetComponent<Exporter>().expectedOutput = level.Tests[testIndex].Output2;
     }
     
     public Transform getGridButton(int x, int y)

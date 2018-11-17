@@ -3359,6 +3359,7 @@ GameObject:
   - component: {fileID: 524674850}
   - component: {fileID: 524674852}
   - component: {fileID: 524674851}
+  - component: {fileID: 524674853}
   m_Layer: 0
   m_Name: TableOutline
   m_TagString: Untagged
@@ -3419,6 +3420,22 @@ CanvasRenderer:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 524674849}
   m_CullTransparentMesh: 0
+--- !u!114 &524674853
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 524674849}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ce3185a1621effc4692ef1e6ed996214, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ImporterPrefab: {fileID: 1988762894267732, guid: 197492ecad1a11f4ea53f515b72273bf,
+    type: 2}
+  ExporterPrefab: {fileID: 1988762894267732, guid: 15f868fedf6411848aef3feaac0e2e93,
+    type: 2}
+  ColumnsParent: {fileID: 1548227078}
 --- !u!1 &525730601
 GameObject:
   m_ObjectHideFlags: 0
@@ -5091,6 +5108,22 @@ MonoBehaviour:
   lessThan: {fileID: 1764051842149660, guid: f7765b79adc996640bd128897daa87bf, type: 2}
   importer: {fileID: 1988762894267732, guid: 197492ecad1a11f4ea53f515b72273bf, type: 2}
   exporter: {fileID: 1988762894267732, guid: 15f868fedf6411848aef3feaac0e2e93, type: 2}
+  OnGridReady:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 524674853}
+        m_MethodName: OnGridReady
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
   SelectedColor: {r: 0, g: 1, b: 0, a: 1}
   EditorInstance: {fileID: 1936236315}
 --- !u!1 &897321720
