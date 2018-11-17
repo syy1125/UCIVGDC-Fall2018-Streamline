@@ -35,12 +35,15 @@ public class GameController : MonoBehaviour {
     public string levelOverride = "";
     [HideInInspector]
     public static bool[] TestCaseCompletion;
+    public static Vector2 MouseWorldPosition;
+    private Camera mainCamera;
 	void Awake(){
         outputColumns = new List<Exporter>();
         gameMenuOpen = false;
         clearConfirmationOpen = false;
         simState = SimState.EDITING;
         levelWon = false;
+        mainCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
     }
     void Start () {
         gameGrid = Grid.Instance;
@@ -82,6 +85,7 @@ public class GameController : MonoBehaviour {
     }
 	// Update is called once per frame
 	void Update () {
+        MouseWorldPosition = (Vector2)mainCamera.ScreenToWorldPoint(Input.mousePosition);
         if (mouseDragging && !Input.GetMouseButton(0)) //Left mouse button
         {
             mouseDragging = false;
