@@ -13,6 +13,8 @@ public class LevelListState
 	[CanBeNull]
 	public string Search;
 
+	public bool? Tutorial;
+
 	public int? SelectedIndex;
 }
 
@@ -20,14 +22,14 @@ public class LevelList : StatefulUI<LevelListState>
 {
 	public GameObject LevelsGrid;
 	public GameObject ButtonPrefab;
+	public Button TutorialSwitch;
+	public Button ChallengeSwitch;
 
 	public Color SelectedColor;
 	private ColorBlock _selectedColors;
-	public static int SolutionIndex;
 
 	private void Start()
 	{
-		SolutionIndex = 0;
 		_selectedColors = new ColorBlock()
 		{
 			colorMultiplier = 1,
@@ -37,11 +39,12 @@ public class LevelList : StatefulUI<LevelListState>
 			pressedColor = SelectedColor
 		};
 
-		State = new LevelListState()
+		State = new LevelListState
 		{
 			Levels = new GameLevel[0],
 			Search = "",
-			SelectedIndex = -1
+			SelectedIndex = -1,
+			Tutorial = true
 		};
 
 		ReadLevels();
@@ -76,6 +79,7 @@ public class LevelList : StatefulUI<LevelListState>
 
 		for (int index = 0; index < State.Levels.Length; index++)
 		{
+			if (State.Tutorial.Value == (State.Levels[index].Tutorial == null)) continue;;
 			if (!State.Search.Equals("") && !State.Levels[index].Name.ToLower().Contains(State.Search)) continue;
 
 			GameObject button = Instantiate(ButtonPrefab, LevelsGrid.transform);
@@ -90,6 +94,9 @@ public class LevelList : StatefulUI<LevelListState>
 
 			button.GetComponentInChildren<Text>().text = State.Levels[index].Name;
 		}
+
+		TutorialSwitch.colors = State.Tutorial.Value ? _selectedColors : ColorBlock.defaultColorBlock;
+		ChallengeSwitch.colors = State.Tutorial.Value ? ColorBlock.defaultColorBlock : _selectedColors;
 	}
 
 	public void UpdateSearch(string search)
@@ -97,6 +104,14 @@ public class LevelList : StatefulUI<LevelListState>
 		State = new LevelListState
 		{
 			Search = search.ToLower()
+		};
+	}
+
+	public void UpdateTutorial(bool tutorial)
+	{
+		State = new LevelListState
+		{
+			Tutorial = tutorial
 		};
 	}
 
@@ -117,9 +132,9 @@ public class LevelList : StatefulUI<LevelListState>
 		};
 	}
 
-	public void PlaySelectedLevel(int SolutionIndex)
+	public void PlaySelectedLevel(int solutionIndex)
 	{
-		GameController.solutionNum = SolutionIndex;
+		GameController.solutionNum = solutionIndex;
 		GameLevel level = State.Levels[State.SelectedIndex.Value];
 
 		GameController.gameLevel = level;
