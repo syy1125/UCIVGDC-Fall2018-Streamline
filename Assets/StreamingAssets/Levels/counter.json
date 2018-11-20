@@ -6,7 +6,7 @@
     "You can leverage this feature to build a counter.",
     "Send the output to Out.1."
   ],
-  "Tutorial": "CycleCount",
+  "Tutorial": "Counter",
   "Tests": [
     {
       "Input1": [],
