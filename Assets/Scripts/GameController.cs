@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -89,13 +90,14 @@ public class GameController : MonoBehaviour {
         if (mouseDragging && !Input.GetMouseButton(0)) //Left mouse button
         {
             mouseDragging = false;
+            GridButton.DragType = DragType.NONE;
         }
         switch (simState)
         {
             case SimState.EDITING:
                 if(!gameMenuOpen && Input.GetKeyDown(escapeKey))
                 {  
-                    gameMenuUIGroup.EnableUI();
+                    StartCoroutine(DelayedOpenUI(gameMenuUIGroup));
                 }
                 
               
@@ -400,6 +402,11 @@ public class GameController : MonoBehaviour {
         }
         return result;
     }   
+    private IEnumerator DelayedOpenUI(UIGroup group)
+    {
+        yield return new WaitForEndOfFrame();
+        group.EnableUI();
+    }
     public void GoToMainMenu(bool autoSave)
     {
         if (autoSave)

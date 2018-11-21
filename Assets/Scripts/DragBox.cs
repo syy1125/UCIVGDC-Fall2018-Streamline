@@ -23,6 +23,7 @@ public class DragBox : MonoBehaviour {
 	void Update () {
 		if(Input.GetMouseButtonUp(0))
 		{
+			Grid.Instance.SelectAll(Grid.GetWorldRect(transform));
 			Destroy(gameObject);
 		}
 		Pointer = (Vector2)mainCam.ScreenToViewportPoint(Input.mousePosition);

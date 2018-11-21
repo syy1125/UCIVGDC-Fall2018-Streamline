@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 
 public abstract class Operator : MonoBehaviour {
     public string errorHighlight = "ErrorHighlight";
@@ -11,14 +12,34 @@ public abstract class Operator : MonoBehaviour {
     public static int MAX = 999;
     public static int MIN = -999;
 	public string OpName { get; protected set; }
+	private Graphic TargetGraphic;
+	private Color DefaultColor;
+	public Color SelectedColor = Color.white;
+	private bool _isSelected;
+	public bool IsSelected { 
+		get
+		{
+			return _isSelected;
+		} 
+		set
+		{
+			TargetGraphic.color = (value) ? SelectedColor : DefaultColor;
+			this._isSelected = value;
+		}
+	}
 	
 
 	public abstract void Step();
-
+	protected virtual void Awake()
+	{
+		TargetGraphic = GetComponent<Graphic>();
+		DefaultColor = TargetGraphic.color;
+	}
 	protected virtual void Start() {
 		receiver = GetComponent<Receiver>();
 		transmitter = GetComponent<Transmitter>();
 		OpName = "Operator";
+		
 	}
 
 	protected void GetFromReceiver() {

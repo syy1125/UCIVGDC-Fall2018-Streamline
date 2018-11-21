@@ -2,14 +2,20 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+
+public enum DragType
+{
+    NONE, DRAW, GROUPMOVE
+}
 public class GridButton : MonoBehaviour {
 
     // Use this for initialization
     private Vector2Int position;
     private EventSystem eventSystem;
     public Transform DragBoxPrefab;
-    public static Vector2Int DragBegin;
-    public static Vector2Int DragEnd;
+    public static DragType DragType = DragType.NONE;
+    public static Vector2Int DragBegin = Vector2Int.zero;
+    public static Vector2Int DragEnd = Vector2Int.one;
 
     void Start()
     {
@@ -31,12 +37,26 @@ public class GridButton : MonoBehaviour {
     {
         return position;
     }
-    public void onPress()
+    public void onClick()
     {
         Grid.Instance.onGridButtonPress(position);
-        DragBegin = position;
-        SpawnDragBox();
+        Grid.Instance.ClearGroupSelection();
     }
+    public void onPress()
+    {
+        Grid grid = Grid.Instance;
+        grid.onGridButtonPress(position);
+        DragBegin = position;
+        if(ComponentSelection.selected == ComponentType.NONE && Grid.Instance.GroupSelection.PointSet.Contains(position))
+        {
+            DragType = DragType.GROUPMOVE;
+            Grid.Instance.GroupSelection.GraspPoint = position;
+        } else {
+            Grid.Instance.ClearGroupSelection();
+            SpawnDragBox();
+        }
+    }
+    
     public void OnPointerEnter(PointerEventData data)
     {
         eventSystem.SetSelectedGameObject(gameObject);
@@ -45,13 +65,27 @@ public class GridButton : MonoBehaviour {
     public void DragDraw()
     {
         //place components if this is a valid mouse drag
-        if (!GameController.mouseDragging)
-            return;
-        Grid.Instance.onGridButtonPress(position);
+        if (GameController.mouseDragging && DragType == DragType.DRAW)
+        {
+            DragEnd = position;
+            Grid.Instance.onGridButtonPress(position);
+        }
+    }
+    public void MoveSelectionToButton()
+    {
+        if(GameController.mouseDragging && DragType == DragType.GROUPMOVE)
+        {
+            DragEnd = position;
+            Grid.Instance.MoveGroupSelectionTo(DragEnd);
+            Grid.Instance.Selected = Vector2Int.one*-1;
+        }
+        
     }
     public void BeginDragDraw()
     {
         GameController.mouseDragging = true;
+        if(ComponentSelection.selected != ComponentType.NONE)
+            DragType = DragType.DRAW;
     }
     public void SpawnDragBox()
     {

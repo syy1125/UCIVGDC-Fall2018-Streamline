@@ -47,7 +47,7 @@ public static class SaveData {
     {
         RED, GREEN, BOTH
     }
-    private static void LoadComponent(int[] values)
+    public static void LoadComponent(int[] values)
     {
         Grid grid = Grid.Instance;
         Vector2Int coords = new Vector2Int(values[1], values[2]);
@@ -60,6 +60,7 @@ public static class SaveData {
                 w.Location = coords;
                 w.HasGreen = ((WireType)values[3] == WireType.GREEN || (WireType)values[3] == WireType.BOTH);
                 w.HasRed = ((WireType)values[3] == WireType.RED || (WireType)values[3] == WireType.BOTH);
+                Grid.Instance.UpdateAdjacentWires(w.Location);
                 break;
             case ComponentType.CONSTANT:
                 Constant c = grid.SetGridComponent(coords, grid.constant).GetComponent<Constant>();
