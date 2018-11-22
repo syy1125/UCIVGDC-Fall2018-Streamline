@@ -139,6 +139,6 @@ public class LevelList : StatefulUI<LevelListState>
 
 		GameController.gameLevel = level;
 
-		SceneManager.LoadScene("CircuitGrid");
+		StartCoroutine(GameController.TransitionAndLoad("CircuitGrid"));
 	}
 }

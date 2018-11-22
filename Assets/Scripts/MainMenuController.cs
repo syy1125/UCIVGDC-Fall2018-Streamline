@@ -18,14 +18,21 @@ public class MainMenuController : MonoBehaviour {
 	}
     public void PlayPress()
     {
-        SceneManager.LoadScene(levelSelectScene);
+        StartCoroutine(TransitionAndLoad(levelSelectScene));
     }
     public void CreditsPress()
     {
-        SceneManager.LoadScene(creditsScene);
+        StartCoroutine(TransitionAndLoad(creditsScene));
     }
     public void QuitPress()
     {
         Application.Quit();
+    }
+    private IEnumerator TransitionAndLoad(string sceneName)
+    {
+        ColorLerp c = GameObject.FindGameObjectWithTag("Transition").GetComponent<ColorLerp>();
+        c.SetActivated(true);
+        yield return new WaitForSeconds(c.ChangeDuration);
+        SceneManager.LoadScene(levelSelectScene);
     }
 }

@@ -7,6 +7,7 @@ TagManager:
   - Wire
   - Operator
   - Grid
+  - Transition
   layers:
   - Default
   - TransparentFX

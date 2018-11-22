@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-
+using UnityEngine.EventSystems;
 public enum SimState
 {
     EDITING,RUNNING,PAUSED,CRASHED
@@ -411,12 +411,20 @@ public class GameController : MonoBehaviour {
     {
         if (autoSave)
             SaveGame();
-        SceneManager.LoadScene("MainMenu");
+        StartCoroutine(TransitionAndLoad("MainMenu"));
     }
     public void GoToLevelSelect(bool autoSave)
     {
         if(autoSave)
             SaveGame();
-        SceneManager.LoadScene("LevelSelect");
+        StartCoroutine(TransitionAndLoad("LevelSelect"));
+    }
+    public static IEnumerator TransitionAndLoad(string sceneName)
+    {
+        ColorLerp c = GameObject.FindGameObjectWithTag("Transition").GetComponent<ColorLerp>();
+        c.SetActivated(true);
+        GameObject.Find("EventSystem").GetComponent<EventSystem>().enabled = false;
+        yield return new WaitForSeconds(c.ChangeDuration);
+        SceneManager.LoadScene(sceneName);
     }
 }
