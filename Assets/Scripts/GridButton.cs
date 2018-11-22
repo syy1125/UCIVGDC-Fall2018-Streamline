@@ -53,7 +53,6 @@ public class GridButton : MonoBehaviour {
             Grid.Instance.GroupSelection.GraspPoint = position;
         } else {
             Grid.Instance.ClearGroupSelection();
-            SpawnDragBox();
         }
     }
     
@@ -86,6 +85,10 @@ public class GridButton : MonoBehaviour {
         GameController.mouseDragging = true;
         if(ComponentSelection.selected != ComponentType.NONE)
             DragType = DragType.DRAW;
+        else if(DragType == DragType.NONE)
+        {
+            SpawnDragBox();
+        }
     }
     public void SpawnDragBox()
     {

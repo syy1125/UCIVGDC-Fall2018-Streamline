@@ -343,8 +343,10 @@ public class Grid : MonoBehaviour
         foreach(Vector2Int point in GroupSelection.PointSet)
         {
             g = GetGridComponent(point);
-            if(IsOperator(g))
+            if (IsOperator(g))
                 GetGridComponent(point).GetComponent<Operator>().IsSelected = true;
+            else if (IsWire(g))
+                GetGridComponent(point).GetComponent<Wire>().IsSelected = true;
         }
     }
     public void ClearGroupSelection()
@@ -353,6 +355,8 @@ public class Grid : MonoBehaviour
         {
             if(IsOperator(GetGridComponent(point)))
                 GetGridComponent(point).GetComponent<Operator>().IsSelected = false;
+            else if(IsWire(GetGridComponent(point)))
+                GetGridComponent(point).GetComponent<Wire>().IsSelected = false;
         }
         GroupSelection.PointSet.Clear();
     }
@@ -396,6 +400,9 @@ public class Grid : MonoBehaviour
                 if(IsOperator(GetGridComponent(pos)))
                 {
                     GetGridComponent(pos).GetComponent<Operator>().IsSelected = true;
+                } else if (IsWire(GetGridComponent(pos)))
+                {
+                    GetGridComponent(pos).GetComponent<Wire>().IsSelected = true;
                 }
 
             }

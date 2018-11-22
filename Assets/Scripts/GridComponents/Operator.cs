@@ -14,7 +14,7 @@ public abstract class Operator : MonoBehaviour {
 	public string OpName { get; protected set; }
 	private Graphic TargetGraphic;
 	private Color DefaultColor;
-	public Color SelectedColor = Color.white;
+    public Color SelectedColorModifier;
 	private bool _isSelected;
 	public bool IsSelected { 
 		get
@@ -23,7 +23,7 @@ public abstract class Operator : MonoBehaviour {
 		} 
 		set
 		{
-			TargetGraphic.color = (value) ? SelectedColor : DefaultColor;
+			TargetGraphic.color = (value) ? (DefaultColor+SelectedColorModifier) : DefaultColor;
 			this._isSelected = value;
 		}
 	}
