@@ -1,12 +1,12 @@
 {
   "Name": "3. Counter",
+  "Tutorial": "Counter",
   "Description": [
     "Streamline operators have delays.",
     "That is, the computational result gets sent out 1 cycle later than when the inputs come in.",
     "You can leverage this feature to build a counter.",
     "Send the output to Out.1."
   ],
-  "Tutorial": "Counter",
   "Tests": [
     {
       "Input1": [],

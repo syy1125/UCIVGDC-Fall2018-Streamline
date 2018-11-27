@@ -41,7 +41,7 @@ public class Tutorial : MonoBehaviour
 	{
 		string[] completedTutorials = PlayerPrefs.GetString("TutorialProgress", "").Split(':');
 		if (
-			GameController.gameLevel.Name.Equals(TutorialName)
+			!GameController.gameLevel.Tutorial.Equals(TutorialName)
 			|| Array.BinarySearch(completedTutorials, TutorialName) >= 0
 		)
 		{
