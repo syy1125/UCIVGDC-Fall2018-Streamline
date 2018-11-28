@@ -1410,8 +1410,8 @@ MonoBehaviour:
   - OutlinePosition: {fileID: 0}
     HintText: Use the component editor to set the Constant operator to output a signal
       of 1 upward.
-    TextOffset: {x: 0, y: -1}
-    TextAlign: 0
+    TextOffset: {x: -1, y: 0}
+    TextAlign: 5
   - OutlinePosition: {fileID: 0}
     HintText: Connect to output.
     TextOffset: {x: 0, y: 1}
@@ -8425,8 +8425,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.27187487, y: 0.16922393}
   m_AnchorMax: {x: 0.7281249, y: 0.9787761}
-  m_AnchoredPosition: {x: -227.98, y: -315.2}
-  m_SizeDelta: {x: -614.15, y: -618.9}
+  m_AnchoredPosition: {x: -183.49, y: -315.2}
+  m_SizeDelta: {x: -525.18, y: -618.9}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1123394059
 GameObject:
@@ -13019,13 +13019,17 @@ MonoBehaviour:
     TextOffset: {x: 1, y: 0}
     TextAlign: 3
   - OutlinePosition: {fileID: 0}
-    HintText: Connect In.2 to the Add operator.
-    TextOffset: {x: -1, y: 1}
-    TextAlign: 8
+    HintText: 'Connect In.2 to
+
+      the Add operator.'
+    TextOffset: {x: 1, y: 0}
+    TextAlign: 3
   - OutlinePosition: {fileID: 0}
-    HintText: Connect In.2 to the Add operator.
-    TextOffset: {x: -1, y: 0}
-    TextAlign: 5
+    HintText: 'Connect In.2 to
+
+      the Add operator.'
+    TextOffset: {x: 1, y: 0}
+    TextAlign: 3
   - OutlinePosition: {fileID: 0}
     HintText: Now choose the select tool.
     TextOffset: {x: -1, y: 0}
@@ -13037,8 +13041,8 @@ MonoBehaviour:
   - OutlinePosition: {fileID: 0}
     HintText: Use the component editor to configure Add operator's input and output
       directions.
-    TextOffset: {x: 0, y: 1}
-    TextAlign: 0
+    TextOffset: {x: -1, y: 0}
+    TextAlign: 5
   - OutlinePosition: {fileID: 0}
     HintText: 'I''ll leave the division to you. Enjoy!
 
