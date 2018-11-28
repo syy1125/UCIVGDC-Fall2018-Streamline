@@ -409,6 +409,7 @@ MonoBehaviour:
     Down: {fileID: 1631586333849812}
     Left: {fileID: 1635442024146480}
     Right: {fileID: 1866869804910930}
+  SelectedColorModifier: {r: 0.6415094, g: 0.6415094, b: 0.6415094, a: 1}
   Location: {x: 0, y: 0}
 --- !u!114 &114782412980624116
 MonoBehaviour:

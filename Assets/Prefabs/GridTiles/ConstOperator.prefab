@@ -71,6 +71,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   errorHighlight: ErrorHighlight
+  SelectedColorModifier: {r: 0.6415094, g: 0.6415094, b: 0.6415094, a: 1}
   number: 0
 --- !u!114 &114759989710034120
 MonoBehaviour:
@@ -84,7 +85,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_EffectColor: {r: 0, g: 0, b: 0, a: 1}
-  m_EffectDistance: {x: 1, y: -1}
+  m_EffectDistance: {x: 2, y: -2}
   m_UseGraphicAlpha: 1
 --- !u!114 &114806932854863304
 MonoBehaviour:

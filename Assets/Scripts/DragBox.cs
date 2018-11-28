@@ -12,6 +12,7 @@ public class DragBox : MonoBehaviour {
 	private RectTransform rectTransform;
 	private Vector2 LowerLeftBounds = Vector2.zero;
 	private Vector2 UpperRightBounds = Vector3.one;
+    private Rect bounds;
 	void Awake () {
 		mainCam = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
 		Pointer = (Vector2)mainCam.ScreenToWorldPoint(Input.mousePosition);
@@ -23,9 +24,12 @@ public class DragBox : MonoBehaviour {
 	void Update () {
 		if(Input.GetMouseButtonUp(0))
 		{
+			Grid.Instance.SelectAll(Grid.GetWorldRect(transform));
 			Destroy(gameObject);
 		}
-		Pointer = (Vector2)mainCam.ScreenToViewportPoint(Input.mousePosition);
+		Pointer = mainCam.ScreenToWorldPoint(Input.mousePosition);
+        Pointer = new Vector2(Mathf.Clamp(Pointer.x,bounds.xMin,bounds.xMax),Mathf.Clamp(Pointer.y,bounds.yMax,bounds.yMin));
+        Pointer = mainCam.WorldToViewportPoint(Pointer);
 		SetRectPos(Origin,Pointer);
 		if(Pointer.x > Origin.x)
 		{
@@ -77,11 +81,7 @@ public class DragBox : MonoBehaviour {
 	}
 	public void SetBounds(RectTransform newBounds)
 	{
-		/*
-		LowerLeftBounds = (Vector2)mainCam.WorldToViewportPoint(new Vector2(newBounds.rect.x, newBounds.rect.y+newBounds.rect.height));
-		UpperRightBounds = (Vector2)mainCam.WorldToViewportPoint(new Vector2(newBounds.rect.x+newBounds.rect.width, newBounds.rect.y));
-		Debug.Log(newBounds.rect);
-		*/
+        bounds = Grid.GetWorldRect(newBounds.transform);
 	}
 
 

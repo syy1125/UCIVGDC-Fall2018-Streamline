@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-
+using UnityEngine.UI;
 public class Wire : MonoBehaviour
 {
 	[Serializable]
@@ -60,11 +60,38 @@ public class Wire : MonoBehaviour
 			UpdateTexture(GreenParts, GreenWireConnects);
 		}
 	}
-
+    public Color SelectedColorModifier; //This color is added to regular wire color when selected
+    private Color[] DefaultColor;
+    private bool _isSelected;
+    public bool IsSelected
+    {
+        get
+        {
+            return _isSelected;
+        }
+        set
+        {
+            switch(value)
+            {
+                case true:
+                    SetColor(RedParts, DefaultColor[0] + SelectedColorModifier);
+                    SetColor(GreenParts, DefaultColor[1] + SelectedColorModifier);
+                    break;
+                case false:
+                    SetColor(RedParts, DefaultColor[0]);
+                    SetColor(GreenParts, DefaultColor[1]);
+                    break;
+            }
+            this._isSelected = value;
+        }
+    }
 	[HideInInspector]
 	public Vector2Int Location;
-
-	private void Start()
+    private void Awake()
+    {
+        DefaultColor = new Color[2] { RedParts.Center.GetComponent<Image>().color, GreenParts.Center.GetComponent<Image>().color };
+    }
+    private void Start()
 	{
 		_redNetwork = null;
 		_greenNetwork = null;
@@ -255,8 +282,15 @@ public class Wire : MonoBehaviour
 		_redNetwork = null;
 		_greenNetwork = null;
 	}
-
-	public string SaveString()
+    public void SetColor(Parts parts, Color c)
+    {
+        parts.Center.GetComponent<Image>().color = c;
+        parts.Up.GetComponent<Image>().color = c;
+        parts.Right.GetComponent<Image>().color = c;
+        parts.Down.GetComponent<Image>().color = c;
+        parts.Left.GetComponent<Image>().color = c;
+    }
+    public string SaveString()
 	{
 		string result = "";
 		result += "" + (int) ComponentType.REDWIRE + "\t"; //can be either REDWIRE or GREENWIRE

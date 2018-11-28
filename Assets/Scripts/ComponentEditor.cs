@@ -210,8 +210,11 @@ public class ComponentEditor : MonoBehaviour
     }
     private void DisableStart(GameObject g)
     {
-        if(g.GetComponent<Operator>() != null)
+        if (g.GetComponent<Operator>() != null)
+        {
+            g.GetComponent<Text>().color = Color.red;
             g.GetComponent<Operator>().enabled = false;
+        }
     }
     private void SetButtonsActive(bool b)
     {

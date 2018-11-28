@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-
+using UnityEngine.EventSystems;
 public enum SimState
 {
     EDITING,RUNNING,PAUSED,CRASHED
@@ -89,13 +90,14 @@ public class GameController : MonoBehaviour {
         if (mouseDragging && !Input.GetMouseButton(0)) //Left mouse button
         {
             mouseDragging = false;
+            GridButton.DragType = DragType.NONE;
         }
         switch (simState)
         {
             case SimState.EDITING:
                 if(!gameMenuOpen && Input.GetKeyDown(escapeKey))
                 {  
-                    gameMenuUIGroup.EnableUI();
+                    StartCoroutine(DelayedOpenUI(gameMenuUIGroup));
                 }
                 
               
@@ -400,16 +402,29 @@ public class GameController : MonoBehaviour {
         }
         return result;
     }   
+    private IEnumerator DelayedOpenUI(UIGroup group)
+    {
+        yield return new WaitForEndOfFrame();
+        group.EnableUI();
+    }
     public void GoToMainMenu(bool autoSave)
     {
         if (autoSave)
             SaveGame();
-        SceneManager.LoadScene("MainMenu");
+        StartCoroutine(TransitionAndLoad("MainMenu"));
     }
     public void GoToLevelSelect(bool autoSave)
     {
         if(autoSave)
             SaveGame();
-        SceneManager.LoadScene("LevelSelect");
+        StartCoroutine(TransitionAndLoad("LevelSelect"));
+    }
+    public static IEnumerator TransitionAndLoad(string sceneName)
+    {
+        ColorLerp c = GameObject.FindGameObjectWithTag("Transition").GetComponent<ColorLerp>();
+        c.SetActivated(true);
+        GameObject.Find("EventSystem").GetComponent<EventSystem>().enabled = false;
+        yield return new WaitForSeconds(c.ChangeDuration);
+        SceneManager.LoadScene(sceneName);
     }
 }
