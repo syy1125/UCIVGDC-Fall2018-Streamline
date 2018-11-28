@@ -11,9 +11,9 @@ public class Tutorial : MonoBehaviour
 	private TutorialStep[] _steps;
 
 	private int _index;
-	private GameObject _outline;
-	private GameObject _hintText;
-	private TutorialManager _manager;
+	protected GameObject Outline;
+	protected GameObject HintText;
+	protected TutorialManager Manager;
 
 	private Coroutine _outlineTransition;
 	private Coroutine _textTransition;
@@ -49,21 +49,21 @@ public class Tutorial : MonoBehaviour
 
 		_index = -1;
 
-		_outline = Instantiate(Resources.Load<GameObject>("TutorialOutline"), transform);
-		_hintText = Instantiate(Resources.Load<GameObject>("TutorialText"), transform);
-		_manager = transform.parent.GetComponent<TutorialManager>();
+		Outline = Instantiate(Resources.Load<GameObject>("TutorialOutline"), transform);
+		HintText = Instantiate(Resources.Load<GameObject>("TutorialText"), transform);
+		Manager = transform.parent.GetComponent<TutorialManager>();
 		
 		Next();
 	}
 
 	private void UpdateHintText()
 	{
-		RectTransform t = _hintText.GetComponent<RectTransform>();
+		RectTransform t = HintText.GetComponent<RectTransform>();
 		t.SetParent(transform.GetChild(_index).GetComponent<RectTransform>());
 		MatchTransform(t, _steps[_index].HintText.rectTransform);
 
-		_hintText.GetComponent<Text>().alignment = _steps[_index].HintText.alignment;
-		_hintText.GetComponent<Text>().text = _steps[_index].HintText.text;
+		HintText.GetComponent<Text>().alignment = _steps[_index].HintText.alignment;
+		HintText.GetComponent<Text>().text = _steps[_index].HintText.text;
 	}
 
 	protected void Next()
@@ -98,7 +98,7 @@ public class Tutorial : MonoBehaviour
 
 	private IEnumerator MoveOutline()
 	{
-		RectTransform t = _outline.GetComponent<RectTransform>();
+		RectTransform t = Outline.GetComponent<RectTransform>();
 
 		RectTransform start = Instantiate(Resources.Load<GameObject>("TutorialOutline"), transform)
 			.GetComponent<RectTransform>();
@@ -108,9 +108,9 @@ public class Tutorial : MonoBehaviour
 
 		float startTime = Time.time;
 
-		while (Time.time - startTime < _manager.MoveDuration)
+		while (Time.time - startTime < Manager.MoveDuration)
 		{
-			float proportion = _manager.OutlineCurve.Evaluate((Time.time - startTime) / _manager.MoveDuration);
+			float proportion = Manager.OutlineCurve.Evaluate((Time.time - startTime) / Manager.MoveDuration);
 
 			t.anchorMin = Vector2.Lerp(start.anchorMin, finish.anchorMin, proportion);
 			t.anchorMax = Vector2.Lerp(start.anchorMax, finish.anchorMax, proportion);
@@ -126,35 +126,35 @@ public class Tutorial : MonoBehaviour
 
 	private IEnumerator MoveText()
 	{
-		Text hintText = _hintText.GetComponent<Text>();
+		Text hintText = HintText.GetComponent<Text>();
 
 		float startTime = Time.time;
 
 		// Fade out
-		while (Time.time - startTime < _manager.TextFadeDuration)
+		while (Time.time - startTime < Manager.TextFadeDuration)
 		{
 			hintText.color = new Color(
 				hintText.color.r,
 				hintText.color.g,
 				hintText.color.b,
-				1 - (Time.time - startTime) / _manager.TextFadeDuration
+				1 - (Time.time - startTime) / Manager.TextFadeDuration
 			);
 
 			yield return null;
 		}
 
-		yield return new WaitForSeconds(_manager.MoveDuration - 2 * _manager.TextFadeDuration);
+		yield return new WaitForSeconds(Manager.MoveDuration - 2 * Manager.TextFadeDuration);
 
 		UpdateHintText();
 
 		// Fade in
-		while (Time.time - startTime < _manager.MoveDuration)
+		while (Time.time - startTime < Manager.MoveDuration)
 		{
 			hintText.color = new Color(
 				hintText.color.r,
 				hintText.color.g,
 				hintText.color.b,
-				1 - (startTime + _manager.MoveDuration - Time.time) / _manager.TextFadeDuration
+				1 - (startTime + Manager.MoveDuration - Time.time) / Manager.TextFadeDuration
 			);
 
 			yield return null;
