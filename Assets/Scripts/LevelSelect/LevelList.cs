@@ -44,7 +44,7 @@ public class LevelList : StatefulUI<LevelListState>
 			Levels = new GameLevel[0],
 			Search = "",
 			SelectedIndex = -1,
-			Tutorial = true
+			Tutorial = PlayerPrefs.GetInt("LevelList.Tutorial", 0) == 1
 		};
 
 		ReadLevels();
@@ -113,6 +113,7 @@ public class LevelList : StatefulUI<LevelListState>
 		{
 			Tutorial = tutorial
 		};
+		PlayerPrefs.SetInt("LevelList.Tutorial", tutorial ? 1 : 0);
 	}
 
 	private void UpdateSelection(int index)
