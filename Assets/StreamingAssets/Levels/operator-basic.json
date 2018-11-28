@@ -8,15 +8,23 @@
     "You have only a few operators to work with in Streamline. Among those are the four basic mathematical operators.",
     "Note that, since all signal levels are integers, the division operator truncates results.",
     "To complete this level,\n",
-    "Send In.1 * In.2 to Out.1.\n",
-    "Send (In.1 + In.2) / 2 to Out.2."
+    "Send (In.1 + In.2) / 2 to Out.1."
   ],
   "Tests": [
     {
       "Input1": [4],
       "Input2": [8],
-      "Output1": [32],
-      "Output2": [6]
+      "Output1": [6]
+    },
+    {
+      "Input1": [15],
+      "Input2": [21],
+      "Output1": [18]
+    },
+    {
+      "Input1": [41],
+      "Input2": [-75],
+      "Output1": [-17]
     }
   ]
 }

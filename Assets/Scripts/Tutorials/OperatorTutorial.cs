@@ -9,105 +9,46 @@ public class OperatorTutorial : Tutorial
 	{
 		Grid grid = Grid.Instance;
 
-		yield return WaitForSelection(ComponentType.MULT);
-		Next();
-
-		yield return new WaitUntil(() =>
-			grid.GetGridComponent(0, 1) != null
-			&& grid.GetGridComponent(0, 1).GetComponent<Multiply>() != null);
-		Next();
-
-		float startTime = Time.time;
-		yield return new WaitUntil(() => Time.time - startTime > 10 || Input.GetKeyDown(KeyCode.Return));
-		Next();
-
-		yield return WaitForSelection(ComponentType.REDWIRE);
-		Next();
-
-		yield return WaitForWires(new[]
-		{
-			new Vector2Int(0, 2),
-			new Vector2Int(0, 3),
-			new Vector2Int(0, 4),
-			new Vector2Int(0, 5),
-			new Vector2Int(0, 6),
-		}, wire => wire.HasRed);
-		Next();
-
-		yield return WaitForWires(new[]
-		{
-			new Vector2Int(1, 1),
-			new Vector2Int(2, 1),
-			new Vector2Int(3, 1),
-			new Vector2Int(4, 1),
-			new Vector2Int(5, 1),
-			new Vector2Int(6, 1),
-			new Vector2Int(7, 1),
-		}, wire => wire.HasRed);
-		Next();
-
+		// 1
 		yield return WaitForSelection(ComponentType.ADD);
 		Next();
 
+		// 2
 		yield return new WaitUntil(() =>
-			grid.GetGridComponent(2, 7) != null
-			&& grid.GetGridComponent(2, 7).GetComponent<Add>() != null);
+			grid.GetGridComponent(1, 0) != null
+			&& grid.GetGridComponent(1, 0).GetComponent<Add>() != null);
 		Next();
 
-		yield return WaitForSelection(ComponentType.GREENWIRE);
+		// 3
+		yield return WaitForSelection(ComponentType.REDWIRE);
 		Next();
 
-		yield return new WaitUntil(() =>
-			grid.IsWire(grid.GetGridComponent(1, 7))
-			&& grid.GetGridComponent(1, 7).GetComponent<Wire>().HasGreen);
-		Next();
-
+		// 4
 		yield return WaitForWires(new[]
 		{
-			new Vector2Int(1, 0),
-			new Vector2Int(2, 0),
-		}, wire => wire.HasGreen);
+			new Vector2Int(1, 1),
+			new Vector2Int(1, 2),
+			new Vector2Int(1, 3),
+			new Vector2Int(1, 4),
+			new Vector2Int(1, 5),
+			new Vector2Int(1, 6),
+			new Vector2Int(1, 7),
+		}, wire => wire.HasRed);
 		Next();
-
-		yield return WaitForWires(new[]
-		{
-			new Vector2Int(2, 1),
-			new Vector2Int(2, 2),
-			new Vector2Int(2, 3),
-			new Vector2Int(2, 4),
-			new Vector2Int(2, 5),
-			new Vector2Int(2, 6),
-		}, wire => wire.HasGreen);
-		Next();
-
+		
+		// 5
 		yield return WaitForSelection(ComponentType.NONE);
 		Next();
 		
-		yield return new WaitUntil(() => grid.Selected == new Vector2Int(2,7));
-		Next();
-		
-		
+		// 6
 		yield return new WaitUntil(() =>
-		{
-			GameObject addTile = grid.GetGridComponent(2, 7);
-			if (addTile == null) return false;
-			Add addOp = addTile.GetComponent<Add>();
-			if (addOp == null) return false;
-
-			Transmitter t = addTile.GetComponent<Transmitter>();
-			Receiver r = addTile.GetComponent<Receiver>();
-
-			if (t.OutputDirection != Vector2Int.right) return false;
-
-			if (r.InputDirection1 == Vector2Int.left && r.InputDirection2 == Vector2Int.down) return true;
-			if (r.InputDirection1 == Vector2Int.down && r.InputDirection2 == Vector2Int.left) return true;
-
-			return false;
-		});
+			grid.GetGridComponent(1, 0) != null
+			&& grid.GetGridComponent(1, 0).GetComponent<Add>() != null
+			&& grid.Selected == new Vector2Int(1, 0));
 		Next();
-
-		startTime = Time.time;
-		yield return new WaitUntil(() => Time.time - startTime > 10 || Input.GetKeyDown(KeyCode.Return));
+		
+		// 7
+		yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Return));
 		Next();
 	}
 

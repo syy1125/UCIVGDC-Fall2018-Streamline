@@ -2,27 +2,13 @@
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Analytics;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class Tutorial : MonoBehaviour
 {
-	[Serializable]
-	public class Step
-	{
-		[HideInInspector]
-		public RectTransform OutlinePosition;
-
-		[TextArea]
-		public string HintText;
-
-		public Vector2Int TextOffset;
-
-		[FormerlySerializedAs("Anchor")]
-		public TextAnchor TextAlign;
-	}
-
-	public Step[] Steps;
+	private TutorialStep[] _steps;
 
 	private int _index;
 	private GameObject _outline;
@@ -49,33 +35,42 @@ public class Tutorial : MonoBehaviour
 			return;
 		}
 
+		_steps = new TutorialStep[transform.childCount];
+
 		for (int i = 0; i < transform.childCount; i++)
 		{
-			Steps[i].OutlinePosition = transform.GetChild(i).GetComponent<RectTransform>();
+			Transform child = transform.GetChild(i);
+			_steps[i] = child.GetComponent<TutorialStep>();
+			foreach (Transform t in child)
+			{
+				t.gameObject.SetActive(false);
+			}
 		}
 
+		_index = 0;
+
 		_outline = Instantiate(Resources.Load<GameObject>("TutorialOutline"), transform);
-		_outline.GetComponent<RectTransform>().anchorMin = Steps[0].OutlinePosition.anchorMin;
-		_outline.GetComponent<RectTransform>().anchorMax = Steps[0].OutlinePosition.anchorMax;
-		_outline.GetComponent<RectTransform>().pivot = Steps[0].OutlinePosition.pivot;
-		_outline.GetComponent<RectTransform>().offsetMin = Steps[0].OutlinePosition.offsetMin;
-		_outline.GetComponent<RectTransform>().offsetMax = Steps[0].OutlinePosition.offsetMax;
+		MatchTransform(_outline.GetComponent<RectTransform>(), _steps[_index].Position);
 
 		_hintText = Instantiate(Resources.Load<GameObject>("TutorialText"), transform);
-		ResolveTextTransform(
-			_hintText.GetComponent<RectTransform>(),
-			_outline.GetComponent<RectTransform>(),
-			Steps[0].TextOffset
-		);
-		_hintText.GetComponent<Text>().alignment = Steps[0].TextAlign;
-		_hintText.GetComponent<Text>().text = Steps[0].HintText;
+		UpdateHintText();
 
 		_manager = transform.parent.GetComponent<TutorialManager>();
 	}
 
+	private void UpdateHintText()
+	{
+		RectTransform t = _hintText.GetComponent<RectTransform>();
+		t.parent = transform.GetChild(_index).GetComponent<RectTransform>();
+		MatchTransform(t, _steps[_index].HintText.rectTransform);
+
+		_hintText.GetComponent<Text>().alignment = _steps[_index].HintText.alignment;
+		_hintText.GetComponent<Text>().text = _steps[_index].HintText.text;
+	}
+
 	protected void Next()
 	{
-		if (++_index < Steps.Length)
+		if (++_index < _steps.Length)
 		{
 			UpdateUI();
 		}
@@ -107,8 +102,11 @@ public class Tutorial : MonoBehaviour
 	{
 		RectTransform t = _outline.GetComponent<RectTransform>();
 
-		RectTransform start = Steps[_index - 1].OutlinePosition;
-		RectTransform finish = Steps[_index].OutlinePosition;
+		RectTransform start = Instantiate(Resources.Load<GameObject>("TutorialOutline"), transform)
+			.GetComponent<RectTransform>();
+		start.gameObject.SetActive(false);
+		MatchTransform(start, t);
+		RectTransform finish = _steps[_index].Position;
 
 		float startTime = Time.time;
 
@@ -124,6 +122,8 @@ public class Tutorial : MonoBehaviour
 
 			yield return null;
 		}
+		
+		Destroy(start.gameObject);
 	}
 
 	private IEnumerator MoveText()
@@ -147,14 +147,7 @@ public class Tutorial : MonoBehaviour
 
 		yield return new WaitForSeconds(_manager.MoveDuration - 2 * _manager.TextFadeDuration);
 
-		RectTransform outline = Steps[_index].OutlinePosition;
-		Vector2Int textOffset = Steps[_index].TextOffset;
-
-		RectTransform t = _hintText.GetComponent<RectTransform>();
-		ResolveTextTransform(t, outline, textOffset);
-
-		hintText.text = Steps[_index].HintText;
-		hintText.alignment = Steps[_index].TextAlign;
+		UpdateHintText();
 
 		// Fade in
 		while (Time.time - startTime < _manager.MoveDuration)
@@ -170,44 +163,15 @@ public class Tutorial : MonoBehaviour
 		}
 	}
 
-	private static void ResolveTextTransform(
-		RectTransform textTransform,
-		RectTransform outlinePosition,
-		Vector2Int textOffset
+	private static void MatchTransform(
+		RectTransform lvalue,
+		RectTransform rvalue
 	)
 	{
-		Debug.Log(textOffset);
-		
-		textTransform.anchorMin = outlinePosition.anchorMin;
-		textTransform.anchorMax = outlinePosition.anchorMax;
-		textTransform.pivot = outlinePosition.pivot;
-		
-		textTransform.offsetMin = outlinePosition.offsetMin + textOffset * outlinePosition.rect.size;
-		
-		if (textOffset.x < 0)
-		{
-			Debug.Log("x<0");
-			textTransform.offsetMin -= new Vector2(outlinePosition.rect.size.x * 9, 0);
-		}
-
-		if (textOffset.y < 0)
-		{
-			Debug.Log("y<0");
-			textTransform.offsetMin -= new Vector2(0, outlinePosition.rect.size.y * 9);
-		}
-
-		textTransform.offsetMax = outlinePosition.offsetMax + textOffset * outlinePosition.rect.size;
-		
-		if (textOffset.x > 0)
-		{
-			Debug.Log("x>0");
-			textTransform.offsetMax += new Vector2(outlinePosition.rect.size.x * 9, 0);
-		}
-
-		if (textOffset.y > 0)
-		{
-			Debug.Log("y>0");
-			textTransform.offsetMax += new Vector2(0, outlinePosition.rect.size.y * 9);
-		}
+		lvalue.anchorMin = rvalue.anchorMin;
+		lvalue.anchorMax = rvalue.anchorMax;
+		lvalue.pivot = rvalue.pivot;
+		lvalue.offsetMin = rvalue.offsetMin;
+		lvalue.offsetMax = rvalue.offsetMax;
 	}
 }
