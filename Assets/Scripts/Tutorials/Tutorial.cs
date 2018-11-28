@@ -47,21 +47,19 @@ public class Tutorial : MonoBehaviour
 			}
 		}
 
-		_index = 0;
+		_index = -1;
 
 		_outline = Instantiate(Resources.Load<GameObject>("TutorialOutline"), transform);
-		MatchTransform(_outline.GetComponent<RectTransform>(), _steps[_index].Position);
-
 		_hintText = Instantiate(Resources.Load<GameObject>("TutorialText"), transform);
-		UpdateHintText();
-
 		_manager = transform.parent.GetComponent<TutorialManager>();
+		
+		Next();
 	}
 
 	private void UpdateHintText()
 	{
 		RectTransform t = _hintText.GetComponent<RectTransform>();
-		t.parent = transform.GetChild(_index).GetComponent<RectTransform>();
+		t.SetParent(transform.GetChild(_index).GetComponent<RectTransform>());
 		MatchTransform(t, _steps[_index].HintText.rectTransform);
 
 		_hintText.GetComponent<Text>().alignment = _steps[_index].HintText.alignment;
