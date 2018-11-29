@@ -11,9 +11,9 @@ public class Tutorial : MonoBehaviour
 	private TutorialStep[] _steps;
 
 	private int _index;
-	protected GameObject Outline;
-	protected GameObject HintText;
-	protected TutorialManager Manager;
+	protected GameObject Outline { get; private set; }
+	protected GameObject HintText { get; private set; }
+	protected TutorialManager Manager { get; private set; }
 
 	private Coroutine _outlineTransition;
 	private Coroutine _textTransition;
@@ -27,7 +27,8 @@ public class Tutorial : MonoBehaviour
 	{
 		string[] completedTutorials = PlayerPrefs.GetString("TutorialProgress", "").Split(':');
 		if (
-			!GameController.gameLevel.Tutorial.Equals(TutorialName)
+			GameController.gameLevel == null
+			|| !GameController.gameLevel.Tutorial.Equals(TutorialName)
 			|| Array.BinarySearch(completedTutorials, TutorialName) >= 0
 		)
 		{
