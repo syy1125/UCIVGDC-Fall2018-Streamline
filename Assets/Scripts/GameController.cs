@@ -42,6 +42,7 @@ public class GameController : MonoBehaviour {
     private AudioSource Source;
     public AudioClip StepSound;
     public AudioClip WinSound;
+    public KeyCode[] DeleteKeys;
 
 	void Awake(){
         outputColumns = new List<Exporter>();
@@ -118,7 +119,22 @@ public class GameController : MonoBehaviour {
         switch (simState)
         {
             case SimState.EDITING:
-                if(!gameMenuOpen && Input.GetKeyDown(escapeKey))
+                bool deletedComponents = false;
+                if(!gameMenuOpen)
+                {
+                    for(int i = 0; i < DeleteKeys.Length; i++){
+                        if(Input.GetKeyDown(DeleteKeys[i])){
+                            foreach(Vector2Int point in Grid.Instance.GroupSelection.PointSet)
+                            {
+                                Grid.Instance.DestroyGridComponent(point);
+                                deletedComponents = true;
+                            }
+                            Grid.Instance.ClearGroupSelection();
+                        }
+                    }
+                    
+                }
+                if(!deletedComponents && !gameMenuOpen && Input.GetKeyDown(escapeKey))
                 {  
                     if(Grid.Instance.Selected != Vector2Int.one*-1){
                         Grid.Instance.Selected = new Vector2Int(-1,-1);
@@ -338,7 +354,33 @@ public class GameController : MonoBehaviour {
     public void SoftReset()
     {
         //Reset simulation, does not reset test completion
-        TearDownSimulation();
+        Wire.GlobalTearDown();
+        Grid grid = Grid.Instance;
+        Transmitter tr = null;
+        for(int i = 0; i < grid.Height; i++)
+        {
+            for(int j = 0; j < grid.Width; j++)
+            {
+                GameObject g = grid.GetGridComponent(i,j);
+                if(g == null)
+                    continue;
+                tr = g.GetComponent<Transmitter>();
+                if(tr != null)
+                {
+                    tr.Reset();
+                }
+            }
+        }
+
+        if(ColumnManager.LevelIOMask[0])
+            grid.GetGridComponent(0,grid.Height - 1).GetComponent<Importer>().ResetState();
+        if(ColumnManager.LevelIOMask[1])
+            grid.GetGridComponent(0,0).GetComponent<Importer>().ResetState();
+        if(ColumnManager.LevelIOMask[2])
+            grid.GetGridComponent(grid.Width - 1, 0).GetComponent<Exporter>().ResetState();
+        if(ColumnManager.LevelIOMask[3])
+            grid.GetGridComponent(grid.Width - 1, grid.Height - 1).GetComponent<Exporter>().ResetState();
+        ValueDisplayManager.DestroyAllValueDisplays();        
         isSetUp = true;
         Grid.Instance.ClearGroupSelection();
         Wire.GlobalSetUp();
@@ -391,7 +433,7 @@ public class GameController : MonoBehaviour {
             grid.GetGridComponent(grid.Width - 1, 0).GetComponent<Exporter>().ResetState();
         if(ColumnManager.LevelIOMask[3])
             grid.GetGridComponent(grid.Width - 1, grid.Height - 1).GetComponent<Exporter>().ResetState();
-        
+        ColManager.SetTestIndex(0);
         ValueDisplayManager.DestroyAllValueDisplays();
     }
     public void SaveGame()

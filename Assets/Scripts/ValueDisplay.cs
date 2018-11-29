@@ -34,24 +34,30 @@ public class ValueDisplay : MonoBehaviour {
             type = CopyType.WIRE;
             copyFrom = transform.parent.GetComponent<Wire>();
         }
+        Update();
     }
 	
 	// Update is called once per frame
 	void Update () {
+        int value = 0;
         switch (type)
         {
             case CopyType.OMNIRECEIVER:
-                text.text = "" + ((OmniReceiver)copyFrom).Num1;
+                value = ((OmniReceiver)copyFrom).Num1;
                 break;
             case CopyType.TRANSMITTER: // Operators
-                text.text = "" + ((Transmitter)copyFrom).Signal;
+                value = ((Transmitter)copyFrom).Signal;
                 break;
             case CopyType.RECEIVER: // Exporters
-                text.text = "" + ((Receiver) copyFrom).Num1;
+                value =((Receiver) copyFrom).Num1;
                 break;
             case CopyType.WIRE: // Wires
-                text.text = "" + ((Wire)copyFrom).SignalStrength;
+                value = ((Wire)copyFrom).SignalStrength;
                 break;
         }
+        if(value == 0)
+            text.text = "";
+        else
+            text.text = value.ToString();
 	}
 }

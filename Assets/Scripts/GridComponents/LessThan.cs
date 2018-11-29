@@ -5,7 +5,7 @@ using UnityEngine;
 public class LessThan : Operator {
 
 	public static int TRUEVALUE = 1;
-	public static int FALSEVALUE = -1;
+	public static int FALSEVALUE = 0;
 	protected override void Start()
 	{
 		base.Start();

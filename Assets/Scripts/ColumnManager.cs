@@ -111,6 +111,10 @@ public class ColumnManager : MonoBehaviour
 	{
 		if(GameController.gameLevel.Tests.Length <= 0)
 			return;
+		if(newIndex < 0)
+		{
+			newIndex = GameController.gameLevel.Tests.Length-1;
+		}
 		newIndex = newIndex % GameController.gameLevel.Tests.Length;
 		TestIndex = newIndex;
 
