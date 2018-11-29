@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
@@ -30,6 +30,7 @@ public class Tutorial : MonoBehaviour
 		string[] completedTutorials = PlayerPrefs.GetString("TutorialProgress", "").Split(':');
 		if (
 			GameController.gameLevel == null
+			|| GameController.gameLevel.Tutorial == null
 			|| !GameController.gameLevel.Tutorial.Equals(TutorialName)
 			|| Array.BinarySearch(completedTutorials, TutorialName) >= 0
 		)
