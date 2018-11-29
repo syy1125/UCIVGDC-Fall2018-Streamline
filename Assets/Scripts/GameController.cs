@@ -329,6 +329,7 @@ public class GameController : MonoBehaviour {
         if (isSetUp)
             return;
         isSetUp = true;
+        Grid.Instance.ClearGroupSelection();
         Wire.GlobalSetUp();
         displayManager.AddAllValueDisplays();
         stepTimer = stepDelay;
