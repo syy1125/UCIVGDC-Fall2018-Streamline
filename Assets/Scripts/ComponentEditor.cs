@@ -73,6 +73,8 @@ public class ComponentEditor : MonoBehaviour
                 {
                     UpdateConst(constEditor.GetComponentInChildren<InputField>());
                     constEditor.SetActive(true);
+                    EventSystem.current.SetSelectedGameObject(constEditor, null);
+                    constEditor.GetComponentInChildren<InputField>().OnPointerClick(new PointerEventData(EventSystem.current));                
                 } else
                 {
                     constEditor.SetActive(false);

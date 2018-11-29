@@ -287,6 +287,7 @@ public class Grid : MonoBehaviour
                 SetGridComponent(location, lessThan);
                 break;
         }
+        StartCoroutine(SelectAtEndOfFrame(location));
         Source.PlayOneShot(PlacementSound);
         UpdateAdjacentWires(location);
     }
@@ -486,6 +487,10 @@ public class Grid : MonoBehaviour
     {
         Instance = null;
     }
-    
+    private IEnumerator SelectAtEndOfFrame(Vector2Int loc)
+    {
+        yield return new WaitForEndOfFrame();
+        Selected = loc;
+    }
    
 }

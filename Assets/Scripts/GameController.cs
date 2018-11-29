@@ -120,7 +120,12 @@ public class GameController : MonoBehaviour {
             case SimState.EDITING:
                 if(!gameMenuOpen && Input.GetKeyDown(escapeKey))
                 {  
-                    StartCoroutine(DelayedOpenUI(gameMenuUIGroup));
+                    if(Grid.Instance.Selected != Vector2Int.one*-1){
+                        Grid.Instance.Selected = new Vector2Int(-1,-1);
+                        Grid.Instance.ClearGroupSelection();
+                    }
+                    else
+                        StartCoroutine(DelayedOpenUI(gameMenuUIGroup));
                 }
                 
               
