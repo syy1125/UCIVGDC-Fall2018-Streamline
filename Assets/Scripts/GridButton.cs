@@ -47,7 +47,7 @@ public class GridButton : MonoBehaviour {
         Grid grid = Grid.Instance;
         grid.onGridButtonPress(position);
         DragBegin = position;
-        if(ComponentSelection.selected == ComponentType.NONE && Grid.Instance.GroupSelection.PointSet.Contains(position))
+        if(GameController.simState == SimState.EDITING && ComponentSelection.selected == ComponentType.NONE && Grid.Instance.GroupSelection.PointSet.Contains(position))
         {
             DragType = DragType.GROUPMOVE;
             Grid.Instance.GroupSelection.GraspPoint = position;
@@ -72,7 +72,7 @@ public class GridButton : MonoBehaviour {
     }
     public void MoveSelectionToButton()
     {
-        if(GameController.mouseDragging && DragType == DragType.GROUPMOVE)
+        if(GameController.simState == SimState.EDITING && GameController.mouseDragging && DragType == DragType.GROUPMOVE)
         {
             DragEnd = position;
             Grid.Instance.MoveGroupSelectionTo(DragEnd);
@@ -85,7 +85,7 @@ public class GridButton : MonoBehaviour {
         GameController.mouseDragging = true;
         if(ComponentSelection.selected != ComponentType.NONE)
             DragType = DragType.DRAW;
-        else if(DragType == DragType.NONE)
+        else if(GameController.simState == SimState.EDITING && DragType == DragType.NONE)
         {
             SpawnDragBox();
         }

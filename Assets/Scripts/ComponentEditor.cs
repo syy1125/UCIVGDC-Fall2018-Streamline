@@ -31,6 +31,10 @@ public class ComponentEditor : MonoBehaviour
     public DirectionButton[] directionButtons;
     private EventSystem eventSystem;
     private bool[] IOMask;
+    public AudioClip ArrowPressSound;
+    public AudioClip InputTypeSwapSound;
+    private AudioSource Source;
+
     private void Awake()
     {
         ioUnderlines = new Image[3];
@@ -38,6 +42,7 @@ public class ComponentEditor : MonoBehaviour
         ioUnderlines[1] = input2Button.GetComponentsInChildren<Image>()[1];
         ioUnderlines[2] = outputButton.GetComponentsInChildren<Image>()[1];
         eventSystem = GameObject.Find("EventSystem").GetComponent<EventSystem>();
+        Source = GetComponent<AudioSource>();
         IOMask = new bool[3];
     }
     public void UpdateUI()
@@ -161,15 +166,19 @@ public class ComponentEditor : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D))
             {
                 SetArrowDirection(Vector2Int.right);
+                Source.PlayOneShot(ArrowPressSound);
             } else if (Input.GetKeyDown(KeyCode.UpArrow)|| Input.GetKeyDown(KeyCode.W))
             {
                 SetArrowDirection(Vector2Int.up);
+                Source.PlayOneShot(ArrowPressSound);
             } else if (Input.GetKeyDown(KeyCode.LeftArrow)|| Input.GetKeyDown(KeyCode.A))
             {
                 SetArrowDirection(Vector2Int.left);
+                Source.PlayOneShot(ArrowPressSound);
             } else if (Input.GetKeyDown(KeyCode.DownArrow)|| Input.GetKeyDown(KeyCode.S))
             {
                 SetArrowDirection(Vector2Int.down);
+                Source.PlayOneShot(ArrowPressSound);
             }
         }
         //Tab and Shift+Tab
@@ -185,6 +194,7 @@ public class ComponentEditor : MonoBehaviour
             while(!IOMask[x]);
             x += 1;
             SetArrowSelection((ArrowSelection)x);
+            Source.PlayOneShot(InputTypeSwapSound);
         }
         else if(Input.GetKeyDown(KeyCode.Tab))
         {
@@ -197,6 +207,7 @@ public class ComponentEditor : MonoBehaviour
             while(!IOMask[x]);
             x += 1;
             SetArrowSelection((ArrowSelection)x);
+            Source.PlayOneShot(InputTypeSwapSound);
         }
 
 
