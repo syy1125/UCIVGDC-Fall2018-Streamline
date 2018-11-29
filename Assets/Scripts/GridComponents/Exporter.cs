@@ -39,7 +39,7 @@
     {
         //Output only reads from num1 var
         GetFromReceiver();
-        if(num1 != 0)
+        if(num1 != 0 && outputColumn.Length() < expectedOutputColumn.Length())
             outputColumn.AddValue(num1);
     }
 

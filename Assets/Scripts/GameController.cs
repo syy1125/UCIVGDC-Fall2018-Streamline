@@ -36,6 +36,7 @@ public class GameController : MonoBehaviour {
     public string levelOverride = "";
     [HideInInspector]
     public static bool[] TestCaseCompletion;
+    public ColumnManager ColManager;
     public static Vector2 MouseWorldPosition;
     private Camera mainCamera;
     private AudioSource Source;
@@ -92,6 +93,11 @@ public class GameController : MonoBehaviour {
         if(TestCaseComplete())
         {
             TestCaseCompletion[ColumnManager.TestIndex] = true;
+            if(!IsLevelWon())
+            {
+                ColManager.OffsetTestIndex(1);
+                SoftReset();
+            }
         }
         if(!levelWon && IsLevelWon())
         {
@@ -324,10 +330,20 @@ public class GameController : MonoBehaviour {
         }
 
     }
+    public void SoftReset()
+    {
+        //Reset simulation, does not reset test completion
+        TearDownSimulation();
+        isSetUp = true;
+        Grid.Instance.ClearGroupSelection();
+        Wire.GlobalSetUp();
+        displayManager.AddAllValueDisplays();
+    }
     public void SetUpSimulation()
     {
         if (isSetUp)
             return;
+        SaveGame();
         isSetUp = true;
         Grid.Instance.ClearGroupSelection();
         Wire.GlobalSetUp();
@@ -337,6 +353,7 @@ public class GameController : MonoBehaviour {
         {
             TestCaseCompletion[i] = false;
         }
+        levelWon = false;
     }
     public void TearDownSimulation()
     {

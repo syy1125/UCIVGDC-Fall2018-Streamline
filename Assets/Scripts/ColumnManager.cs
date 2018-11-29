@@ -111,18 +111,7 @@ public class ColumnManager : MonoBehaviour
 	{
 		if(GameController.gameLevel.Tests.Length <= 0)
 			return;
-		newIndex = Mathf.Clamp(newIndex,0, GameController.gameLevel.Tests.Length-1);
-		/*
-		if (newIndex < 0)
-		{
-			throw new IndexOutOfRangeException("Test index cannot be negative.");
-		}
-
-		if (newIndex >= GameController.gameLevel.Tests.Length && GameController.gameLevel.Tests.Length > 0)
-		{
-			throw new IndexOutOfRangeException("Test index cannot be higher than number of test cases.");
-		}
-		*/
+		newIndex = newIndex % GameController.gameLevel.Tests.Length;
 		TestIndex = newIndex;
 
 		UpdateTestSequence();
