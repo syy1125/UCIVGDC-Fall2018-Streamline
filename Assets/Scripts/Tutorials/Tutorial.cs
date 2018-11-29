@@ -52,7 +52,7 @@ public class Tutorial : MonoBehaviour
 		Outline = Instantiate(Resources.Load<GameObject>("TutorialOutline"), transform);
 		HintText = Instantiate(Resources.Load<GameObject>("TutorialText"), transform);
 		Manager = transform.parent.GetComponent<TutorialManager>();
-		
+
 		Next();
 	}
 
@@ -74,7 +74,7 @@ public class Tutorial : MonoBehaviour
 		}
 		else
 		{
-			gameObject.SetActive(false);
+			StartCoroutine(FadeOut());
 
 			string[] completedTutorials = PlayerPrefs.GetString("TutorialProgress", "").Split(':');
 			Array.Resize(ref completedTutorials, completedTutorials.Length + 1);
@@ -120,7 +120,7 @@ public class Tutorial : MonoBehaviour
 
 			yield return null;
 		}
-		
+
 		Destroy(start.gameObject);
 	}
 
@@ -171,5 +171,33 @@ public class Tutorial : MonoBehaviour
 		lvalue.pivot = rvalue.pivot;
 		lvalue.offsetMin = rvalue.offsetMin;
 		lvalue.offsetMax = rvalue.offsetMax;
+	}
+
+	private IEnumerator FadeOut()
+	{
+		float startTime = Time.time;
+		Image outlineImage = Outline.GetComponent<Image>();
+		Text hintText = HintText.GetComponent<Text>();
+
+		while (Time.time < startTime + Manager.TextFadeDuration)
+		{
+			outlineImage.color = new Color(
+				outlineImage.color.r,
+				outlineImage.color.g,
+				outlineImage.color.b,
+				1 - (Time.time - startTime) / Manager.TextFadeDuration
+			);
+
+			hintText.color = new Color(
+				hintText.color.r,
+				hintText.color.g,
+				hintText.color.b,
+				1 - (Time.time - startTime) / Manager.TextFadeDuration
+			);
+
+			yield return null;
+		}
+
+		gameObject.SetActive(false);
 	}
 }

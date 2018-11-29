@@ -688,7 +688,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Now wait until the simulation finishes, and you are good to go!
+  m_Text: Wait until the simulation finishes, and you are good to go!
 --- !u!222 &79998427
 CanvasRenderer:
   m_ObjectHideFlags: 0
