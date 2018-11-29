@@ -38,6 +38,10 @@ public class GameController : MonoBehaviour {
     public static bool[] TestCaseCompletion;
     public static Vector2 MouseWorldPosition;
     private Camera mainCamera;
+    private AudioSource Source;
+    public AudioClip StepSound;
+    public AudioClip WinSound;
+
 	void Awake(){
         outputColumns = new List<Exporter>();
         gameMenuOpen = false;
@@ -45,6 +49,7 @@ public class GameController : MonoBehaviour {
         simState = SimState.EDITING;
         levelWon = false;
         mainCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
+        Source = GetComponent<AudioSource>();
     }
     void Start () {
         gameGrid = Grid.Instance;
@@ -55,6 +60,7 @@ public class GameController : MonoBehaviour {
 
 
     public void Step() {
+        Source.PlayOneShot(StepSound);
         HashSet<Vector2Int> redSet = new HashSet<Vector2Int>();
         HashSet<Vector2Int> greenSet = new HashSet<Vector2Int>();
         for (int h=0; h < gameGrid.Height; ++h) {
@@ -83,6 +89,17 @@ public class GameController : MonoBehaviour {
                 }
             }
         }
+        if(TestCaseComplete())
+        {
+            TestCaseCompletion[ColumnManager.TestIndex] = true;
+        }
+        if(!levelWon && IsLevelWon())
+        {
+            SetSimState((int)SimState.PAUSED);
+            levelWon = true;
+            levelWonGroup.EnableUI();
+            Source.PlayOneShot(WinSound);
+        }
     }
 	// Update is called once per frame
 	void Update () {
@@ -103,12 +120,7 @@ public class GameController : MonoBehaviour {
               
                 break;
             case SimState.RUNNING:
-                if(!levelWon && IsLevelWon())
-                {
-                    SetSimState((int)SimState.PAUSED);
-                    levelWon = true;
-                    levelWonGroup.EnableUI();
-                }
+                
                 if(Input.GetKeyDown(escapeKey))
                 {  
                     SetSimState((int)SimState.PAUSED);
@@ -235,14 +247,7 @@ public class GameController : MonoBehaviour {
                 }
                 break;
         }
-        if(TestCaseComplete())
-        {
-            TestCaseCompletion[ColumnManager.TestIndex] = true;
-        }
-        if(IsLevelWon())
-        {
-            levelWon = true;
-        }
+        
 
         
     }
@@ -426,5 +431,12 @@ public class GameController : MonoBehaviour {
         GameObject.Find("EventSystem").GetComponent<EventSystem>().enabled = false;
         yield return new WaitForSeconds(c.ChangeDuration);
         SceneManager.LoadScene(sceneName);
+    }
+    public void OpenGameMenu()
+    {
+        if(simState == SimState.EDITING && !gameMenuOpen)
+        {  
+            StartCoroutine(DelayedOpenUI(gameMenuUIGroup));
+        }
     }
 }

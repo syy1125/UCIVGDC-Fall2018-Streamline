@@ -34,6 +34,8 @@ public class Grid : MonoBehaviour
     public UnityEvent OnGridReady;
 
     public Color SelectedColor;
+    public AudioClip PlacementSound;
+    private AudioSource Source;
    
     private ColorBlock SelectedButtonColors
     {
@@ -93,6 +95,7 @@ public class Grid : MonoBehaviour
     private void Start ()
     {
         // Build grid
+        Source = GetComponent<AudioSource>();
         _gridComponents = new GameObject[Width][];
         for (int x = 0; x < Width; x++)
         {
@@ -284,7 +287,7 @@ public class Grid : MonoBehaviour
                 SetGridComponent(location, lessThan);
                 break;
         }
-        
+        Source.PlayOneShot(PlacementSound);
         UpdateAdjacentWires(location);
     }
     
@@ -363,13 +366,17 @@ public class Grid : MonoBehaviour
     public void MoveGroupSelectionTo(Vector2Int targetPos)
     {
         Vector2Int moveBy = targetPos - GroupSelection.GraspPoint;
+        HashSet<Vector2Int> savedSet = new HashSet<Vector2Int>(GroupSelection.PointSet);
+        if(moveBy == Vector2Int.zero)
+            return;
         if(ValidGroupMove(moveBy)){
             ShiftGroupSelection(moveBy);
         } else {
             ShiftGroupSelection(new Vector2Int(moveBy.x,0));
             ShiftGroupSelection(new Vector2Int(0,moveBy.y));
         }
-        
+        if(!savedSet.Equals(GroupSelection.PointSet))
+            Source.PlayOneShot(PlacementSound);
     }
     public void ShiftGroupSelection(Vector2Int moveBy)
     {
@@ -405,6 +412,10 @@ public class Grid : MonoBehaviour
                     GetGridComponent(pos).GetComponent<Wire>().IsSelected = true;
                 }
 
+            }
+            foreach(Vector2Int point in GroupSelection.PointSet)
+            {
+                UpdateAdjacentWires(point);
             }
             GroupSelection.GraspPoint += moveBy;    //Update grasp point
         }

@@ -109,6 +109,10 @@ public class ColumnManager : MonoBehaviour
 
 	public void SetTestIndex(int newIndex)
 	{
+		if(GameController.gameLevel.Tests.Length <= 0)
+			return;
+		newIndex = Mathf.Clamp(newIndex,0, GameController.gameLevel.Tests.Length-1);
+		/*
 		if (newIndex < 0)
 		{
 			throw new IndexOutOfRangeException("Test index cannot be negative.");
@@ -118,11 +122,13 @@ public class ColumnManager : MonoBehaviour
 		{
 			throw new IndexOutOfRangeException("Test index cannot be higher than number of test cases.");
 		}
-
+		*/
 		TestIndex = newIndex;
 
 		UpdateTestSequence();
 		UpdatePaginationDisplay();
+		
+		
 	}
 
 	private void UpdateTestSequence()
