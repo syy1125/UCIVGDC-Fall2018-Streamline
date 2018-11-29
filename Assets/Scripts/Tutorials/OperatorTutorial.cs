@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Security.Cryptography.X509Certificates;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class OperatorTutorial : Tutorial
 {
@@ -35,20 +36,39 @@ public class OperatorTutorial : Tutorial
 			new Vector2Int(1, 7),
 		}, wire => wire.HasRed);
 		Next();
-		
+
 		// 5
 		yield return WaitForSelection(ComponentType.NONE);
 		Next();
-		
+
 		// 6
 		yield return new WaitUntil(() =>
 			grid.GetGridComponent(1, 0) != null
 			&& grid.GetGridComponent(1, 0).GetComponent<Add>() != null
 			&& grid.Selected == new Vector2Int(1, 0));
 		Next();
-		
+
 		// 7
 		yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Return));
+		yield return null;
+		Next();
+
+		// 8
+		yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Return));
+		yield return null;
+		Next();
+
+		// 9
+		yield return new WaitUntil(() => ComponentEditor.selection == ArrowSelection.IN2);
+		Next();
+
+		// 10
+		yield return new WaitUntil(() =>
+			grid.GetGridComponent(1, 0) != null
+			&& grid.GetGridComponent(1, 0).GetComponent<Receiver>() != null
+			&& grid.GetGridComponent(1, 0).GetComponent<Receiver>().InputDirection2 == new Vector2Int(-1, 0)
+			&& grid.Selected == new Vector2Int(1, 0)
+			&& grid.GetGridComponent(1, 0).GetComponent<Add>() != null);
 		Next();
 	}
 
