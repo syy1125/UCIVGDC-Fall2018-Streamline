@@ -3,8 +3,10 @@ using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Analytics;
+using UnityEngine.Experimental.UIElements;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
+using Image = UnityEngine.UI.Image;
 
 public class Tutorial : MonoBehaviour
 {
@@ -127,41 +129,15 @@ public class Tutorial : MonoBehaviour
 
 	private IEnumerator MoveText()
 	{
-		Text hintText = HintText.GetComponent<Text>();
+		HintText.GetComponent<Text>().CrossFadeAlpha(0, Manager.TextFadeDuration, false);
 
-		float startTime = Time.time;
-
-		// Fade out
-		while (Time.time - startTime < Manager.TextFadeDuration)
-		{
-			hintText.color = new Color(
-				hintText.color.r,
-				hintText.color.g,
-				hintText.color.b,
-				1 - (Time.time - startTime) / Manager.TextFadeDuration
-			);
-
-			yield return null;
-		}
-
-		yield return new WaitForSeconds(Manager.MoveDuration - 2 * Manager.TextFadeDuration);
+		yield return new WaitForSeconds(Manager.MoveDuration - Manager.TextFadeDuration);
 
 		UpdateHintText();
-
-		// Fade in
-		while (Time.time - startTime < Manager.MoveDuration)
-		{
-			hintText.color = new Color(
-				hintText.color.r,
-				hintText.color.g,
-				hintText.color.b,
-				1 - (startTime + Manager.MoveDuration - Time.time) / Manager.TextFadeDuration
-			);
-
-			yield return null;
-		}
+		
+		HintText.GetComponent<Text>().CrossFadeAlpha(1, Manager.TextFadeDuration, false);
 	}
-
+	
 	private static void MatchTransform(
 		RectTransform lvalue,
 		RectTransform rvalue
@@ -176,28 +152,10 @@ public class Tutorial : MonoBehaviour
 
 	private IEnumerator FadeOut()
 	{
-		float startTime = Time.time;
-		Image outlineImage = Outline.GetComponent<Image>();
-		Text hintText = HintText.GetComponent<Text>();
+		Outline.GetComponent<Image>().CrossFadeAlpha(0,Manager.TextFadeDuration, false);
+		HintText.GetComponent<Text>().CrossFadeAlpha(0,Manager.TextFadeDuration, false);
 
-		while (Time.time < startTime + Manager.TextFadeDuration)
-		{
-			outlineImage.color = new Color(
-				outlineImage.color.r,
-				outlineImage.color.g,
-				outlineImage.color.b,
-				1 - (Time.time - startTime) / Manager.TextFadeDuration
-			);
-
-			hintText.color = new Color(
-				hintText.color.r,
-				hintText.color.g,
-				hintText.color.b,
-				1 - (Time.time - startTime) / Manager.TextFadeDuration
-			);
-
-			yield return null;
-		}
+		yield return new WaitForSeconds(Manager.TextFadeDuration);
 
 		gameObject.SetActive(false);
 	}
