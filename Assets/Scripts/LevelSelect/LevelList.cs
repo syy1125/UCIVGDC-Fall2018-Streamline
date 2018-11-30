@@ -79,7 +79,8 @@ public class LevelList : StatefulUI<LevelListState>
 
 		for (int index = 0; index < State.Levels.Length; index++)
 		{
-			if (State.Tutorial.Value == (State.Levels[index].Tutorial == null)) continue;;
+			if (State.Tutorial.Value == (State.Levels[index].Tutorial == null)) continue;
+			;
 			if (!State.Search.Equals("") && !State.Levels[index].Name.ToLower().Contains(State.Search)) continue;
 
 			GameObject button = Instantiate(ButtonPrefab, LevelsGrid.transform);
@@ -131,6 +132,11 @@ public class LevelList : StatefulUI<LevelListState>
 		{
 			SelectedIndex = -1
 		};
+	}
+
+	public void GoToMainMenu()
+	{
+		StartCoroutine(GameController.TransitionAndLoad("MainMenu"));
 	}
 
 	public void PlaySelectedLevel(int solutionIndex)
