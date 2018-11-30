@@ -70,6 +70,107 @@ public class OperatorTutorial : Tutorial
 			&& grid.Selected == new Vector2Int(1, 0)
 			&& grid.GetGridComponent(1, 0).GetComponent<Add>() != null);
 		Next();
+
+		// 11
+		yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Return));
+		yield return null;
+		Next();
+
+		// 12
+		yield return WaitForSelection(ComponentType.DIV);
+		Next();
+
+		// 13
+		yield return new WaitUntil(() =>
+			grid.GetGridComponent(4, 0) != null
+			&& grid.GetGridComponent(4, 0).GetComponent<Divide>() != null);
+		Next();
+
+		// 14
+		yield return WaitForSelection(ComponentType.CONSTANT);
+		Next();
+
+		// 15
+		yield return new WaitUntil(() =>
+			grid.GetGridComponent(4, 1) != null
+			&& grid.GetGridComponent(4, 1).GetComponent<Constant>() != null);
+		Next();
+
+		// 16
+		yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Return));
+		yield return null;
+		Next();
+
+		// 17
+		yield return new WaitUntil(() =>
+			grid.GetGridComponent(4, 1) != null
+			&& grid.GetGridComponent(4, 1).GetComponent<Constant>() != null
+			&& grid.Selected == new Vector2Int(4, 1)
+			&& grid.GetGridComponent(4, 1).GetComponent<Transmitter>() != null
+			&& grid.GetGridComponent(4, 1).GetComponent<Constant>().number == 2
+			&& grid.GetGridComponent(4, 1).GetComponent<Transmitter>().OutputDirection == Vector2Int.down);
+		Next();
+		
+		// 18
+		yield return WaitForSelection(ComponentType.NONE);
+		Next();
+		
+		// 19
+		yield return new WaitUntil(() =>
+			grid.GetGridComponent(4, 0) != null
+			&& grid.GetGridComponent(4, 0).GetComponent<Divide>() != null
+			&& grid.Selected == new Vector2Int(4, 0));
+		Next();
+		
+		// 20
+		yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Return));
+		yield return null;
+		Next();
+		
+		// 21
+		yield return new WaitUntil(() =>
+			grid.GetGridComponent(4, 0) != null
+			&& grid.GetGridComponent(4, 0).GetComponent<Divide>() != null
+			&& grid.Selected == new Vector2Int(4, 0)
+			&& grid.GetGridComponent(4, 0).GetComponent<Receiver>() != null
+			&& grid.GetGridComponent(4, 0).GetComponent<Transmitter>() != null
+			&& grid.GetGridComponent(4, 0).GetComponent<Receiver>().InputDirection1 == Vector2Int.left
+			&& grid.GetGridComponent(4, 0).GetComponent<Receiver>().InputDirection2 == Vector2Int.up
+			&& grid.GetGridComponent(4, 0).GetComponent<Transmitter>().OutputDirection == Vector2Int.right);
+		Next();
+		
+		// 22
+		yield return WaitForSelection(ComponentType.REDWIRE);
+		Next();
+		
+		// 23
+		yield return WaitForWires(new[]
+		{
+			new Vector2Int(2, 0),
+			new Vector2Int(3, 0),
+			new Vector2Int(5, 0),
+			new Vector2Int(6, 0),
+		}, wire => wire.HasRed);
+		Next();
+		
+		// 24
+		yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Return));
+		yield return null;
+		Next();
+		
+		// 25
+		yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Return));
+		yield return null;
+		Next();
+		
+		// 26
+		yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Return));
+		yield return null;
+		Next();
+		
+		// 27
+		yield return new WaitUntil(() => GameController.simState == SimState.RUNNING);
+		Next();
 	}
 
 	private CustomYieldInstruction WaitForSelection(ComponentType selection)

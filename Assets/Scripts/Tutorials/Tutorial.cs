@@ -221,4 +221,16 @@ public class Tutorial : MonoBehaviour
 
 		gameObject.SetActive(false);
 	}
+
+	protected void ModifyBackdrops(Action<GameObject> mod)
+	{
+		mod(_backdropTL);
+		mod(_backdropTC);
+		mod(_backdropTR);
+		mod(_backdropML);
+		mod(_backdropMR);
+		mod(_backdropBL);
+		mod(_backdropBC);
+		mod(_backdropBR);
+	}
 }
