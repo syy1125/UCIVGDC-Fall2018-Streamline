@@ -46,6 +46,6 @@ public class MainMenuController : MonoBehaviour {
         ColorLerp c = GameObject.FindGameObjectWithTag("Transition").GetComponent<ColorLerp>();
         c.SetActivated(true);
         yield return new WaitForSeconds(c.ChangeDuration);
-        SceneManager.LoadScene(levelSelectScene);
+        SceneManager.LoadScene(sceneName);
     }
 }
