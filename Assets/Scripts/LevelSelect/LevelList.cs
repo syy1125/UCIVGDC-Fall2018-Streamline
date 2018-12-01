@@ -27,6 +27,8 @@ public class LevelList : StatefulUI<LevelListState>
 
 	public Color SelectedColor;
 	private ColorBlock _selectedColors;
+	public AudioClip SelectSound;
+	private AudioSource _source;
 
 	private void Start()
 	{
@@ -38,6 +40,8 @@ public class LevelList : StatefulUI<LevelListState>
 			normalColor = SelectedColor,
 			pressedColor = SelectedColor
 		};
+
+		_source = GetComponent<AudioSource>();
 
 		State = new LevelListState
 		{
@@ -86,7 +90,11 @@ public class LevelList : StatefulUI<LevelListState>
 			GameObject button = Instantiate(ButtonPrefab, LevelsGrid.transform);
 
 			int i = index; // `i` is an immutable index
-			button.GetComponent<Button>().onClick.AddListener(() => UpdateSelection(i));
+			button.GetComponent<Button>().onClick.AddListener(() =>
+			{
+				UpdateSelection(i);
+				PlayLevelSelectSound();
+			});
 
 			if (index == State.SelectedIndex)
 			{
@@ -98,6 +106,11 @@ public class LevelList : StatefulUI<LevelListState>
 
 		TutorialSwitch.colors = State.Tutorial.Value ? _selectedColors : ColorBlock.defaultColorBlock;
 		ChallengeSwitch.colors = State.Tutorial.Value ? ColorBlock.defaultColorBlock : _selectedColors;
+	}
+
+	private void PlayLevelSelectSound()
+	{
+		_source.PlayOneShot(SelectSound);
 	}
 
 	public void UpdateSearch(string search)
