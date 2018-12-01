@@ -35,6 +35,7 @@ public class Grid : MonoBehaviour
 
     public Color SelectedColor;
     public AudioClip PlacementSound;
+    public AudioClip SelectSound;
     private AudioSource Source;
    
     private ColorBlock SelectedButtonColors
@@ -234,7 +235,8 @@ public class Grid : MonoBehaviour
     {
         if (ComponentSelection.selected == ComponentType.NONE)
         {
-            
+            if(GetGridComponent(location) != null)
+                Source.PlayOneShot(SelectSound);
             Selected = location;
             return;
         }

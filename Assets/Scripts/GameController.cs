@@ -42,6 +42,7 @@ public class GameController : MonoBehaviour {
     private AudioSource Source;
     public AudioClip StepSound;
     public AudioClip WinSound;
+    public AudioClip CrashSound;
     public KeyCode[] DeleteKeys;
 
 	void Awake(){
@@ -282,7 +283,9 @@ public class GameController : MonoBehaviour {
     {
         if (simState != SimState.CRASHED)
         {
+            
             GameController gc = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
+            gc.Source.PlayOneShot(gc.CrashSound);
             gc.SetSimState((int)SimState.CRASHED);
         }
     }
@@ -435,6 +438,11 @@ public class GameController : MonoBehaviour {
             grid.GetGridComponent(grid.Width - 1, grid.Height - 1).GetComponent<Exporter>().ResetState();
         ColManager.SetTestIndex(0);
         ValueDisplayManager.DestroyAllValueDisplays();
+        for (int i = 0; i < TestCaseCompletion.Length; i++)
+        {
+            TestCaseCompletion[i] = false;
+        }
+        levelWon = false;
     }
     public void SaveGame()
     {

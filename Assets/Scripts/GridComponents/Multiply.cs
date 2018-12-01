@@ -16,7 +16,7 @@ public class Multiply : Operator {
 	}
 	public override string GetHint()
     {
-		return "<Color=#00d2d6>In.1</Color> x <Color=#c9d300>In.2</Color> -> Out.1";
+		return "<Color=#00d2d6>In.1</Color> x <Color=#FFFF00>In.2</Color> -> Out.1";
 
 	}
 	public override string SaveString()

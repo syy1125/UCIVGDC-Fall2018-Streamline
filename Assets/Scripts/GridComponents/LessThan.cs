@@ -19,8 +19,8 @@ public class LessThan : Operator {
 	}
 	public override string GetHint()
     {
-		return "<Color=#00d2d6>In.1</Color> < <Color=#c9d300>In.2</Color> -> "+TRUEVALUE + 
-				"\n<Color=#00d2d6>In.1</Color> >= <Color=#c9d300>In.2</Color> -> "+FALSEVALUE;
+		return "<Color=#00d2d6>In.1</Color> < <Color=#FFFF00>In.2</Color> -> " + TRUEVALUE +
+                "\n<Color=#00d2d6>In.1</Color> >= <Color=#FFFF00>In.2</Color> -> " + FALSEVALUE;
 	}
 	public override string SaveString()
 	{
