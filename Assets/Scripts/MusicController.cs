@@ -17,6 +17,12 @@ public class MusicController : MonoBehaviour
 
 	private void Awake()
 	{
+		if (Instance != null)
+		{
+			Destroy(gameObject);
+			return;
+		}
+
 		DontDestroyOnLoad(gameObject);
 		Instance = this;
 	}
@@ -56,7 +62,7 @@ public class MusicController : MonoBehaviour
 			Source.loop = false;
 			Source.volume = 0;
 			Source.Play();
-			VolumeFade(1, 1);
+			VolumeFade(1);
 		}
 	}
 
@@ -69,12 +75,14 @@ public class MusicController : MonoBehaviour
 			Source.loop = true;
 			Source.volume = 0;
 			Source.Play();
-			VolumeFade(1, 1);
+			VolumeFade(1);
 		}
 	}
 
 	public void VolumeFade(float targetVolume, float duration = 1f)
 	{
+		Debug.Log(System.Environment.StackTrace);
+
 		if (_volumeFade != null)
 		{
 			StopCoroutine(_volumeFade);
@@ -93,6 +101,8 @@ public class MusicController : MonoBehaviour
 			Source.volume = Mathf.Lerp(startVolume, targetVolume, (Time.time - startTime) / duration);
 			yield return null;
 		}
+
+		Source.volume = targetVolume;
 	}
 
 	private bool IsCircuitScene(Scene s)

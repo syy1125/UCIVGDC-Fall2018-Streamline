@@ -497,12 +497,16 @@ public class GameController : MonoBehaviour {
             SaveGame();
         StartCoroutine(TransitionAndLoad("LevelSelect"));
     }
+    public void FadeMusic()
+    {
+        MusicController.Instance.VolumeFade(0,
+            GameObject.FindGameObjectWithTag("Transition").GetComponent<ColorLerp>().ChangeDuration);
+    }
     public static IEnumerator TransitionAndLoad(string sceneName)
     {
         ColorLerp c = GameObject.FindGameObjectWithTag("Transition").GetComponent<ColorLerp>();
         c.SetActivated(true);
         GameObject.Find("EventSystem").GetComponent<EventSystem>().enabled = false;
-        MusicController.Instance.VolumeFade(0, c.ChangeDuration);
         yield return new WaitForSeconds(c.ChangeDuration);
         SceneManager.LoadScene(sceneName);
     }
