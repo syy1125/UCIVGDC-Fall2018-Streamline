@@ -1395,7 +1395,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e55edd703a8516b4c94df494b9180f46, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Ambient: {fileID: 8300000, guid: e735055700ae3954ea447eacbd61b88a, type: 3}
+  AmbientMusic: {fileID: 8300000, guid: e735055700ae3954ea447eacbd61b88a, type: 3}
   CircuitPlaylist:
   - {fileID: 8300000, guid: 0e27958ecc08baa45bc4ab99f16801a2, type: 3}
   - {fileID: 8300000, guid: 1a21824911e497b4ca7899f46024eb4a, type: 3}
