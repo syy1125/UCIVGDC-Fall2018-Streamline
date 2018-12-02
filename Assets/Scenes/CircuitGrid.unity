@@ -17034,7 +17034,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Connect the result to circuit otuput.
+  m_Text: Connect the result to circuit output.
 --- !u!222 &1557636554
 CanvasRenderer:
   m_ObjectHideFlags: 0
