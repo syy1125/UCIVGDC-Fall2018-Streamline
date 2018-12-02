@@ -19,6 +19,7 @@ public class MusicController : MonoBehaviour
 		SceneManager.sceneLoaded += OnSceneLoaded;
 		SceneManager.sceneUnloaded += OnSceneUnloaded;
 		_source = GetComponent<AudioSource>();
+		_clipIndex = Random.Range(0, CircuitPlaylist.Length);
 	}
 
 	private void Update()
