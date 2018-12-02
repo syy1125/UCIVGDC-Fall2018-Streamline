@@ -1,35 +1,42 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using System.Runtime.InteropServices;
+using UnityEditor;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class MusicController : MonoBehaviour
 {
+	public static MusicController Instance;
+
 	public AudioClip AmbientMusic;
 	public AudioClip[] CircuitPlaylist;
 
-	private AudioSource _source;
+	public AudioSource Source { get; private set; }
 	private int _clipIndex;
+	private Coroutine _volumeFade;
 
 	private void Awake()
 	{
 		DontDestroyOnLoad(gameObject);
+		Instance = this;
 	}
 
 	private void Start()
 	{
 		SceneManager.sceneLoaded += OnSceneLoaded;
 		SceneManager.sceneUnloaded += OnSceneUnloaded;
-		_source = GetComponent<AudioSource>();
+		Source = GetComponent<AudioSource>();
 		_clipIndex = Random.Range(0, CircuitPlaylist.Length);
 	}
 
 	private void Update()
 	{
 		// If music ends and is in circuit scene, play another clip.
-		if (!_source.isPlaying && IsCircuitScene(SceneManager.GetActiveScene()))
+		if (!Source.isPlaying && IsCircuitScene(SceneManager.GetActiveScene()))
 		{
 			RandomizeIndex();
-			_source.clip = CircuitPlaylist[_clipIndex];
-			_source.Play();
+			Source.clip = CircuitPlaylist[_clipIndex];
+			Source.Play();
 		}
 	}
 
@@ -43,11 +50,13 @@ public class MusicController : MonoBehaviour
 	{
 		if (IsCircuitScene(s))
 		{
-			_source.Stop();
+			Source.Stop();
 			RandomizeIndex();
-			_source.clip = CircuitPlaylist[_clipIndex];
-			_source.loop = false;
-			_source.Play();
+			Source.clip = CircuitPlaylist[_clipIndex];
+			Source.loop = false;
+			Source.volume = 0;
+			Source.Play();
+			VolumeFade(1, 1);
 		}
 	}
 
@@ -55,10 +64,34 @@ public class MusicController : MonoBehaviour
 	{
 		if (IsCircuitScene(s))
 		{
-			_source.Stop();
-			_source.clip = AmbientMusic;
-			_source.loop = true;
-			_source.Play();
+			Source.Stop();
+			Source.clip = AmbientMusic;
+			Source.loop = true;
+			Source.volume = 0;
+			Source.Play();
+			VolumeFade(1, 1);
+		}
+	}
+
+	public void VolumeFade(float targetVolume, float duration = 1f)
+	{
+		if (_volumeFade != null)
+		{
+			StopCoroutine(_volumeFade);
+		}
+
+		_volumeFade = StartCoroutine(ExecVolumeFade(targetVolume, duration));
+	}
+
+	private IEnumerator ExecVolumeFade(float targetVolume, float duration)
+	{
+		float startVolume = Source.volume;
+		float startTime = Time.time;
+
+		while (Time.time - startTime < duration)
+		{
+			Source.volume = Mathf.Lerp(startVolume, targetVolume, (Time.time - startTime) / duration);
+			yield return null;
 		}
 	}
 

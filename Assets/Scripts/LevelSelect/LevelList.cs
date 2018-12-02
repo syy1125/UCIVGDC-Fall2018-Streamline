@@ -159,6 +159,8 @@ public class LevelList : StatefulUI<LevelListState>
 
 		GameController.gameLevel = level;
 
+		MusicController.Instance.VolumeFade(0,
+			GameObject.FindGameObjectWithTag("Transition").GetComponent<ColorLerp>().ChangeDuration);
 		StartCoroutine(GameController.TransitionAndLoad("CircuitGrid"));
 	}
 }

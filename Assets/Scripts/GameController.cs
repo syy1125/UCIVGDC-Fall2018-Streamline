@@ -502,6 +502,7 @@ public class GameController : MonoBehaviour {
         ColorLerp c = GameObject.FindGameObjectWithTag("Transition").GetComponent<ColorLerp>();
         c.SetActivated(true);
         GameObject.Find("EventSystem").GetComponent<EventSystem>().enabled = false;
+        MusicController.Instance.VolumeFade(0, c.ChangeDuration);
         yield return new WaitForSeconds(c.ChangeDuration);
         SceneManager.LoadScene(sceneName);
     }
