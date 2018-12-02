@@ -36,6 +36,7 @@ public class MusicController : MonoBehaviour
 	private void RandomizeIndex()
 	{
 		_clipIndex += Random.Range(1, CircuitPlaylist.Length);
+		_clipIndex %= CircuitPlaylist.Length;
 	}
 
 	private void OnSceneLoaded(Scene s, LoadSceneMode m)
