@@ -23,6 +23,7 @@ public class GameController : MonoBehaviour {
     public UIGroup gameMenuUIGroup;
     public UIGroup crashUIGroup;
     public UIGroup levelWonGroup;
+    public UIGroup SkipUIGroup;
     public float stepDelay;
     private float stepTimer = 0;
     public ValueDisplayManager displayManager;
@@ -137,8 +138,12 @@ public class GameController : MonoBehaviour {
                 }
                 if(!deletedComponents && !gameMenuOpen && Input.GetKeyDown(escapeKey))
                 {  
+                    
                     if(Grid.Instance.Selected != Vector2Int.one*-1){
                         Grid.Instance.Selected = new Vector2Int(-1,-1);
+                        Grid.Instance.ClearGroupSelection();
+                    } else if(Grid.Instance.GroupSelection.PointSet.Count > 0)
+                    {
                         Grid.Instance.ClearGroupSelection();
                     }
                     else
@@ -499,8 +504,11 @@ public class GameController : MonoBehaviour {
     }
     public void FadeMusic()
     {
-        MusicController.Instance.VolumeFade(0,
-            GameObject.FindGameObjectWithTag("Transition").GetComponent<ColorLerp>().ChangeDuration);
+        if (MusicController.Instance != null)
+        {
+            MusicController.Instance.VolumeFade(0,
+                GameObject.FindGameObjectWithTag("Transition").GetComponent<ColorLerp>().ChangeDuration);
+        }
     }
     public static IEnumerator TransitionAndLoad(string sceneName)
     {
@@ -522,10 +530,11 @@ public class GameController : MonoBehaviour {
         //Typical esc key press does not always open game menu
         //due to deselecting things and stuff that overrides the key.
         //That is normal behavior, so this is used to override all of that stuff.
-        if (simState != SimState.EDITING)
+        if (simState != SimState.EDITING && !levelWon)
         {
             SetSimState((int)SimState.EDITING);
         }
         StartCoroutine(DelayedOpenUI(gameMenuUIGroup));
     }
+    
 }

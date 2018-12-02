@@ -23,6 +23,7 @@ public class Tutorial : MonoBehaviour
 
 	private Coroutine _outlineTransition;
 	private Coroutine _textTransition;
+    public static bool TutorialActive;
 
 	private string TutorialName
 	{
@@ -31,7 +32,7 @@ public class Tutorial : MonoBehaviour
 
 	private void Awake()
 	{
-		string[] completedTutorials = PlayerPrefs.GetString("TutorialProgress", "").Split(':');
+        string[] completedTutorials = PlayerPrefs.GetString("TutorialProgress", "").Split(':');
 		if (
 			GameController.gameLevel == null
 			|| GameController.gameLevel.Tutorial == null
@@ -71,7 +72,7 @@ public class Tutorial : MonoBehaviour
 		_backdropBL = Instantiate(backdropPrefab, backdropTransform);
 		_backdropBC = Instantiate(backdropPrefab, backdropTransform);
 		_backdropBR = Instantiate(backdropPrefab, backdropTransform);
-
+        TutorialActive = true;
 		Next();
 	}
 
@@ -94,15 +95,18 @@ public class Tutorial : MonoBehaviour
 		else
 		{
 			StartCoroutine(FadeOut());
-
-			string[] completedTutorials = PlayerPrefs.GetString("TutorialProgress", "").Split(':');
-			Array.Resize(ref completedTutorials, completedTutorials.Length + 1);
-			completedTutorials[completedTutorials.Length - 1] = TutorialName;
-			Array.Sort(completedTutorials);
-			PlayerPrefs.SetString("TutorialProgress", string.Join(":", completedTutorials));
+            MarkAsComplete();
 		}
 	}
-
+    public void MarkAsComplete()
+    {
+        string[] completedTutorials = PlayerPrefs.GetString("TutorialProgress", "").Split(':');
+        Array.Resize(ref completedTutorials, completedTutorials.Length + 1);
+        completedTutorials[completedTutorials.Length - 1] = TutorialName;
+        Array.Sort(completedTutorials);
+        PlayerPrefs.SetString("TutorialProgress", string.Join(":", completedTutorials));
+        TutorialActive = false;
+    }
 	private void UpdateUI()
 	{
 		if (_outlineTransition != null)
