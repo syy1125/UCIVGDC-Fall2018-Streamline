@@ -13607,7 +13607,6 @@ GameObject:
   - component: {fileID: 1300644677}
   - component: {fileID: 1300644676}
   - component: {fileID: 1300644675}
-  - component: {fileID: 1300644674}
   m_Layer: 5
   m_Name: MenuButton
   m_TagString: Untagged
@@ -13634,17 +13633,6 @@ RectTransform:
   m_AnchoredPosition: {x: -20, y: 20}
   m_SizeDelta: {x: 125, y: 60}
   m_Pivot: {x: 1, y: 0}
---- !u!114 &1300644674
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1300644672}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 13781944ca46b6e44b69393d5bb4121f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1300644675
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13685,7 +13673,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1508251642}
-        m_MethodName: OpenGameMenu
+        m_MethodName: ForceOpenGameMenu
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

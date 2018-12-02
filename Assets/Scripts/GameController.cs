@@ -517,4 +517,15 @@ public class GameController : MonoBehaviour {
             StartCoroutine(DelayedOpenUI(gameMenuUIGroup));
         }
     }
+    public void ForceOpenGameMenu()
+    {
+        //Typical esc key press does not always open game menu
+        //due to deselecting things and stuff that overrides the key.
+        //That is normal behavior, so this is used to override all of that stuff.
+        if (simState != SimState.EDITING)
+        {
+            SetSimState((int)SimState.EDITING);
+        }
+        StartCoroutine(DelayedOpenUI(gameMenuUIGroup));
+    }
 }
