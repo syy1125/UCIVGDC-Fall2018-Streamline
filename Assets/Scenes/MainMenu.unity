@@ -1406,6 +1406,12 @@ MonoBehaviour:
   - Clip: {fileID: 8300000, guid: 1a21824911e497b4ca7899f46024eb4a, type: 3}
     Name: Mysterious Ambience
     Author: cynicmusic
+  - Clip: {fileID: 8300000, guid: 8afca549356a1df419dddf2c7a6b8ebe, type: 3}
+    Name: Advanced Simulacra
+    Author: Trevor Lentz
+  - Clip: {fileID: 8300000, guid: a7266bb06afa2824ca05e3f7b25efb74, type: 3}
+    Name: Constellation
+    Author: Trevor Lentz
 --- !u!224 &1073211979
 RectTransform:
   m_ObjectHideFlags: 0
