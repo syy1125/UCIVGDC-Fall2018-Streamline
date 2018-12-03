@@ -1397,9 +1397,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AmbientMusic: {fileID: 8300000, guid: e735055700ae3954ea447eacbd61b88a, type: 3}
   CircuitPlaylist:
-  - {fileID: 8300000, guid: 0e27958ecc08baa45bc4ab99f16801a2, type: 3}
-  - {fileID: 8300000, guid: 1a21824911e497b4ca7899f46024eb4a, type: 3}
-  - {fileID: 8300000, guid: b76f83f0fca80ec47a1f8830cf2cf14a, type: 3}
+  - Clip: {fileID: 8300000, guid: b76f83f0fca80ec47a1f8830cf2cf14a, type: 3}
+    Name: Through Space
+    Author: maxstack
+  - Clip: {fileID: 8300000, guid: 0e27958ecc08baa45bc4ab99f16801a2, type: 3}
+    Name: Walk With Me
+    Author: HaelDB
+  - Clip: {fileID: 8300000, guid: 1a21824911e497b4ca7899f46024eb4a, type: 3}
+    Name: Mysterious Ambience
+    Author: cynicmusic
 --- !u!224 &1073211979
 RectTransform:
   m_ObjectHideFlags: 0

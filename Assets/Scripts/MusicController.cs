@@ -1,19 +1,33 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Runtime.InteropServices;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+using Random = UnityEngine.Random;
+
+[Serializable]
+public class MusicClip
+{
+	public AudioClip Clip;
+	public string Name;
+	public string Author;
+}
 
 public class MusicController : MonoBehaviour
 {
 	public static MusicController Instance;
 
 	public AudioClip AmbientMusic;
-	public AudioClip[] CircuitPlaylist;
+	public MusicClip[] CircuitPlaylist;
 
 	public AudioSource Source { get; private set; }
 	private int _clipIndex;
 	private Coroutine _volumeFade;
+
+	private GameObject _nowPlaying;
+	private Coroutine _moveNowPlaying;
 
 	private void Awake()
 	{
@@ -41,8 +55,10 @@ public class MusicController : MonoBehaviour
 		if (!Source.isPlaying && IsCircuitScene(SceneManager.GetActiveScene()))
 		{
 			RandomizeIndex();
-			Source.clip = CircuitPlaylist[_clipIndex];
+			Source.clip = CircuitPlaylist[_clipIndex].Clip;
 			Source.Play();
+
+			UpdateNowPlaying();
 		}
 	}
 
@@ -58,11 +74,14 @@ public class MusicController : MonoBehaviour
 		{
 			Source.Stop();
 			RandomizeIndex();
-			Source.clip = CircuitPlaylist[_clipIndex];
+			Source.clip = CircuitPlaylist[_clipIndex].Clip;
 			Source.loop = false;
 			Source.volume = 0;
 			Source.Play();
 			VolumeFade(1);
+
+			_nowPlaying = GameObject.Find("Now Playing Text");
+			UpdateNowPlaying();
 		}
 	}
 
@@ -76,13 +95,13 @@ public class MusicController : MonoBehaviour
 			Source.volume = 0;
 			Source.Play();
 			VolumeFade(1);
+
+			StopCoroutine(_moveNowPlaying);
 		}
 	}
 
 	public void VolumeFade(float targetVolume, float duration = 1f)
 	{
-		Debug.Log(System.Environment.StackTrace);
-
 		if (_volumeFade != null)
 		{
 			StopCoroutine(_volumeFade);
@@ -103,6 +122,52 @@ public class MusicController : MonoBehaviour
 		}
 
 		Source.volume = targetVolume;
+	}
+
+	private void UpdateNowPlaying()
+	{
+		_nowPlaying.GetComponent<Text>().text = "Now Playing: " + CircuitPlaylist[_clipIndex].Name + " - by "
+		                                        + CircuitPlaylist[_clipIndex].Author;
+
+		if (_moveNowPlaying != null) StopCoroutine(_moveNowPlaying);
+		_moveNowPlaying = StartCoroutine(MoveNowPlaying());
+	}
+
+	private IEnumerator MoveNowPlaying()
+	{
+		RectTransform nowPlayingTransform = _nowPlaying.GetComponent<RectTransform>();
+		nowPlayingTransform.offsetMin = new Vector2(0, nowPlayingTransform.offsetMin.y);
+		Text nowPlayingText = _nowPlaying.GetComponent<Text>();
+		nowPlayingText.CrossFadeAlpha(1, 0, true);
+
+		Debug.Log(_nowPlaying.GetComponent<Text>().preferredWidth);
+		Debug.Log(nowPlayingTransform.GetComponentInParent<RectTransform>().rect.width);
+
+		float moveDistance = _nowPlaying.GetComponent<Text>().preferredWidth
+		                     - nowPlayingTransform.GetComponentInParent<RectTransform>().rect.width;
+
+		if (moveDistance <= 0) yield break;
+
+		while (true)
+		{
+			yield return new WaitForSeconds(2);
+
+			while (nowPlayingTransform.offsetMin.x > -moveDistance)
+			{
+				nowPlayingTransform.offsetMin += Vector2.left * Time.deltaTime * 20f;
+				yield return null;
+			}
+
+			yield return new WaitForSeconds(2);
+
+			nowPlayingText.CrossFadeAlpha(0, 1, false);
+			yield return new WaitForSeconds(1);
+
+			nowPlayingTransform.offsetMin = new Vector2(0, nowPlayingTransform.offsetMin.y);
+
+			nowPlayingText.CrossFadeAlpha(1, 1, false);
+			yield return new WaitForSeconds(1);
+		}
 	}
 
 	private bool IsCircuitScene(Scene s)
