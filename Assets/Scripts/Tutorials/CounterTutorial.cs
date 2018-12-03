@@ -6,7 +6,8 @@ public class CounterTutorial : Tutorial
 {
 	private IEnumerator Start()
 	{
-		Grid grid = Grid.Instance;
+        base.Start();
+        Grid grid = Grid.Instance;
 
 		// 1
 		yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Return));

@@ -8,6 +8,7 @@ public class OperatorTutorial : Tutorial
 {
 	private IEnumerator Start()
 	{
+        base.Start();
 		Grid grid = Grid.Instance;
 
 		// 1

@@ -32,6 +32,7 @@ public class Tutorial : MonoBehaviour
 
 	private void Awake()
 	{
+        TutorialActive = false;
         string[] completedTutorials = PlayerPrefs.GetString("TutorialProgress", "").Split(':');
 		if (
 			GameController.gameLevel == null
@@ -72,11 +73,10 @@ public class Tutorial : MonoBehaviour
 		_backdropBL = Instantiate(backdropPrefab, backdropTransform);
 		_backdropBC = Instantiate(backdropPrefab, backdropTransform);
 		_backdropBR = Instantiate(backdropPrefab, backdropTransform);
-        TutorialActive = true;
 		Next();
 	}
-
-	private void UpdateHintText()
+    
+    private void UpdateHintText()
 	{
 		RectTransform t = HintText.GetComponent<RectTransform>();
 		t.SetParent(transform.GetChild(_index).GetComponent<RectTransform>());
@@ -85,7 +85,10 @@ public class Tutorial : MonoBehaviour
 		HintText.GetComponent<Text>().alignment = _steps[_index].HintText.alignment;
 		HintText.GetComponent<Text>().text = _steps[_index].HintText.text;
 	}
-
+    protected void Start()
+    {
+        TutorialActive = true;
+    }
 	protected void Next()
 	{
 		if (++_index < _steps.Length)

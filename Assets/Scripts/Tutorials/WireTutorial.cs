@@ -5,6 +5,7 @@ public class WireTutorial : Tutorial
 {
 	private IEnumerator Start()
 	{
+        base.Start();
 		// 1
 		yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Return));
 		yield return null;
