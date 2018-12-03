@@ -17,6 +17,7 @@ public class SelectionButton : MonoBehaviour
 
 	public void OnButtonClick()
 	{
-		Master.setSelection(Type);
+        if(GameController.simState == SimState.EDITING)
+		    Master.setSelection(Type);
 	}
 }

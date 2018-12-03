@@ -22,7 +22,7 @@ public class DragBox : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if(Input.GetMouseButtonUp(0))
+		if(Input.GetMouseButtonUp(0) || Input.GetMouseButtonUp(1))
 		{
 			Grid.Instance.SelectAll(Grid.GetWorldRect(transform));
 			Destroy(gameObject);

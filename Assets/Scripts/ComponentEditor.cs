@@ -60,6 +60,15 @@ public class ComponentEditor : MonoBehaviour
                 if(PrevSelected.Equals(Grid.Instance.Selected))
                 {
                     CycleSelection(1);
+                    GameObject gridComponent = Grid.Instance.GetGridComponent(Grid.Instance.Selected);
+                    GameObject previewedObject = Instantiate(gridComponent, ComponentPreview.transform);
+                    foreach (Transform t in previewedObject.transform)
+                    {
+                        Destroy(t.gameObject);
+                    }
+                    ComponentName.text = gridComponent.GetComponent<Operator>().OpName;
+                    currentlySelectedComponent = Grid.Instance.GetGridComponent(Grid.Instance.Selected);
+                    DisableStart(previewedObject);
                     return;
                 } else
                 {

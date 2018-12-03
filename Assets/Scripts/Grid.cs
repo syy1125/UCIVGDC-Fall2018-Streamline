@@ -165,7 +165,7 @@ public class Grid : MonoBehaviour
             if (!IsImporterOrExporter(_gridComponents[x][y])){
                 Transform OutArrow = Instantiate(OutArrowPrefab, OutArrowParent.transform);
                 OutArrow.GetComponent<OutArrow>().Trans = _gridComponents[x][y].GetComponent<Transmitter>();
-            } else
+            } else if(_gridComponents[x][y].GetComponent<Importer>() != null)
             {
                 Transform OutArrow = Instantiate(ImporterOutArrowPrefab, OutArrowParent.transform);
                 OutArrow.position = _gridComponents[x][y].transform.position;

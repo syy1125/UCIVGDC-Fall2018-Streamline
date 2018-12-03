@@ -80,7 +80,7 @@ TrailRenderer:
   m_Time: 0.03
   m_Parameters:
     serializedVersion: 2
-    widthMultiplier: 0.2
+    widthMultiplier: 0.24
     widthCurve:
       serializedVersion: 2
       m_Curve:
@@ -164,7 +164,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   destTile: {x: 0, y: 0}
   destination: {x: 0, y: 0}
-  speed: 35
+  speed: 30
   effectPrefab: {fileID: 4743055532203228}
   followColor: 0
   noSpread: 0
