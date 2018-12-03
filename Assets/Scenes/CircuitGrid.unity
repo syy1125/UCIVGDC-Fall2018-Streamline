@@ -2888,6 +2888,39 @@ CanvasRenderer:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 296796726}
   m_CullTransparentMesh: 0
+--- !u!1 &301358234
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 301358235}
+  m_Layer: 5
+  m_Name: OutArrows
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &301358235
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 301358234}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1268349860}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.2, y: 0.2}
+  m_AnchorMax: {x: 0.8, y: 1}
+  m_AnchoredPosition: {x: 0, y: -20}
+  m_SizeDelta: {x: -231.20001, y: 0}
+  m_Pivot: {x: 0.5, y: 1}
 --- !u!1 &301818022
 GameObject:
   m_ObjectHideFlags: 0
@@ -6375,7 +6408,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1268349860}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -9458,7 +9491,7 @@ RectTransform:
   - {fileID: 1261212181}
   - {fileID: 1050570892}
   m_Father: {fileID: 1268349860}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.272, y: 0}
   m_AnchorMax: {x: 0.728, y: 0.15}
@@ -11469,7 +11502,7 @@ RectTransform:
   - {fileID: 830831529}
   - {fileID: 301818023}
   m_Father: {fileID: 1268349860}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.75, y: 0}
   m_AnchorMax: {x: 1, y: 0.54}
@@ -13581,6 +13614,11 @@ MonoBehaviour:
   Width: 8
   gridButtonPrefab: {fileID: 224380810879266388, guid: 2428961fd55002641880c28d121f6d9f,
     type: 2}
+  OutArrowPrefab: {fileID: 224695871060339804, guid: 90523fe6ad1c6e54b983e05d50e284e3,
+    type: 2}
+  ImporterOutArrowPrefab: {fileID: 224187580435321814, guid: 7c4f043fd8d3f3e4fb0a4c65ec401c35,
+    type: 2}
+  OutArrowParent: {fileID: 301358234}
   columnsParent: {fileID: 1605283016}
   wire: {fileID: 1375651345715788, guid: bfe14384f4980434db3cde3d1cc1d347, type: 2}
   addition: {fileID: 1111880713450656, guid: 5e0b8fc0c72648f48975d772d070a591, type: 2}
@@ -13911,6 +13949,7 @@ RectTransform:
   m_Children:
   - {fileID: 260090357}
   - {fileID: 1250649352}
+  - {fileID: 301358235}
   - {fileID: 1132187681}
   - {fileID: 965411341}
   - {fileID: 668996764}
@@ -14347,7 +14386,7 @@ RectTransform:
   m_Children:
   - {fileID: 1709593780}
   m_Father: {fileID: 1268349860}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
@@ -15625,7 +15664,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0.26, y: 0.075}
-  m_AnchoredPosition: {x: -50, y: 25}
+  m_AnchoredPosition: {x: -50.000015, y: 25}
   m_SizeDelta: {x: -100, y: -25}
   m_Pivot: {x: 1, y: 0}
 --- !u!114 &1320598708

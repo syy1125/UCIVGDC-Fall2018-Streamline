@@ -34,9 +34,10 @@ public class ComponentEditor : MonoBehaviour
     public AudioClip ArrowPressSound;
     public AudioClip InputTypeSwapSound;
     private AudioSource Source;
-
+    private Vector2Int PrevSelected;
     private void Awake()
     {
+        PrevSelected = Vector2Int.one * -1;
         ioUnderlines = new Image[3];
         ioUnderlines[0] = input1Button.GetComponentsInChildren<Image>()[1];
         ioUnderlines[1] = input2Button.GetComponentsInChildren<Image>()[1];
@@ -56,47 +57,59 @@ public class ComponentEditor : MonoBehaviour
 		{
 			if (Grid.Instance.IsOperator(Grid.Instance.GetGridComponent(Grid.Instance.Selected)))
 			{
-				GameObject gridComponent = Grid.Instance.GetGridComponent(Grid.Instance.Selected);
-				GameObject previewedObject = Instantiate(gridComponent, ComponentPreview.transform);
-                foreach (Transform t in previewedObject.transform)
+                if(PrevSelected.Equals(Grid.Instance.Selected))
                 {
-                    Destroy(t.gameObject);
-                }
-                ComponentName.text = gridComponent.GetComponent<Operator>().OpName;
-                currentlySelectedComponent = Grid.Instance.GetGridComponent(Grid.Instance.Selected);
-                DisableStart(previewedObject);
-                for (int i = 0; i < directionButtons.Length; i++)
-                {
-                    directionButtons[i].GetComponent<Image>().enabled = true;
-                }
-                if (currentlySelectedComponent.GetComponent<Operator>().OpName.Equals("Constant"))
-                {
-                    UpdateConst(constEditor.GetComponentInChildren<InputField>());
-                    constEditor.SetActive(true);
-                    EventSystem.current.SetSelectedGameObject(constEditor, null);
-                    constEditor.GetComponentInChildren<InputField>().OnPointerClick(new PointerEventData(EventSystem.current));                
+                    CycleSelection(1);
+                    return;
                 } else
                 {
-                    constEditor.SetActive(false);
+                    GameObject gridComponent = Grid.Instance.GetGridComponent(Grid.Instance.Selected);
+                    GameObject previewedObject = Instantiate(gridComponent, ComponentPreview.transform);
+                    foreach (Transform t in previewedObject.transform)
+                    {
+                        Destroy(t.gameObject);
+                    }
+                    ComponentName.text = gridComponent.GetComponent<Operator>().OpName;
+                    currentlySelectedComponent = Grid.Instance.GetGridComponent(Grid.Instance.Selected);
+                    DisableStart(previewedObject);
+                    for (int i = 0; i < directionButtons.Length; i++)
+                    {
+                        directionButtons[i].GetComponent<Image>().enabled = true;
+                    }
+                    if (currentlySelectedComponent.GetComponent<Operator>().OpName.Equals("Constant"))
+                    {
+                        UpdateConst(constEditor.GetComponentInChildren<InputField>());
+                        constEditor.SetActive(true);
+                        EventSystem.current.SetSelectedGameObject(constEditor, null);
+                        constEditor.GetComponentInChildren<InputField>().OnPointerClick(new PointerEventData(EventSystem.current));
+                    }
+                    else
+                    {
+                        constEditor.SetActive(false);
+                    }
+                    IOMask = currentlySelectedComponent.GetComponent<Operator>().GetIOMask();
+                    if (IOMask[0])
+                        SetArrowSelection(ArrowSelection.IN1);
+                    else if (IOMask[1])
+                        SetArrowSelection(ArrowSelection.IN2);
+                    else if (IOMask[2])
+                        SetArrowSelection(ArrowSelection.OUT);
+                    else
+                        SetArrowSelection(ArrowSelection.NONE);
+                    PrevSelected = Grid.Instance.Selected;
+                    return;
                 }
-                IOMask = currentlySelectedComponent.GetComponent<Operator>().GetIOMask();
-                if (IOMask[0])
-                    SetArrowSelection(ArrowSelection.IN1);
-                else if (IOMask[1])
-                    SetArrowSelection(ArrowSelection.IN2);
-                else if (IOMask[2])
-                    SetArrowSelection(ArrowSelection.OUT);
-                else
-                    SetArrowSelection(ArrowSelection.NONE);
-                return;
+				
 			} else
             {
                 SetArrowSelection(ArrowSelection.NONE);
+                PrevSelected = Grid.Instance.Selected;
                 return;
             }
 		}
         SetArrowSelection(ArrowSelection.NONE);
         ComponentName.text = "Empty";
+        PrevSelected = Grid.Instance.Selected;
 	}
     public void ClearSelection()
     {
@@ -184,35 +197,45 @@ public class ComponentEditor : MonoBehaviour
             }
         }
         //Tab and Shift+Tab
-        int x = ((int)selection)-1; //0->IN1,1->IN2,2->OUT
         if (Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.Tab))
+        {
+            CycleSelection(-1);
+        }
+        else if(Input.GetKeyDown(KeyCode.Tab))
+        {
+            CycleSelection(1);
+        }
+
+
+    }
+    private void CycleSelection(int direction)
+    {
+        int x = ((int)selection) - 1; //0->IN1,1->IN2,2->OUT
+        if (direction < 0)
         {
             do
             {
                 x -= 1;
-                if(x < 0)
+                if (x < 0)
                     x = 2;
             }
-            while(!IOMask[x]);
+            while (!IOMask[x]);
             x += 1;
             SetArrowSelection((ArrowSelection)x);
             Source.PlayOneShot(InputTypeSwapSound);
-        }
-        else if(Input.GetKeyDown(KeyCode.Tab))
+        } else
         {
             do
             {
                 x += 1;
-                if(x >= 3)
+                if (x >= 3)
                     x = 0;
             }
-            while(!IOMask[x]);
+            while (!IOMask[x]);
             x += 1;
             SetArrowSelection((ArrowSelection)x);
             Source.PlayOneShot(InputTypeSwapSound);
         }
-
-
     }
     private void DrawButtonUnderlines()
     {

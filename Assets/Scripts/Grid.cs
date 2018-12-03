@@ -14,6 +14,10 @@ public class Grid : MonoBehaviour
     [FormerlySerializedAs("rows")] public int Height;
     [FormerlySerializedAs("columns")] public int Width;
     public Transform gridButtonPrefab;
+    public Transform OutArrowPrefab;
+    public Transform ImporterOutArrowPrefab;
+
+    public GameObject OutArrowParent;
     [HideInInspector]
     public Transform[][] buttonList;
     public GameObject columnsParent;
@@ -37,7 +41,6 @@ public class Grid : MonoBehaviour
     public AudioClip PlacementSound;
     public AudioClip SelectSound;
     private AudioSource Source;
-   
     private ColorBlock SelectedButtonColors
     {
         get
@@ -156,6 +159,19 @@ public class Grid : MonoBehaviour
         if (_gridComponents[x][y].GetComponent<Transmitter>() != null)
         {
             _gridComponents[x][y].GetComponent<Transmitter>().Location = new Vector2Int(x, y);
+        }
+        if (IsOperator(_gridComponents[x][y]))
+        {
+            if (!IsImporterOrExporter(_gridComponents[x][y])){
+                Transform OutArrow = Instantiate(OutArrowPrefab, OutArrowParent.transform);
+                OutArrow.GetComponent<OutArrow>().Trans = _gridComponents[x][y].GetComponent<Transmitter>();
+            } else
+            {
+                Transform OutArrow = Instantiate(ImporterOutArrowPrefab, OutArrowParent.transform);
+                OutArrow.position = _gridComponents[x][y].transform.position;
+                OutArrow.GetComponent<ImporterOutArrow>().Location = new Vector2Int(x, y);
+            }
+            
         }
         return _gridComponents[x][y];
     }
