@@ -1,0 +1,55 @@
+{
+	"Name": "Voltage Regulator",
+	"Description": [
+		"Ensure voltage does not exceed operational bounds."
+	],
+	"Objective": [
+		"In.1 measures current voltage.",
+		"In.2 is the change in voltage.",
+		"If the sum of the Inputs equals or exceeds <color=#ff0000>[300]</color>,",
+		"output In.1 - In.2 to Out.1.",
+		"Otherwise, output In.1 + In.2 to Out.1"
+	],
+	"Tests": [
+		{
+			"Input1": [ 250 ],
+			"Input2": [ 23 ],
+			"Output1": [ 273 ]
+		},
+		{
+			"Input1": [ 273 ],
+			"Input2": [ 40 ],
+			"Output1": [ 230 ]
+		},
+		{
+			"Input1": [ 230 ],
+			"Input2": [ -12 ],
+			"Output1": [ 218 ]
+		},
+		{
+			"Input1": [ 218 ],
+			"Input2": [ 34 ],
+			"Output1": [ 252 ]
+		},
+		{
+			"Input1": [ 252 ],
+			"Input2": [ 45 ],
+			"Output1": [ 297 ]
+		},
+		{
+			"Input1": [ 297 ],
+			"Input2": [ 10 ],
+			"Output1": [ 287 ]
+		},
+		{
+			"Input1": [ 287 ],
+			"Input2": [ 15 ],
+			"Output1": [ 272 ]
+		},
+		{
+			"Input1": [ 272 ],
+			"Input2": [ 21 ],
+			"Output1": [ 293 ]
+		}
+	]
+}

@@ -1,0 +1,44 @@
+{
+    "Name": "[REDACTED]",
+    "Description": [
+        "Prevent illegal numbers from being transmitted."
+    ],
+    "Objective": [
+        "A new law has declared values <color=#ff0000>[66-133]</color> (inclusive) to be illegal.",
+        "Replace illegal numbers with <color=#ff0000>[404]</color> and send to Out.1."
+    ],
+    "Tests": [
+        {
+            "Input1": [ 100 ],
+            "Output1": [ 404 ]
+        },
+        {
+            "Input1": [ 56 ],
+            "Output1": [ 56 ]
+        },
+        {
+            "Input1": [ 130 ],
+            "Output1": [ 404 ]
+        },
+        {
+            "Input1": [ 12 ],
+            "Output1": [ 12 ]
+        },
+        {
+            "Input1": [ 66 ],
+            "Output1": [ 404 ]
+        },
+        {
+            "Input1": [ 101 ],
+            "Output1": [ 404 ]
+        },
+        {
+            "Input1": [ 133 ],
+            "Output1": [ 404 ]
+        },
+        {
+            "Input1": [ 25 ],
+            "Output1": [ 25 ]
+        }
+    ]
+}

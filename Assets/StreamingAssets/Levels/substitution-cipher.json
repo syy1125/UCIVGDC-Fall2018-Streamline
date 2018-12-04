@@ -1,0 +1,91 @@
+{
+    "Name": "Substitution Cipher",
+    "Description": [
+        "Encode a secret message for a old friend."
+    ],
+    "Objective": [
+        "Letters <color=#ff0000>[A-Z]</color> are assigned <color=#ff0000>[1-26]</color>.",
+        "Encode the message 'TEN PM DONT BE LATE' by shifting each letter by an offset.",
+        "Ensure that all outputs are in the range <color=#ff0000>[1-26]</color>.",
+        "In.1 is the original letter, ",
+        "In.2 is the offset for that letter"
+    ],
+    "Tests": [
+        {
+            "Input1": [ 20 ],
+            "Input2": [ 10 ],
+            "Output1": [ 4 ]
+        },
+        {
+            "Input1": [ 5 ],
+            "Input2": [ 2 ],
+            "Output1": [ 7 ]
+        },
+        {
+            "Input1": [ 14 ],
+            "Input2": [ -3 ],
+            "Output1": [ 11 ]
+        },
+        {
+            "Input1": [ 16 ],
+            "Input2": [ 20 ],
+            "Output1": [ 10 ]
+        },
+        {
+            "Input1": [ 13 ],
+            "Input2": [ 8 ],
+            "Output1": [ 21 ]
+        },
+        {
+            "Input1": [ 4 ],
+            "Input2": [ -10 ],
+            "Output1": [ 20 ]
+        },
+        {
+            "Input1": [ 15 ],
+            "Input2": [ 0 ],
+            "Output1": [ 15 ]
+        },
+        {
+            "Input1": [ 14 ],
+            "Input2": [ -3 ],
+            "Output1": [ 11 ]
+        },
+        {
+            "Input1": [ 20 ],
+            "Input2": [ 10 ],
+            "Output1": [ 4 ]
+        },
+        {
+            "Input1": [ 2 ],
+            "Input2": [ 1 ],
+            "Output1": [ 3 ]
+        },
+        {
+            "Input1": [ 5 ],
+            "Input2": [ 2 ],
+            "Output1": [ 7 ]
+        },
+        {
+            "Input1": [ 12 ],
+            "Input2": [ 15 ],
+            "Output1": [ 1 ]
+        },
+        {
+            "Input1": [ 1 ],
+            "Input2": [ 15 ],
+            "Output1": [ 16 ]
+
+        },
+        {
+            "Input1": [ 20 ],
+            "Input2": [ 10 ],
+            "Output1": [ 4 ]
+        },
+        {
+            "Input1": [ 5 ],
+            "Input2": [ 2 ],
+            "Output1": [ 7 ]
+        }
+    ]
+}
