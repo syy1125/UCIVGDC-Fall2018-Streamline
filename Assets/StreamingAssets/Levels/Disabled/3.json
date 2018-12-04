@@ -1,0 +1,14 @@
+{
+  "Name": "Bleh",
+  "Description": [
+    "asdfasdfasdf"
+  ],
+  "Tests": [
+    {
+      "Input1": [1, 2, 3],
+      "Input2": [1, 2, 3],
+      "Output1": [1, 2, 3],
+      "Output2": [1, 2, 3]
+    }
+  ]
+}
