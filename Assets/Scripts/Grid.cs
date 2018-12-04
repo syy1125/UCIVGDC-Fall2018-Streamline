@@ -69,11 +69,13 @@ public class Grid : MonoBehaviour
             }
 
             _selected = value;
+            
             if (InGrid(_selected))
             {
                 buttonList[_selected.x][_selected.y].GetComponent<Button>().colors = SelectedButtonColors;
-                EditorInstance.UpdateUI();
             }
+            
+            EditorInstance.UpdateUI();
         }
     }
     public class SelectionGroup{
@@ -210,6 +212,12 @@ public class Grid : MonoBehaviour
         Destroy(GetGridComponent(x,y));
         _gridComponents[x][y] = null;
         UpdateAdjacentWires(x,y);
+        
+        // If we destroyed a selected component, reset selection to nothing
+        if (Selected.x == x && Selected.y == y)
+        {
+            Selected = new Vector2Int(-1, -1);
+        }
     }
     public void DestroyGridComponent(Vector2Int pos)
     {
